@@ -1,0 +1,277 @@
+#: import Buttons main.Buttons
+
+WindowManager:
+    MainWindow:
+    SoloWindow:
+    GroupWindow:
+    LoginWindow:
+    GameWindow:
+    ChoosePlayers:
+
+<MainWindow>:
+    name: "main"
+    size: root.width,root.height
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+        cols: 1
+        size_hint: .4,.4
+        pos_hint: {'x': 0.3 , 'y': 0.3}
+        spacing: '20dp'
+        Button:
+            text: "Gry Solo"
+            id:solobutton
+            background_color: (1.0, 0.0, 0.0, 1.0)
+            # size_hint: 0.3, 0.3
+            on_release: 
+                app.root.current = "solo";root.manager.transition.direction = "left"   
+        Button:
+            text: "Gry drużynowe"
+            background_color: (1.0, 0.0, 0.0, 1.0)
+            # size_hint: 0.3, 0.3
+            # on_release: app.root.current = "group"
+            on_release:app.root.current = "chooseplayers";root.manager.transition.direction = "left"
+
+<ChoosePlayers>:
+    playersInput: playersInput
+    playersLabel: playersLabel
+    playersButton: playersButton
+    playerGrid: playerGrid
+    name: "chooseplayers"
+    GridLayout:
+        cols: 1
+        # size_hint: 1,1
+        spacing: '20dp'
+        GridLayout:
+            cols: 1
+            Label:
+                id: playersLabel
+                name: "playersLabel"
+                text:'Podaj liczbe graczy (2-8)'
+                # size_hint: 1,1 
+            TextInput:
+                id: playersInput
+                name: 'popupInput'
+                multiline: False
+                # size_hint: 1,0.5
+                # pos_hint: {'x':0 , 'y':0 }
+            Button:
+                # size_hint: 1,1
+                # pos_hint: {'x':0 , 'y':0.0 }
+                text: "Wyślij"
+                color:
+                id: playersButton
+                # on_press:  app.root.current = "game";
+                on_press: root.checkPlayers()
+                # on_press: print(root.checkPlayers()[1])
+    
+        GridLayout:
+            id: playerGrid
+            name: "playerGrid"
+            cols: 4
+        GridLayout:
+            cols: 2
+            Button:
+                text: "Zatwierdź"
+                color:
+                on_release: root.saveNames()
+            Button:
+                text: "Powrót"
+                color:
+                on_release: root.clear();app.root.current = "main";root.manager.transition.direction = "right"   
+                    
+            
+        
+<SoloWindow>:
+    name: "solo"
+    size: root.width,root.height
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+        cols: 1
+        size_hint: .6,.6
+        pos_hint: {'x': 0.2 , 'y': 0.2}
+        spacing: '10dp'
+        GridLayout:
+            cols: 2
+            rows: 3
+            # size_hint: .6,.6
+            # pos_hint: {'x': 0.2 , 'y': 0.2}
+            # size_hint: 0.5,0.5
+            spacing: '10dp'
+            Button:
+                text: "180"
+                color: 0.4,0.3,0.2,1
+                on_release: app.root.current = "game"; root.manager.transition.direction = "left"     
+            Button:
+                text: "301"
+                color: 0.4,0.3,0.2,1
+                on_release: app.root.current = "solo"
+                background_colour: 1,1,1,1
+            Button:
+                text: "501"
+                color: 0.4,0.3,0.2,1
+                on_release: app.root.current = "solo"
+            Button:
+                text: "701"
+                color: 0.4,0.3,0.2,1
+                on_release: app.root.current = "solo"
+            Button:
+                text: "Trening"
+                color: 0.4,0.3,0.2,1
+                on_release: app.root.current = "solo"
+            Button:
+                text: "Trening losowy"
+                color: 0.4,0.3,0.2,1
+                on_release: app.root.current = "solo"
+        Button:
+            text: "Powrót"
+            # font_size: self.width / 15
+            size_hint_y: 0.35
+            on_release: 
+                app.root.current = "main"       
+                root.manager.transition.direction = "right"        
+
+<LoginWindow>:
+    errorLabel: errorLabel
+    passwordLabel: passwordLabel
+    usernameInput: usernameInput
+    passwordInput: passwordInput
+
+    name: "login"
+    size: root.width,root.height
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+
+        cols: 1
+        size_hint: .6,.6
+        pos_hint: {'x': 0.2 , 'y': 0.2}
+        spacing: '10dp'
+
+        Label:
+            name: "usernameLabel"
+            text: "Użytkownik"
+            color:
+            # text_size: self.size
+            font_size: root.width / 20 + 10
+            # halign: "left"
+            # valign: "middle"
+
+        TextInput:
+            id: usernameInput
+            name: "usernameInput"
+            hint_text:
+            multiline: False
+
+        Label:
+            id: passwordLabel
+            name: "passwordLabel"
+            text: "Hasło"
+            color:
+            font_size: root.width / 20 + 10
+            background_color: 1,1,1,1
+
+        TextInput:
+            id: passwordInput
+            password: True
+            name: "passwordInput"
+            hint_text:
+            multiline: False
+
+        Label:
+            id: errorLabel
+            name: "errorLabel"
+            text: ""
+            color:
+
+        Button:
+            text: "Zaloguj"
+            on_press: 
+                if usernameInput.text != 'Ziemo': root.badUsernameMessage()
+                
+                elif passwordInput.text != 'Ziemo': root.badPasswordMessage()
+                else: app.root.current = "solo";usernameInput.text = passwordInput.text = errorLabel.text = "";root.manager.transition.direction = "left"
+            
+
+<P>:
+    cancel: cancel
+    popupInput: popupInput
+    # size_hint: 1,.5
+    # pos_hint: {'x': 0 , 'y': 0.5}
+    size: root.width,root.height
+    GridLayout:
+        cols: 1
+    TextInput:
+        id: popupInput
+        name: 'popupInput'
+        multiline: False
+        size_hint: 1,.4
+        pos_hint: {'x':0 , 'y':0.5 }
+    Button:
+        size_hint: 1,.4
+        pos_hint: {'x':0 , 'y':0.0 }
+        text: "Wyślij"
+        color:
+        id: cancel
+        # on_press:  app.root.current = "game";
+        on_press: root.checkempty()
+            
+
+<GroupWindow>:
+    popupInput: popupInput
+    pop: pop
+    name: "group"
+    grid: grid
+    size: root.width,root.height
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    Popup:
+        id: pop
+        name: 'pop'
+        title: 'Wpisz liczbe graczy'
+        size_hint: 1,.5
+        pos_hint: {'x': 0 , 'y': 0.5}
+        GridLayout:
+            cols: 2    
+            TextInput:
+                id: popupInput
+                name: 'popupInput'
+                multiline: False
+            Button:
+                text: "Wyślij"
+                color:
+                id: popupButton
+                on_press:  root.popDismiss()
+    GridLayout:
+        id: grid
+        cols: 2
+        size_hint: 1,.5
+        pos_hint: {'x': 0 , 'y': 0.5}
+        spacing: '10dp'
+    Buttons:
+
+
+
+<GameWindow>:
+    name: "game"
+    # size: root.width,root.height
+    size_hint: 1, 1
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    Buttons:
