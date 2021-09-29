@@ -9,6 +9,7 @@ WindowManager:
     ChoosePlayers:
 
 <MainWindow>:
+    solobutton: solobutton
     name: "main"
     size: root.width,root.height
     canvas.before:
@@ -77,11 +78,13 @@ WindowManager:
             Button:
                 text: "Zatwierdź"
                 color:
-                on_release: root.saveNames()
+                # on_release: root.saveNames()
+                on_press: app.root.current = "game";root.manager.transition.direction = "left"   
             Button:
                 text: "Powrót"
                 color:
-                on_release: root.clear();app.root.current = "main";root.manager.transition.direction = "right"   
+                # on_release: root.clear();app.root.current = "main";root.manager.transition.direction = "right"   
+                on_release: root.saveNames()
                     
             
         
@@ -269,9 +272,22 @@ WindowManager:
     name: "game"
     # size: root.width,root.height
     size_hint: 1, 1
+
     canvas.before:
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
+    Button:
+        size_hint: 0.2, 0.2
+        pos_hint: {'x':0.8 , 'y':0.8 }
+        text: "getplayers"
+        color:
+        on_press: root.getplayers()
+    Button:
+        size_hint: 0.2, 0.2
+        pos_hint: {'x':0.6 , 'y':0.6 }
+        text: "powrót do main"
+        color:
+        on_press:               app.root.current = "main"       ;root.manager.transition.direction = "right"    
     Buttons:

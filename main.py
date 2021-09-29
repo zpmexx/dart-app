@@ -14,10 +14,14 @@ class SoloWindow(Screen):
     pass
 
 class GameWindow(Screen):
-    pass
+    def getplayers(self):
+        print(self.manager.get_screen('chooseplayers').playerGrid.children)
+        self.manager.get_screen('chooseplayers').playerGrid.clear_widgets()
+        self.manager.get_screen('chooseplayers').playersInput.text = ''
+        self.manager.get_screen('chooseplayers').playersButton.disabled = False
 
 class ChoosePlayers(Screen):
-
+    global players
     playersInput = ObjectProperty(None)
     playersButton = ObjectProperty(None)
     playersLabel = ObjectProperty(None)
@@ -43,13 +47,13 @@ class ChoosePlayers(Screen):
         self.playersButton.disabled = False
 
     def saveNames(self):
-        # players = [] 
-        # for i in range (0,len(self.playerGrid.children),2):
-        #     players.append(self.playerGrid.children[i].text)
-        #     print(self.playerGrid.children[i].text)
-        # print(players)
-        # return players 
-        print(WindowManager.get_screen(WindowManager,name ='MainWindow'))
+        players = [] 
+        for i in range (0,len(self.playerGrid.children),2):
+            players.append(self.playerGrid.children[i].text)
+            print(self.playerGrid.children[i].text)
+        print(players)
+        return players 
+        # print(self.manager.get_screen('main').solobutton.text)
 
         
 
