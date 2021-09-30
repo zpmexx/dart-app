@@ -16,6 +16,8 @@ class SoloWindow(Screen):
 class GameWindow(Screen):
     def getplayers(self):
         print(self.manager.get_screen('chooseplayers').playerGrid.children)
+        for i in range (0,len(self.manager.get_screen('chooseplayers').playerGrid.children),2):
+            print (self.manager.get_screen('chooseplayers').playerGrid.children[i].text)
         self.manager.get_screen('chooseplayers').playerGrid.clear_widgets()
         self.manager.get_screen('chooseplayers').playersInput.text = ''
         self.manager.get_screen('chooseplayers').playersButton.disabled = False
