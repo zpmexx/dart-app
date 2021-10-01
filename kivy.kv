@@ -1,4 +1,4 @@
-#: import Buttons main.Buttons
+# : import Buttons main.Buttons
 
 WindowManager:
     MainWindow:
@@ -37,37 +37,41 @@ WindowManager:
             on_release:app.root.current = "chooseplayers";root.manager.transition.direction = "left"
 
 <ChoosePlayers>:
-    playersInput: playersInput
-    playersLabel: playersLabel
-    playersButton: playersButton
+    # playersInput: playersInput
+    # playersLabel: playersLabel
+    # playersButton: playersButton
     playerGrid: playerGrid
+    chooseGrid: chooseGrid
     name: "chooseplayers"
+    on_pre_enter: root.create()
     GridLayout:
         cols: 1
         # size_hint: 1,1
         spacing: '20dp'
         GridLayout:
-            cols: 1
-            Label:
-                id: playersLabel
-                name: "playersLabel"
-                text:'Podaj liczbe graczy (2-8)'
-                # size_hint: 1,1 
-            TextInput:
-                id: playersInput
-                name: 'popupInput'
-                multiline: False
-                # size_hint: 1,0.5
-                # pos_hint: {'x':0 , 'y':0 }
-            Button:
-                # size_hint: 1,1
-                # pos_hint: {'x':0 , 'y':0.0 }
-                text: "Wyślij"
-                color:
-                id: playersButton
-                # on_press:  app.root.current = "game";
-                on_press: root.checkPlayers()
-                # on_press: print(root.checkPlayers()[1])
+            id: chooseGrid
+            name: 'chooseGrid'
+            cols: 7
+            # Label:
+            #     id: playersLabel
+            #     name: "playersLabel"
+            #     text:'Podaj liczbe graczy (2-8)'
+            #     # size_hint: 1,1 
+            # TextInput:
+            #     id: playersInput
+            #     name: 'popupInput'
+            #     multiline: False
+            #     # size_hint: 1,0.5
+            #     # pos_hint: {'x':0 , 'y':0 }
+            # Button:
+            #     # size_hint: 1,1
+            #     # pos_hint: {'x':0 , 'y':0.0 }
+            #     text: "Wyślij"
+            #     color:
+            #     id: playersButton
+            #     # on_press:  app.root.current = "game";
+            #     on_press: root.checkPlayers()
+            #     # on_press: print(root.checkPlayers()[1])
     
         GridLayout:
             id: playerGrid
@@ -91,6 +95,7 @@ WindowManager:
 <SoloWindow>:
     name: "solo"
     size: root.width,root.height
+    on_enter: root.printhi()
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -270,24 +275,40 @@ WindowManager:
 
 <GameWindow>:
     name: "game"
+    usersGrid: usersGrid
+    # testlab: testlab
     # size: root.width,root.height
     size_hint: 1, 1
-
+    on_enter: root.create()
     canvas.before:
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
-    Button:
-        size_hint: 0.2, 0.2
-        pos_hint: {'x':0.8 , 'y':0.8 }
-        text: "getplayers"
-        color:
-        on_press: root.getplayers()
-    Button:
-        size_hint: 0.2, 0.2
-        pos_hint: {'x':0.6 , 'y':0.6 }
-        text: "powrót do main"
-        color:
-        on_press:               app.root.current = "main"       ;root.manager.transition.direction = "right"    
+    GridLayout:
+        size_hint: 1, 0.4
+        pos_hint: {'x':0 , 'y':0.6 }
+        cols: 2
+        id: usersGrid
+        name: "usersGrid"
+        
+    # # Label:
+    # #     text:''
+    # #     id: testlab
+    # #     name: 'testlab'
+    # #     size_hint: 0.2, 0.2
+    # #     pos_hint: {'x':0.4 , 'y':0.8 }
+    # Button:
+    #     size_hint: 0.2, 0.2
+    #     pos_hint: {'x':0.8 , 'y':0.8 }
+    #     text: "getplayers"
+    #     color:
+    #     on_press: root.getplayers()
+    # Button:
+    #     size_hint: 0.2, 0.2
+    #     pos_hint: {'x':0.6 , 'y':0.6 }
+    #     text: "powrót do main"
+    #     color:
+    #     on_press: root.testm()
+    #     # on_press:               app.root.current = "main"       ;root.manager.transition.direction = "right"    
     Buttons:
