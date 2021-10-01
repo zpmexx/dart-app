@@ -11,6 +11,7 @@ from kivy.uix.popup import Popup
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from random import randint
+from functools import partial
 
 class SoloWindow(Screen):
     def printhi(self):
@@ -90,16 +91,11 @@ class ChoosePlayers(Screen):
             x = Button()
             x.text = str(i)
             x.id = i
+            
             # x.bind(on_release = lambda x: self.buttonclicked(i))
             # x.bind(on_release = lambda x: self.buttonclicked(randint(2,9)))
             self.chooseGrid.add_widget(x)
-        num = 9
-        for i in self.chooseGrid.children:
-            print(i)
-            i.bind(on_release = lambda x:self.buttonclicked(num))
-            # print(self.buttonclicked(num))
-            # print(i.id)
-            num -= 1
+            x.bind(on_release = lambda x :(self.buttonclicked(x.id)))
         # for i in self.chooseGrid.children:
         #     print (i.id)
 
