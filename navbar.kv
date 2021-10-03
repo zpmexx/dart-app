@@ -1,0 +1,42 @@
+<Navbar>:
+    roundLabel: roundLabel
+    sumLabel: sumLabel
+    leftLabel: leftLabel
+    GridLayout:
+        cols:3
+        size: root.width, root.height * 0.1
+        top: root.height + 20
+        Label:
+            text: "Runda"
+            color:
+        Label:
+            text: "Pozostało rzutów"
+            color:
+            name: "leftLabel"
+        Label:
+            text: "Suma rzutów"
+            color:
+    GridLayout:
+        cols: 3
+        size: root.width, root.height * 0.3
+        top: root.height + 40
+        Label:
+            text: "1"
+            font_size: '40dp'
+            color:
+            id: roundLabel
+            name: "roundLabel"
+        Label:
+            font_size: '40dp'
+            text: "0"
+            color:
+            id: leftLabel
+            name: "leftLabel"
+        Label:
+            font_size: '40dp'
+            text: "suma"
+            color:
+            id: sumLabel
+            name: "sumLabel"
+
+

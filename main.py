@@ -14,22 +14,33 @@ from random import randint
 from functools import partial
 
 class SoloWindow(Screen):
-    def printhi(self):
-        print("witam")
+    pass
 
 class GameWindow(Screen):
+    def sayHi(self):
+        print('hi')
     def create(self):
         self.usersGrid.clear_widgets()
         count = len(self.manager.get_screen('chooseplayers').playerGrid.children)
-        for i in range (0,count,2):
+        for i in range (count-1,0,-2):
             x = Label()
-            x.text = self.manager.get_screen('chooseplayers').playerGrid.children[i].text
+            x.text = self.manager.get_screen('chooseplayers').playerGrid.children[i-1].text
             self.usersGrid.add_widget(x)
             x.id = i
             x = Label()
             x.text = str(501)
             self.usersGrid.add_widget(x)
             x.id = i+1
+        # self.children[2].roundLabel.text = '10' #tutaj dobieramy sie do konretniej wartosci
+        for i in self.children:
+            if (hasattr(i, 'roundLabel')):
+                i.roundLabel.text = '69'
+            if (hasattr(i, 'buttonsGrid')):
+                i.button0.text = 'WITAM W '
+                i.button0.bind(on_release = lambda x: self.sayHi())
+        
+                
+
             
     # testlab = ObjectProperty(None)
     # def __init__(self, **kwargs):
@@ -57,33 +68,11 @@ class GameWindow(Screen):
     #     self.testlab.text = 'chuj'
     
 class ChoosePlayers(Screen):
-    # global players
-    # playersInput = ObjectProperty(None)
-    # playersButton = ObjectProperty(None)
-    # playersLabel = ObjectProperty(None)
-    # def checkPlayers(self):
-    #     # if len(self.playersInput.text)== 0 or len(self.playersInput.text) > 1:
-    #     #     return False,'err'
-    #     # for i in self.playersInput.text:
-    #     #     if i.isdigit() == True:
-    #     #         if int(i) > 1 and int(i) < 9:
-    #     #             return True,i
-    #     #     else:
-    #     #         return False,i
-    #     # return False,i
-    #     number = self.ids.playersInput.text
-    #     for i in range (0,int(number)):
-    #         self.playerGrid.add_widget(Label(text='Gracz '+str(i+1)))
-    #         self.playerGrid.add_widget(TextInput(multiline = False,name = str(i+1)))
-    #     self.playersButton.disabled = True
-
     def buttonclicked(self,i):
-        print(i)
         self.playerGrid.clear_widgets()
         for i in range (0,i):
             self.playerGrid.add_widget(Label(text='Gracz '+str(i+1)))
             self.playerGrid.add_widget(TextInput(multiline = False,name = str(i+1)))
-        return i
     
     def create(self):
         self.chooseGrid.clear_widgets()
@@ -91,33 +80,25 @@ class ChoosePlayers(Screen):
             x = Button()
             x.text = str(i)
             x.id = i
-            
-            # x.bind(on_release = lambda x: self.buttonclicked(i))
-            # x.bind(on_release = lambda x: self.buttonclicked(randint(2,9)))
             self.chooseGrid.add_widget(x)
             x.bind(on_release = lambda x :(self.buttonclicked(x.id)))
-        # for i in self.chooseGrid.children:
-        #     print (i.id)
+        
 
     # def clear(self):
     #     self.playerGrid.clear_widgets()
     #     self.playersInput.text = ''
     #     self.playersButton.disabled = False
 
-    # def saveNames(self):
-    #     players = [] 
-    #     for i in range (0,len(self.playerGrid.children),2):
-    #         players.append(self.playerGrid.children[i].text)
-    #         print(self.playerGrid.children[i].text)
-    #     print(players)
-    #     return players 
-    #     # print(self.manager.get_screen('main').solobutton.text)
 
         
 
 
 class Buttons(Widget):
     Builder.load_file("buttons.kv")
+
+class Navbar(Widget):
+    roundLabel = ObjectProperty(None)
+    Builder.load_file("navbar.kv")
 
 
 
@@ -127,9 +108,6 @@ def show_popup():
     cancel = ObjectProperty(None)
     show = P()
     popupWindow = Popup(title =  'Wpisz liczbe graczy', content = show,  size_hint= (0.6,0.3),)
-
-
-    
     show.ids.cancel.on_release = popupWindow.dismiss
     popupWindow.open()
 

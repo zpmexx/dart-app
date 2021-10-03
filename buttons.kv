@@ -1,7 +1,10 @@
 <Buttons>:
+    buttonsGrid: buttonsGrid
+    button0: button0
     GridLayout:
+        id: buttonsGrid
         cols:1
-        size: root.width, root.height * 0.5
+        size: root.width, root.height * 0.4
         GridLayout:
             id: mnoznik
             name: "mnozik"
@@ -39,7 +42,7 @@
                 id: button0
                 text: "0"
                 color: 0.4,0.3,0.2,1
-                on_release: app.root.current = "solo"
+                # on_release: app.root.current = "solo"
             Button:
                 name: 'button25'
                 id: button25
@@ -179,3 +182,4 @@
                 text: "20"
                 color: 0.4,0.3,0.2,1
                 on_release: app.root.current = "solo"
+

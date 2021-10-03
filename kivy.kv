@@ -1,4 +1,4 @@
-# : import Buttons main.Buttons
+##:import Buttons main.Buttons
 
 WindowManager:
     MainWindow:
@@ -88,14 +88,14 @@ WindowManager:
                 text: "Powrót"
                 color:
                 # on_release: root.clear();app.root.current = "main";root.manager.transition.direction = "right"   
-                on_release: root.saveNames()
+                on_release: app.root.current = "main"; root.manager.transition.direction = "right"      
                     
             
         
 <SoloWindow>:
     name: "solo"
     size: root.width,root.height
-    on_enter: root.printhi()
+    # on_enter: root.printhi()
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -285,9 +285,11 @@ WindowManager:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
+    Navbar:
+        id: 'navbar'
     GridLayout:
         size_hint: 1, 0.4
-        pos_hint: {'x':0 , 'y':0.6 }
+        pos_hint: {'x':0 , 'y':0.4 }
         cols: 2
         id: usersGrid
         name: "usersGrid"
