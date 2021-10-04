@@ -12,11 +12,13 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.textinput import TextInput
 from random import randint
 from functools import partial
+from kivy.properties import ListProperty
 
 class SoloWindow(Screen):
     pass
 
 class GameWindow(Screen):
+    buttonList = []
     def sayHi(self):
         print('hi')
     def create(self):
@@ -36,9 +38,13 @@ class GameWindow(Screen):
             if (hasattr(i, 'roundLabel')):
                 i.roundLabel.text = '69'
             if (hasattr(i, 'buttonsGrid')):
-                i.button0.text = 'WITAM W '
-                i.button0.bind(on_release = lambda x: self.sayHi())
-        
+                # i.button0.text = 'WITAM W '
+                # i.button0.bind(on_release = lambda x: self.sayHi())
+                print(i)
+                print(i.button0.text)
+                self.buttonList.append(i.button0)
+                self.buttonList[0].text = 'Strzala'
+                print(self.buttonList[0].name)
                 
 
             
