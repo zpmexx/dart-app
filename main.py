@@ -13,12 +13,43 @@ from kivy.uix.textinput import TextInput
 from random import randint
 from functools import partial
 from kivy.properties import ListProperty
+import time
 
 class SoloWindow(Screen):
     pass
 
 class GameWindow(Screen):
     buttonList = []
+    throwCount = 0
+    rounds = 1
+    left = 3
+    def bindButton(self,j):
+         for i in self.children:
+            if (hasattr(i, 'sumLabel')):
+                if self.throwCount == 0:
+                    i.sumLabel.text = '0'
+                    self.throwCount +=1
+                else:
+                    if self.throwCount >= 2:
+                        self.rounds +=1
+                        self.left -=1
+                    if self.throwCount >=3:
+                        time.sleep(5)
+                        self.left = 3
+                        self.throwCount = 0
+                    else:
+                        i.sumLabel.text = str(int(i.sumLabel.text)+int(j))
+                        self.throwCount +=1
+                        self.left -=1
+                  
+            if (hasattr(i, 'roundLabel')):
+                i.roundLabel.text = str(self.rounds)
+            if (hasattr(i, 'leftLabel')):
+                i.leftLabel.text = str(self.left)
+                
+            
+                    
+                
     def sayHi(self):
         print('hi')
     def create(self):
@@ -35,16 +66,21 @@ class GameWindow(Screen):
             x.id = i+1
         # self.children[2].roundLabel.text = '10' #tutaj dobieramy sie do konretniej wartosci
         for i in self.children:
-            if (hasattr(i, 'roundLabel')):
-                i.roundLabel.text = '69'
             if (hasattr(i, 'buttonsGrid')):
+                # i.button1.bind(on_release = lambda x: self.bindButton(10))
+                temp = []
+                for j in range (0,21):
+                    temp.append(getattr(i, 'button'+str(j))) 
+                    print(temp[j])
+                    temp[j].bind(on_release = lambda x: self.bindButton(x.text))
                 # i.button0.text = 'WITAM W '
                 # i.button0.bind(on_release = lambda x: self.sayHi())
-                print(i)
-                print(i.button0.text)
-                self.buttonList.append(i.button0)
-                self.buttonList[0].text = 'Strzala'
-                print(self.buttonList[0].name)
+                # print(i)
+                # print(i.button0.text)
+                # self.buttonList.append(i.button0)
+                # self.buttonList[0].text = 'Strzala'
+                # print(self.buttonList[0].name)
+                
                 
 
             
@@ -68,10 +104,6 @@ class GameWindow(Screen):
     #     pos_hint ={'x':0.4 , 'y':0.8 }))
     #     self.add_widget(x)
     #     x.id = 'testlab'
-    #     self.testlab.text = 'witam'
-
-    # def testm(self):
-    #     self.testlab.text = 'chuj'
     
 class ChoosePlayers(Screen):
     def buttonclicked(self,i):
