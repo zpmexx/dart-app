@@ -32,8 +32,8 @@
         cols:1
         size: root.width, root.height * 0.4
         GridLayout:
-            id: mnoznik
-            name: "mnozik"
+            id: multiplierGrid
+            name: "multiplierGrid"
             cols: 6
             size_hint: 1, .1
             pos_hint: {'x': 0 , 'y': 0.6}
@@ -44,7 +44,7 @@
                 name: "boxx1"
                 text: "1"
                 color: 0.4,0.3,0.2,1
-                group: "mnoznik"
+                group: "multiplierCheckBox"
             Label:
                 text: "x2"
             CheckBox:
@@ -52,7 +52,7 @@
                 name: "boxx2"
                 text: "2"
                 color: 0.4,0.3,0.2,1
-                group: "mnoznik"
+                group: "multiplierCheckBox"
             Label:
                 text: "x3"
             CheckBox:
@@ -60,11 +60,11 @@
                 name: "boxx3"
                 text: "3"
                 color: 0.4,0.3,0.2,1
-                group: "mnoznik"
+                group: "multiplierCheckBox"
 
         GridLayout:
-            id: klawisze
-            name: "klawisze"
+            id: buttonPointsGrid
+            name: "buttonPointsGrid"
             cols: 4
             # size: root.width, root.height * 0.4
             size_hint: 1,.6

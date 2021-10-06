@@ -19,51 +19,94 @@ class SoloWindow(Screen):
     pass
 
 class GameWindow(Screen):
+
+
+
+
+    navbarList = [] #0 - sumLabel, 1 - roundLabel, 2 - leftLabel
+    playersNamesList = [] #lista graczy
+    playersPointsList = []  #lista punktow graczy, id te same
+    multiplierList = []
+    playersCount = 0
+    currentPlayer = 0
     buttonList = []
-    throwCount = 0
-    rounds = 1
+    round = 1
     left = 3
     def bindButton(self,j):
-         for i in self.children:
-            if (hasattr(i, 'sumLabel')):
-                if self.throwCount == 0:
-                    i.sumLabel.text = '0'
-                    self.throwCount +=1
-                else:
-                    if self.throwCount >= 2:
-                        self.rounds +=1
-                        self.left -=1
-                    if self.throwCount >=3:
-                        time.sleep(5)
-                        self.left = 3
-                        self.throwCount = 0
-                    else:
-                        i.sumLabel.text = str(int(i.sumLabel.text)+int(j))
-                        self.throwCount +=1
-                        self.left -=1
-                  
-            if (hasattr(i, 'roundLabel')):
-                i.roundLabel.text = str(self.rounds)
-            if (hasattr(i, 'leftLabel')):
-                i.leftLabel.text = str(self.left)
-                
+        multiplier = 1 #jutro tutaj trzeba dodac znajdowanie 
+        if self.multiplierList[1].active:
+            multiplier = 2
+        if self.multiplierList[2].active:
+            multiplier = 3
+        self.left -= 1
+        if self.left == 2:
+                self.navbarList[0].text = '0'
+                self.navbarList[0].color = (1, 1, 1, 1)
+                self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+        if self.left != 0:
+                self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
+                self.navbarList[2].text = str(self.left)
+                self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
+
+        else:
+            self.left = 3
+            if self.currentPlayer >= self.playersCount-1:
+                self.round += 1
+            self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
+            self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
+            self.navbarList[0].color = (1,0,1,1)#zmiana koloru przy następnym graczu
+            self.navbarList[1].text = str(self.round)
+            self.navbarList[2].text = str(self.left)
+
+            if self.currentPlayer >= self.playersCount-1:
+                self.currentPlayer = 0
+                self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+                self.playersNamesList[self.playersCount-1].color = (1,1,1,1)
+            else:
+                self.currentPlayer+=1
+                self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+                self.playersNamesList[self.currentPlayer-1].color = (1,1,1,1)
+
             
-                    
+            
                 
     def sayHi(self):
         print('hi')
     def create(self):
+        for i in self.children:
+            if (hasattr(i, 'buttonsGrid')):
+                self.multiplierList.append(i.boxx1)
+                self.multiplierList.append(i.boxx2)
+                self.multiplierList.append(i.boxx3)
+                break
         self.usersGrid.clear_widgets()
         count = len(self.manager.get_screen('chooseplayers').playerGrid.children)
+
+        for i in self.children:
+            if (hasattr(i, 'sumLabel')):
+                self.navbarList.append(i.sumLabel)
+                break
+        for i in self.children:
+            if (hasattr(i, 'roundLabel')):
+                self.navbarList.append(i.roundLabel)
+                break
+        for i in self.children:   
+            if (hasattr(i, 'leftLabel')):
+                self.navbarList.append(i.leftLabel)
+                break
+
         for i in range (count-1,0,-2):
             x = Label()
             x.text = self.manager.get_screen('chooseplayers').playerGrid.children[i-1].text
             self.usersGrid.add_widget(x)
             x.id = i
+            self.playersNamesList.append(x)
             x = Label()
             x.text = str(501)
             self.usersGrid.add_widget(x)
             x.id = i+1
+            self.playersPointsList.append(x)
+        self.playersCount = len(self.playersNamesList)
         # self.children[2].roundLabel.text = '10' #tutaj dobieramy sie do konretniej wartosci
         for i in self.children:
             if (hasattr(i, 'buttonsGrid')):
@@ -71,8 +114,8 @@ class GameWindow(Screen):
                 temp = []
                 for j in range (0,21):
                     temp.append(getattr(i, 'button'+str(j))) 
-                    print(temp[j])
                     temp[j].bind(on_release = lambda x: self.bindButton(x.text))
+        self.playersNamesList[0].color = (1,0,0,1)
                 # i.button0.text = 'WITAM W '
                 # i.button0.bind(on_release = lambda x: self.sayHi())
                 # print(i)
