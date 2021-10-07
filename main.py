@@ -20,9 +20,6 @@ class SoloWindow(Screen):
 
 class GameWindow(Screen):
 
-
-
-
     navbarList = [] #0 - sumLabel, 1 - roundLabel, 2 - leftLabel
     playersNamesList = [] #lista graczy
     playersPointsList = []  #lista punktow graczy, id te same

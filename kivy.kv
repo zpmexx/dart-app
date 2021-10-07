@@ -37,11 +37,17 @@ WindowManager:
             on_release:app.root.current = "chooseplayers";root.manager.transition.direction = "left"
 
 <ChoosePlayers>:
-    # playersInput: playersInput
-    # playersLabel: playersLabel
-    # playersButton: playersButton
     playerGrid: playerGrid
     chooseGrid: chooseGrid
+    gamesGrid: gamesGrid
+    cb180: cb180
+    cb301: cb301
+    cb501: cb501
+    cbmin: cbmin
+    cbmax: cbmax
+    cb180e: cb180e
+    cb301e: cb301e
+    cb501e: cb501e
     name: "chooseplayers"
     on_pre_enter: root.create()
     GridLayout:
@@ -49,30 +55,69 @@ WindowManager:
         # size_hint: 1,1
         spacing: '20dp'
         GridLayout:
+            id: gamesGrid
+            cols: 8
+            Label:
+                text:'180'
+            Label:
+                text:'301'
+            Label:
+                text:'501'
+            Label:
+                text:'MIN'
+            Label:
+                text:'MAX'
+            Label:
+                text:'180e'
+            Label:
+                text:'301e'
+            Label:
+                text:'501e'
+            CheckBox:
+                id: cb180
+                name: "cb180"
+                color: 0.4,0.3,0.2,1
+                group: "gameCheckBox"
+            CheckBox:
+                id: cb301
+                name: "cb301"
+                color: 0.4,0.3,0.2,1
+                group: "gameCheckBox"
+            CheckBox:
+                id: cb501
+                name: "cb501"
+                color: 0.4,0.3,0.2,1
+                group: "gameCheckBox"
+            CheckBox:
+                id: cbmin
+                name: "cbmin"
+                color: 0.4,0.3,0.2,1
+                group: "gameCheckBox"
+            CheckBox:
+                id: cbmax
+                name: "cbmax"
+                color: 0.4,0.3,0.2,1
+                group: "gameCheckBox"
+            CheckBox:
+                id: cb180e
+                name: "cb180e"
+                color: 0.4,0.3,0.2,1
+                group: "gameCheckBox"
+            CheckBox:
+                id: cb301e
+                name: "cb301e"
+                color: 0.4,0.3,0.2,1
+                group: "gameCheckBox"
+            CheckBox:
+                id: cb501e
+                name: "cb501e"
+                color: 0.4,0.3,0.2,1
+                group: "gameCheckBox"
+
+        GridLayout:
             id: chooseGrid
             name: 'chooseGrid'
             cols: 7
-            # Label:
-            #     id: playersLabel
-            #     name: "playersLabel"
-            #     text:'Podaj liczbe graczy (2-8)'
-            #     # size_hint: 1,1 
-            # TextInput:
-            #     id: playersInput
-            #     name: 'popupInput'
-            #     multiline: False
-            #     # size_hint: 1,0.5
-            #     # pos_hint: {'x':0 , 'y':0 }
-            # Button:
-            #     # size_hint: 1,1
-            #     # pos_hint: {'x':0 , 'y':0.0 }
-            #     text: "Wyślij"
-            #     color:
-            #     id: playersButton
-            #     # on_press:  app.root.current = "game";
-            #     on_press: root.checkPlayers()
-            #     # on_press: print(root.checkPlayers()[1])
-    
         GridLayout:
             id: playerGrid
             name: "playerGrid"
