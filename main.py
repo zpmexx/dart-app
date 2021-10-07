@@ -1,3 +1,9 @@
+from kivy import Config
+Config.set('graphics', 'width', '400')
+Config.set('graphics', 'height', '600')
+Config.set('graphics', 'minimum_width', '300')
+Config.set('graphics', 'minimum_height', '400')
+
 from kivy.app import App
 from kivy.core import text
 from kivy.uix.button import Button
@@ -13,6 +19,7 @@ from kivy.uix.textinput import TextInput
 from random import randint
 from functools import partial
 from kivy.properties import ListProperty
+from kivy.properties import NumericProperty
 import time
 
 class SoloWindow(Screen):
@@ -91,15 +98,43 @@ class GameWindow(Screen):
             if (hasattr(i, 'leftLabel')):
                 self.navbarList.append(i.leftLabel)
                 break
+        game = 0 #ktora gra
+        eliminator = 0 #czy gra to eliminator, 1 to eliminator, 2 to min-max
 
+        if self.manager.get_screen('chooseplayers').cb180.active:
+            game = 180
+        elif self.manager.get_screen('chooseplayers').cb301.active:
+            game = 301
+        elif self.manager.get_screen('chooseplayers').cb501.active:
+            game = 501
+        elif self.manager.get_screen('chooseplayers').cb180e.active:
+            game = 180
+            eliminator = 1
+        elif self.manager.get_screen('chooseplayers').cb301e.active:
+            game = 301
+            eliminator = 1
+        elif self.manager.get_screen('chooseplayers').cb501e.active:
+            game = 501
+            eliminator = 1    
+        elif self.manager.get_screen('chooseplayers').cbmax.active:
+            game = 0
+            eliminator = 2 
+        elif self.manager.get_screen('chooseplayers').cbmin.active:
+            game = 0
+            eliminator = 2      
+        
         for i in range (count-1,0,-2):
+            #print(self.manager.get_screen('chooseplayers').gamesGrid.children)
+            # for i in self.manager.get_screen('chooseplayers').gamesGrid.children:
+            #     if (hasattr(i, '301')):
+            #         print('witam')
             x = Label()
             x.text = self.manager.get_screen('chooseplayers').playerGrid.children[i-1].text
             self.usersGrid.add_widget(x)
             x.id = i
             self.playersNamesList.append(x)
             x = Label()
-            x.text = str(501)
+            x.text = str(game)
             self.usersGrid.add_widget(x)
             x.id = i+1
             self.playersPointsList.append(x)
@@ -144,13 +179,21 @@ class GameWindow(Screen):
     #     pos_hint ={'x':0.4 , 'y':0.8 }))
     #     self.add_widget(x)
     #     x.id = 'testlab'
-    
+
+class MaxLengthInput(TextInput):
+    max_characters = NumericProperty(0)
+    def insert_text(self, substring, from_undo=False):
+        if len(self.text) > self.max_characters and self.max_characters > 0:
+            substring = ""
+        TextInput.insert_text(self, substring, from_undo)
+
+
 class ChoosePlayers(Screen):
     def buttonclicked(self,i):
         self.playerGrid.clear_widgets()
         for i in range (0,i):
             self.playerGrid.add_widget(Label(text='Gracz '+str(i+1)))
-            self.playerGrid.add_widget(TextInput(multiline = False,name = str(i+1)))
+            self.playerGrid.add_widget(MaxLengthInput(multiline = False,name = str(i+1),max_characters = 12)) #dlugosc nazwy gracza
     
     def create(self):
         self.chooseGrid.clear_widgets()
