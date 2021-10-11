@@ -35,7 +35,10 @@ class GameWindow(Screen):
     playersCount = 0
     currentPlayer = 0
     buttonList = []
+    placeList = {} #lista miejsc graczy
     eliminator = 0 #czy gra to eliminator, 1 to eliminator, 2 to min-max
+    game = 0 #ktora gra
+    roundsCount = 0
     round = 1
     left = 3
     def bindButton(self,j):
@@ -57,26 +60,39 @@ class GameWindow(Screen):
                         self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
                         self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
                     elif int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier) == 0: #konczymy gre po koncu rundy
-                        pass#koniec gry
+                        self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                        self.playersPointsList[self.currentPlayer].text = '0'
                     else: #przekroczylo 0
                         self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
                         self.left = 0
 
             if self.left == 0:
                 self.left = 3
-                if self.currentPlayer >= self.playersCount-1:
-                    self.round += 1
+
+
+
                 self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
                 
                 if int(self.playersPointsList[self.currentPlayer].text) - int(j)*multiplier > 0:
                     self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
                 elif int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier) == 0:
-                    pass#koniec gry
+                    self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                    self.playersPointsList[self.currentPlayer].text = '0'
                 else:
                     self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
                 
                 self.playersPointsListTemp[self.currentPlayer] = int(self.playersPointsList[self.currentPlayer].text)
                 
+
+                if self.currentPlayer >= self.playersCount-1:
+                    self.round += 1
+                    if self.placeList: #zakonczenie gry
+                        print('koniec gry')
+                        for i in range (0,len(self.playersNamesList)):
+                            if self.playersNamesList[i].text not in self.placeList:
+                                self.placeList[self.playersNamesList[i].text] = self.playersPointsList[i].text
+                        print(self.placeList)
+
                 self.navbarList[0].color = (1,0,1,1)#zmiana koloru przy następnym graczu
                 self.navbarList[1].text = str(self.round)
                 self.navbarList[2].text = str(self.left)
@@ -89,12 +105,116 @@ class GameWindow(Screen):
                     self.currentPlayer+=1
                     self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
                     self.playersNamesList[self.currentPlayer-1].color = (1,1,1,1)
+            
+
+
+        elif self.eliminator == 1: #eliminator
+            if self.left == 2:
+                self.navbarList[0].text = '0'
+                self.navbarList[0].color = (1, 1, 1, 1)
+                self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+            if self.left != 0:
+                    self.navbarList[2].text = str(self.left)
+                    if int(self.playersPointsList[self.currentPlayer].text) + int(j)*multiplier < self.game: #czy rzut nie przekracza maxa
+                        self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
+                        self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier))
+
+                        for i in self.playersPointsList: #zerowanie graczy 
+                            if i!= self.playersPointsList[self.currentPlayer]:
+                                if int(self.playersPointsList[self.currentPlayer].text) == int(i.text):
+                                    i.text = '0'
+
+                    elif int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier) == self.game: #tutaj dodajemy do listy zwyciezce
+                        self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                        self.playersPointsList[self.currentPlayer].text = str(self.game)
+                    else: #przekroczylo 0
+                        self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
+                        self.left = 0
+
+            if self.left == 0:
+                self.left = 3
+
+                self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
+                
+                if int(self.playersPointsList[self.currentPlayer].text) + int(j)*multiplier < self.game:
+                    self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier))
+
+                    for i in self.playersPointsList: #zerowanie graczy 
+                        if i!= self.playersPointsList[self.currentPlayer]:
+                            if int(self.playersPointsList[self.currentPlayer].text) == int(i.text):
+                                i.text = '0'
+
+                elif int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier) == self.game:
+                    self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                    self.playersPointsList[self.currentPlayer].text = str(self.game)
+                else:
+                    self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
+                
+                self.playersPointsListTemp[self.currentPlayer] = int(self.playersPointsList[self.currentPlayer].text)
+                
+
+                if self.currentPlayer >= self.playersCount-1:
+                    self.round += 1
+                    if self.placeList: #zakonczenie gry
+                        print('koniec gry')
+                        for i in range (0,len(self.playersNamesList)):
+                            if self.playersNamesList[i].text not in self.placeList:
+                                self.placeList[self.playersNamesList[i].text] = self.playersPointsList[i].text
+                        print(self.placeList)
+
+
+                self.navbarList[0].color = (1,0,1,1) #zmiana koloru przy następnym graczu
+                self.navbarList[1].text = str(self.round)
+                self.navbarList[2].text = str(self.left)
+
+                if self.currentPlayer >= self.playersCount-1:
+                    self.currentPlayer = 0
+                    self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+                    self.playersNamesList[self.playersCount-1].color = (1,1,1,1)
+                else:
+                    self.currentPlayer+=1
+                    self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+                    self.playersNamesList[self.currentPlayer-1].color = (1,1,1,1)
+        else: #min - max
+            if self.left == 2:
+                self.navbarList[0].text = '0'
+                self.navbarList[0].color = (1, 1, 1, 1)
+                self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+            if self.left != 0:
+                    self.navbarList[2].text = str(self.left)
+                    self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
+                    self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier))
+
+            if self.left == 0:
+                self.left = 3
+                if self.currentPlayer >= self.playersCount-1:
+                    self.roundsCount -= 1
+
+                self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
+                
+                self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier))
+
+
+                if self.roundsCount == 0: #koniec gry
+                    print('koniec gry')
+                    for i in range (0,len(self.playersNamesList)):
+                        self.placeList[self.playersNamesList[i].text] = self.playersPointsList[i].text
+                    print(self.placeList)
+
+                self.navbarList[0].color = (1,0,1,1)#zmiana koloru przy następnym graczu
+                self.navbarList[1].text = str(self.roundsCount)
+                self.navbarList[2].text = str(self.left)
+
+                if self.currentPlayer >= self.playersCount-1:
+                    self.currentPlayer = 0
+                    self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+                    self.playersNamesList[self.playersCount-1].color = (1,1,1,1)
+                else:
+                    self.currentPlayer+=1
+                    self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+                    self.playersNamesList[self.currentPlayer-1].color = (1,1,1,1)
 
             
-            
-                
-    def sayHi(self):
-        print('hi')
     def create(self):
         for i in self.children:
             if (hasattr(i, 'buttonsGrid')):
@@ -117,34 +237,30 @@ class GameWindow(Screen):
             if (hasattr(i, 'leftLabel')):
                 self.navbarList.append(i.leftLabel)
                 break
-        game = 0 #ktora gra
+
         if self.manager.get_screen('chooseplayers').cb180.active:
-            game = 180
+            self.game = 180
         elif self.manager.get_screen('chooseplayers').cb301.active:
-            game = 301
+            self.game = 301
         elif self.manager.get_screen('chooseplayers').cb501.active:
-            game = 501
+            self.game = 501
         elif self.manager.get_screen('chooseplayers').cb180e.active:
-            game = 180
+            self.game = 180
             self.eliminator = 1
         elif self.manager.get_screen('chooseplayers').cb301e.active:
-            game = 301
+            self.game = 301
             self.eliminator = 1
         elif self.manager.get_screen('chooseplayers').cb501e.active:
-            game = 501
+            self.game = 501
             self.eliminator = 1    
         elif self.manager.get_screen('chooseplayers').cbmax.active:
-            game = 0
+            self.game = 0
             self.eliminator = 2 
         elif self.manager.get_screen('chooseplayers').cbmin.active:
-            game = 0
+            self.game = 0
             self.eliminator = 2      
         
         for i in range (count-1,0,-2):
-            #print(self.manager.get_screen('chooseplayers').gamesGrid.children)
-            # for i in self.manager.get_screen('chooseplayers').gamesGrid.children:
-            #     if (hasattr(i, '301')):
-            #         print('witam')
             x = Label()
             x.text = self.manager.get_screen('chooseplayers').playerGrid.children[i-1].text
             self.usersGrid.add_widget(x)
@@ -152,57 +268,37 @@ class GameWindow(Screen):
             self.playersNamesList.append(x)
             x = Label()
             if self.eliminator == 0:
-                x.text = str(game)
+                x.text = str(self.game)
             else:
                 x.text = '0'
             self.usersGrid.add_widget(x)
             x.id = i+1
             self.playersPointsList.append(x)
             if self.eliminator == 0:
-                self.playersPointsListTemp.append(game)
+                self.playersPointsListTemp.append(self.game)
             else:
                 self.playersPointsListTemp.append(0)
         self.playersCount = len(self.playersNamesList)
-        # self.children[2].roundLabel.text = '10' #tutaj dobieramy sie do konretniej wartosci
+
+        if self.playersCount >=2 and self.playersCount <=3: #ustalanie limitu rund dla min-max
+            self.roundsCount = 5
+        elif self.playersCount >=4 and self.playersCount <=5:
+            self.roundsCount = 15
+        else:
+            self.roundsCount = 10
+
+        if self.eliminator == 2:
+            self.navbarList[1].text = str(self.roundsCount)
+
         for i in self.children:
             if (hasattr(i, 'buttonsGrid')):
-                # i.button1.bind(on_release = lambda x: self.bindButton(10))
                 temp = []
                 for j in range (0,21):
                     temp.append(getattr(i, 'button'+str(j))) 
                     temp[j].bind(on_release = lambda x: self.bindButton(x.text))
         self.playersNamesList[0].color = (1,0,0,1)
-                # i.button0.text = 'WITAM W '
-                # i.button0.bind(on_release = lambda x: self.sayHi())
-                # print(i)
-                # print(i.button0.text)
-                # self.buttonList.append(i.button0)
-                # self.buttonList[0].text = 'Strzala'
-                # print(self.buttonList[0].name)
-                
-                
 
-            
-    # testlab = ObjectProperty(None)
-    # def __init__(self, **kwargs):
-    #     super(GameWindow, self).__init__(**kwargs)
-    #     self.lbl = self.ids['testlab']
-    # def getplayers(self):
-    #     print(self.manager.get_screen('chooseplayers').playerGrid.children)
-    #     for i in range (0,len(self.manager.get_screen('chooseplayers').playerGrid.children),2):
-    #         print (self.manager.get_screen('chooseplayers').playerGrid.children[i].text)
-    #     print(f'dlugosc to: ',len(self.manager.get_screen('chooseplayers').playerGrid.children) )
-    #     self.manager.get_screen('chooseplayers').playerGrid.clear_widgets()
-    #     self.manager.get_screen('chooseplayers').playersInput.text = ''
-    #     self.manager.get_screen('chooseplayers').playersButton.disabled = False
-    #     # self.testlab.clear_screen()
-    #     # self.ids.testlab.text = 'Elo'
-    #     x =( Label(
-    #     name = 'testlab',
-    #     size_hint = (0.2, 0.2),
-    #     pos_hint ={'x':0.4 , 'y':0.8 }))
-    #     self.add_widget(x)
-    #     x.id = 'testlab'
+    
 
 class MaxLengthInput(TextInput):
     max_characters = NumericProperty(0)
