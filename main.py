@@ -30,46 +30,65 @@ class GameWindow(Screen):
     navbarList = [] #0 - sumLabel, 1 - roundLabel, 2 - leftLabel
     playersNamesList = [] #lista graczy
     playersPointsList = []  #lista punktow graczy, id te same
+    playersPointsListTemp = []
     multiplierList = []
     playersCount = 0
     currentPlayer = 0
     buttonList = []
+    eliminator = 0 #czy gra to eliminator, 1 to eliminator, 2 to min-max
     round = 1
     left = 3
     def bindButton(self,j):
-        multiplier = 1 #jutro tutaj trzeba dodac znajdowanie 
+        multiplier = 1 
         if self.multiplierList[1].active:
             multiplier = 2
         if self.multiplierList[2].active:
             multiplier = 3
         self.left -= 1
-        if self.left == 2:
+        
+        if self.eliminator == 0: #gra klasyczna
+            if self.left == 2:
                 self.navbarList[0].text = '0'
                 self.navbarList[0].color = (1, 1, 1, 1)
                 self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
-        if self.left != 0:
+            if self.left != 0:
+                    self.navbarList[2].text = str(self.left)
+                    if int(self.playersPointsList[self.currentPlayer].text) - int(j)*multiplier > 0: #czy rzut nie przekracza 0
+                        self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
+                        self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
+                    elif int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier) == 0: #konczymy gre po koncu rundy
+                        pass#koniec gry
+                    else: #przekroczylo 0
+                        self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
+                        self.left = 0
+
+            if self.left == 0:
+                self.left = 3
+                if self.currentPlayer >= self.playersCount-1:
+                    self.round += 1
                 self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
+                
+                if int(self.playersPointsList[self.currentPlayer].text) - int(j)*multiplier > 0:
+                    self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
+                elif int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier) == 0:
+                    pass#koniec gry
+                else:
+                    self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
+                
+                self.playersPointsListTemp[self.currentPlayer] = int(self.playersPointsList[self.currentPlayer].text)
+                
+                self.navbarList[0].color = (1,0,1,1)#zmiana koloru przy następnym graczu
+                self.navbarList[1].text = str(self.round)
                 self.navbarList[2].text = str(self.left)
-                self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
 
-        else:
-            self.left = 3
-            if self.currentPlayer >= self.playersCount-1:
-                self.round += 1
-            self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
-            self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
-            self.navbarList[0].color = (1,0,1,1)#zmiana koloru przy następnym graczu
-            self.navbarList[1].text = str(self.round)
-            self.navbarList[2].text = str(self.left)
-
-            if self.currentPlayer >= self.playersCount-1:
-                self.currentPlayer = 0
-                self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
-                self.playersNamesList[self.playersCount-1].color = (1,1,1,1)
-            else:
-                self.currentPlayer+=1
-                self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
-                self.playersNamesList[self.currentPlayer-1].color = (1,1,1,1)
+                if self.currentPlayer >= self.playersCount-1:
+                    self.currentPlayer = 0
+                    self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+                    self.playersNamesList[self.playersCount-1].color = (1,1,1,1)
+                else:
+                    self.currentPlayer+=1
+                    self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
+                    self.playersNamesList[self.currentPlayer-1].color = (1,1,1,1)
 
             
             
@@ -99,8 +118,6 @@ class GameWindow(Screen):
                 self.navbarList.append(i.leftLabel)
                 break
         game = 0 #ktora gra
-        eliminator = 0 #czy gra to eliminator, 1 to eliminator, 2 to min-max
-
         if self.manager.get_screen('chooseplayers').cb180.active:
             game = 180
         elif self.manager.get_screen('chooseplayers').cb301.active:
@@ -109,19 +126,19 @@ class GameWindow(Screen):
             game = 501
         elif self.manager.get_screen('chooseplayers').cb180e.active:
             game = 180
-            eliminator = 1
+            self.eliminator = 1
         elif self.manager.get_screen('chooseplayers').cb301e.active:
             game = 301
-            eliminator = 1
+            self.eliminator = 1
         elif self.manager.get_screen('chooseplayers').cb501e.active:
             game = 501
-            eliminator = 1    
+            self.eliminator = 1    
         elif self.manager.get_screen('chooseplayers').cbmax.active:
             game = 0
-            eliminator = 2 
+            self.eliminator = 2 
         elif self.manager.get_screen('chooseplayers').cbmin.active:
             game = 0
-            eliminator = 2      
+            self.eliminator = 2      
         
         for i in range (count-1,0,-2):
             #print(self.manager.get_screen('chooseplayers').gamesGrid.children)
@@ -134,10 +151,17 @@ class GameWindow(Screen):
             x.id = i
             self.playersNamesList.append(x)
             x = Label()
-            x.text = str(game)
+            if self.eliminator == 0:
+                x.text = str(game)
+            else:
+                x.text = '0'
             self.usersGrid.add_widget(x)
             x.id = i+1
             self.playersPointsList.append(x)
+            if self.eliminator == 0:
+                self.playersPointsListTemp.append(game)
+            else:
+                self.playersPointsListTemp.append(0)
         self.playersCount = len(self.playersNamesList)
         # self.children[2].roundLabel.text = '10' #tutaj dobieramy sie do konretniej wartosci
         for i in self.children:

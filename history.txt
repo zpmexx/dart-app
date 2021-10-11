@@ -1,160 +1,29 @@
-cd C:\Users\ziemowit.palka\Desktop\git
-cd C:\Users\ziemowit.palka\Desktopls
-ls
-cd
-.
-..
-ls
-C:LS
-ls
-ls -a
-cd .
-cd ..
-ls
-cd ziemo/
-ls
-cd ..
-ls
-cd .
-cd ..
-ls
-ls
-cd dart-app/
-pip instlal virtualenv
-sudo apt install python3-pip
-pip install
-sudo apt install python3-pip
-apt install python3-pip
-sudo apt install python3-pip
-sudo nano /etc/apt/sources.list
 sudo apt update
-sudo apt install python3-pip
-pip install
-pip install virtualenv
-s
-ls
-s
-pip install -r requirements.txt 
-pip list
-clc
-clear
-python main.py 
-oython3 main.py 
-python3 main.py 
-python -m pip install kivy[base] kivy_examples
-python3 -m pip install kivy[base] kivy_examples
-python3 main.py 
-apt-get install libmtdev1
-sudo apt-get install libmtdev1
-python3 main.py 
-virtualenv virtual
-sudo apt install python3-virtualenv
-sudo apt install python3-virtualenv
-virtualenv virtual
-python3 -m venv virtaul
-ls
-virtual\SCRIPTS
-virtual/Scripts/activate
-$ source virtual/Scripts/activate
-pip list
-pip install -r requirements.txt 
-python -m pip install kivy[base] kivy_examples
-python3 -m pip install kivy[base] kivy_examples
-python main.py 
-python3 main.py 
-xhost local:root
-sudo apt install x11-xserver-utils
-xhost local:root
-python3 main.py 
+sudo apt install -y git zip unzip openjdk-8-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+sudo pip install cython==0.20 
+pip3 install --user --upgrade Cython==0.29.19 virtualenv  # the --user should be removed if you do this in a venv
+buildozer init
 pip3 install --user --upgrade buildozer
-buildzoer init
-wget https://github.com/HeaTTheatR/KivyMD-data/raw/master/install-kivy-buildozer-dependencies.sh
-chmod +x install-kivy-buildozer-dependencies.sh
-./install-kivy-buildozer-dependencies.sh
-buildzoer init
+buildozer init
 pip list
-ls
+sudo apt-get install libmtdev1
+python3 -m pip install kivy[base] kivy_examples
 buildozer init
-sudo apt update
-sudo apt install -y git zip unzip openjdk-8-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-pip3 install --upgrade Cython==0.29.19 virtualenv
-pip list
-pip3 list
-python
-python3
-python3 pip list
-buildozer init
-LS
-ls
-virtual\Scripts\deactivate
-virtual/Scripts/deactivate
-ls
-ls -l
-cd ..
-ls -l
-ls
-cd ziemo/
-ls
-cd ..
-pip3 install --upgrade Cython==0.29.19 virtualenv
-buildozer init
-cd ..
-buildozer init
-buildozer android debug
-sudo buildozer android debug
-buildozer android debug
-buildozer android debugsudo pip install cython==0.20
-sudo pip install cython==0.20
-buildozer android debugsudo pip install cython==0.20
-buildozer android debug
-sudo buildozer android debug
-sudo app buildozer android debug
-sudo -f buildozer android debug
-sudo buildozer android debug
-sudo apt updatesudo
-sudo wget https://github.com/HeaTTheatR/KivyMD-data/raw/master/install-kivy-buildozer-dependencies.sh
-chmod +x install-kivy-buildozer-dependencies.sh
-./install-kivy-buildozer-dependencies.sh
-sudo buildozer android debug
-buildozer android debug
-sudo buildozer android debugclear
-clear
-ls
-chmod .buildozer
-chmod .buildozer 777
-chmod 777 .buildozer 
-ls -l
-ls -a
-ls -a -l
-sudo buildozer android debugclear
-buildozer android debug
-sudo apt install -y git zip unzip openjdk-8-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
-pip3 install --upgrade Cython==0.29.19 virtualenv
-buildozer android debug
+sudo apt buildozer init
 ls -la ~/ | more
 vi ~/.bashrc
-buildozer android debug
-ls -la ~/ | more
-chmod 777 .bashrc
-buildozer android debug
-sudo add-apt-repository ppa:kivy-team/kivy
-sudo apt-get update
-sudo apt-get install python-kivy
+buildozer init
+vi ~/.bashrc
 sudo apt-get install zlib1g-dev git-core cython openjdk-7-jdk
-sudo pip install buildozer
-buildozer android debug deploy run
-buildozer android clean
-buildozer android debug
-buildozer android clean
-sudo pip install cython==0.20 
-buildozer android clean
-buildozer android debug
-buildozer android debug deploy run
-buildozer android clean
-sudo pip uninstall cython 
-sudo pip install cython==0.20 
-sudo pip cython --version
-buildozer android clean
-buildozer android debug deploy run
-history
+buildozer init
+sudo buildozer init
+buildozer init
+sudo apt update
+buildozer init
+sudo apt install -y git zip unzip openjdk-8-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+pip3 install --user --upgrade Cython==0.29.19 virtualenv  # the --user should be removed if you do this in a venv
+buildozer init
+vi ~/.bashrc
+buildozer init
+buildozer -v android debug
 history -w history.txt
