@@ -39,17 +39,23 @@ class GameWindow(Screen):
     eliminator = 0 #czy gra to eliminator, 1 to eliminator, 2 to min-max
     game = 0 #ktora gra
     roundsCount = 0
-    round = 1
+    round = 1 
+    finish = 0 #kontolna zmienna by nie powielać kroku gdy zakonczy sie runde przed trecim rzutem
     left = 3
     def bindButton(self,j):
+        self.finish = 0
         multiplier = 1 
         if self.multiplierList[1].active:
             multiplier = 2
         if self.multiplierList[2].active:
             multiplier = 3
         self.left -= 1
+
+        if int(j) == 25 or int(j) == 50:
+            multiplier = 1
         
         if self.eliminator == 0: #gra klasyczna
+            print(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
             if self.left == 2:
                 self.navbarList[0].text = '0'
                 self.navbarList[0].color = (1, 1, 1, 1)
@@ -57,41 +63,49 @@ class GameWindow(Screen):
             if self.left != 0:
                     self.navbarList[2].text = str(self.left)
                     if int(self.playersPointsList[self.currentPlayer].text) - int(j)*multiplier > 0: #czy rzut nie przekracza 0
+                        print("> 0")
                         self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
                         self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
                     elif int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier) == 0: #konczymy gre po koncu rundy
-                        self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                        print("==0")
                         self.playersPointsList[self.currentPlayer].text = '0'
+                        self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                        self.left = 0
+                        self.finish = 1
                     else: #przekroczylo 0
+                        print('<0')
                         self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
                         self.left = 0
 
             if self.left == 0:
                 self.left = 3
 
-
-
                 self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
-                
-                if int(self.playersPointsList[self.currentPlayer].text) - int(j)*multiplier > 0:
-                    self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
-                elif int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier) == 0:
-                    self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
-                    self.playersPointsList[self.currentPlayer].text = '0'
-                else:
-                    self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
-                
-                self.playersPointsListTemp[self.currentPlayer] = int(self.playersPointsList[self.currentPlayer].text)
-                
+                if self.finish == 0:
+                    if int(self.playersPointsList[self.currentPlayer].text) - int(j)*multiplier > 0:
+                        print('>0 v2')
+                        self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier))
+                    elif int(self.playersPointsList[self.currentPlayer].text) - (int(j)*multiplier) == 0:
+                        print('==0 v2')
+                        self.playersPointsList[self.currentPlayer].text = '0'
+                        self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                    else:
+                        print('<0 v2')
+                        self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
+                    
+                    self.playersPointsListTemp[self.currentPlayer] = int(self.playersPointsList[self.currentPlayer].text)
+                    
 
                 if self.currentPlayer >= self.playersCount-1:
                     self.round += 1
-                    if self.placeList: #zakonczenie gry
+                    if self.placeList: #koniec gry
                         print('koniec gry')
                         for i in range (0,len(self.playersNamesList)):
                             if self.playersNamesList[i].text not in self.placeList:
                                 self.placeList[self.playersNamesList[i].text] = self.playersPointsList[i].text
                         print(self.placeList)
+                        App.get_running_app().root.transition.direction = "left"  
+                        App.get_running_app().root.current = "scoreboard"
 
                 self.navbarList[0].color = (1,0,1,1)#zmiana koloru przy następnym graczu
                 self.navbarList[1].text = str(self.round)
@@ -109,6 +123,7 @@ class GameWindow(Screen):
 
 
         elif self.eliminator == 1: #eliminator
+            self.finish = 0
             if self.left == 2:
                 self.navbarList[0].text = '0'
                 self.navbarList[0].color = (1, 1, 1, 1)
@@ -125,8 +140,10 @@ class GameWindow(Screen):
                                     i.text = '0'
 
                     elif int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier) == self.game: #tutaj dodajemy do listy zwyciezce
-                        self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
                         self.playersPointsList[self.currentPlayer].text = str(self.game)
+                        self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                        self.left = 0
+                        self.finish = 1
                     else: #przekroczylo 0
                         self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
                         self.left = 0
@@ -135,22 +152,22 @@ class GameWindow(Screen):
                 self.left = 3
 
                 self.navbarList[0].text = str(int(self.navbarList[0].text)+(int(j)*multiplier))
-                
-                if int(self.playersPointsList[self.currentPlayer].text) + int(j)*multiplier < self.game:
-                    self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier))
+                if self.finish == 0:    
+                    if int(self.playersPointsList[self.currentPlayer].text) + int(j)*multiplier < self.game:
+                        self.playersPointsList[self.currentPlayer].text = str(int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier))
 
-                    for i in self.playersPointsList: #zerowanie graczy 
-                        if i!= self.playersPointsList[self.currentPlayer]:
-                            if int(self.playersPointsList[self.currentPlayer].text) == int(i.text):
-                                i.text = '0'
+                        for i in self.playersPointsList: #zerowanie graczy 
+                            if i!= self.playersPointsList[self.currentPlayer]:
+                                if int(self.playersPointsList[self.currentPlayer].text) == int(i.text):
+                                    i.text = '0'
 
-                elif int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier) == self.game:
-                    self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
-                    self.playersPointsList[self.currentPlayer].text = str(self.game)
-                else:
-                    self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
-                
-                self.playersPointsListTemp[self.currentPlayer] = int(self.playersPointsList[self.currentPlayer].text)
+                    elif int(self.playersPointsList[self.currentPlayer].text) + (int(j)*multiplier) == self.game:
+                        self.playersPointsList[self.currentPlayer].text = str(self.game)
+                        self.placeList[self.playersNamesList[self.currentPlayer].text] = self.playersPointsList[self.currentPlayer].text
+                    else:
+                        self.playersPointsList[self.currentPlayer].text = str(self.playersPointsListTemp[self.currentPlayer])
+                    
+                    self.playersPointsListTemp[self.currentPlayer] = int(self.playersPointsList[self.currentPlayer].text)
                 
 
                 if self.currentPlayer >= self.playersCount-1:
@@ -161,6 +178,8 @@ class GameWindow(Screen):
                             if self.playersNamesList[i].text not in self.placeList:
                                 self.placeList[self.playersNamesList[i].text] = self.playersPointsList[i].text
                         print(self.placeList)
+                        App.get_running_app().root.transition.direction = "left"  
+                        App.get_running_app().root.current = "scoreboard"
 
 
                 self.navbarList[0].color = (1,0,1,1) #zmiana koloru przy następnym graczu
@@ -200,6 +219,8 @@ class GameWindow(Screen):
                     for i in range (0,len(self.playersNamesList)):
                         self.placeList[self.playersNamesList[i].text] = self.playersPointsList[i].text
                     print(self.placeList)
+                    App.get_running_app().root.transition.direction = "left"  
+                    App.get_running_app().root.current = "scoreboard"
 
                 self.navbarList[0].color = (1,0,1,1)#zmiana koloru przy następnym graczu
                 self.navbarList[1].text = str(self.roundsCount)
@@ -296,6 +317,11 @@ class GameWindow(Screen):
                 for j in range (0,21):
                     temp.append(getattr(i, 'button'+str(j))) 
                     temp[j].bind(on_release = lambda x: self.bindButton(x.text))
+                temp.append(getattr(i, 'button25')) 
+                temp[21].bind(on_release = lambda x: self.bindButton(x.text))
+                temp.append(getattr(i, 'button50')) 
+                temp[22].bind(on_release = lambda x: self.bindButton(x.text))
+                
         self.playersNamesList[0].color = (1,0,0,1)
 
     
@@ -330,6 +356,29 @@ class ChoosePlayers(Screen):
     #     self.playersInput.text = ''
     #     self.playersButton.disabled = False
 
+class ScoreBoard(Screen):
+    
+    def create(self):
+        newDict = {}
+        newDict = {k: v for k, v in sorted(self.manager.get_screen('game').placeList.items(), key=lambda item: item[1])}
+        print(newDict)
+        place = 1
+        # for key, value in self.manager.get_screen('game').placeList.items():
+        for key, value in newDict.items():
+
+            x = Label()
+            x.text = str(place)
+            self.scoreboardGrid.add_widget(x) 
+
+            x = Label()
+            x.text = key
+            self.scoreboardGrid.add_widget(x) 
+
+            x = Label()
+            x.text = value
+            self.scoreboardGrid.add_widget(x) 
+
+            place +=1
 
         
 

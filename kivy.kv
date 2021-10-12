@@ -7,6 +7,7 @@ WindowManager:
     LoginWindow:
     GameWindow:
     ChoosePlayers:
+    ScoreBoard:
 
 <MainWindow>:
     solobutton: solobutton
@@ -337,25 +338,23 @@ WindowManager:
         pos_hint: {'x':0 , 'y':0.4 }
         cols: 2
         id: usersGrid
-        name: "usersGrid"
-        
-    # # Label:
-    # #     text:''
-    # #     id: testlab
-    # #     name: 'testlab'
-    # #     size_hint: 0.2, 0.2
-    # #     pos_hint: {'x':0.4 , 'y':0.8 }
-    # Button:
-    #     size_hint: 0.2, 0.2
-    #     pos_hint: {'x':0.8 , 'y':0.8 }
-    #     text: "getplayers"
-    #     color:
-    #     on_press: root.getplayers()
-    # Button:
-    #     size_hint: 0.2, 0.2
-    #     pos_hint: {'x':0.6 , 'y':0.6 }
-    #     text: "powrót do main"
-    #     color:
-    #     on_press: root.testm()
-    #     # on_press:               app.root.current = "main"       ;root.manager.transition.direction = "right"    
+        name: "usersGrid"  
     Buttons:
+
+<ScoreBoard>:
+    scoreboardGrid: scoreboardGrid
+    name: "scoreboard"
+    on_enter: root.create()
+    size_hint: 1, 1
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+        id: scoreboardGrid
+        name: "scoreboardGrid"  
+        cols: 3
+        spacing: '20dp'
+
+
