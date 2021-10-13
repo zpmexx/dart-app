@@ -49,6 +49,7 @@ WindowManager:
     cb180e: cb180e
     cb301e: cb301e
     cb501e: cb501e
+    confirmButton: confirmButton
     name: "chooseplayers"
     on_pre_enter: root.create()
     GridLayout:
@@ -77,41 +78,50 @@ WindowManager:
             CheckBox:
                 id: cb180
                 name: "cb180"
+                active: True
+                allow_no_selection: False
                 color: 0.4,0.3,0.2,1
                 group: "gameCheckBox"
             CheckBox:
                 id: cb301
                 name: "cb301"
+                allow_no_selection: False
                 color: 0.4,0.3,0.2,1
                 group: "gameCheckBox"
             CheckBox:
                 id: cb501
                 name: "cb501"
+                allow_no_selection: False
                 color: 0.4,0.3,0.2,1
                 group: "gameCheckBox"
             CheckBox:
                 id: cbmin
                 name: "cbmin"
+                allow_no_selection: False
                 color: 0.4,0.3,0.2,1
                 group: "gameCheckBox"
             CheckBox:
                 id: cbmax
                 name: "cbmax"
+                allow_no_selection: False
                 color: 0.4,0.3,0.2,1
                 group: "gameCheckBox"
             CheckBox:
                 id: cb180e
                 name: "cb180e"
+                allow_no_selection: False
                 color: 0.4,0.3,0.2,1
                 group: "gameCheckBox"
             CheckBox:
                 id: cb301e
                 name: "cb301e"
+                allow_no_selection: False
                 color: 0.4,0.3,0.2,1
                 group: "gameCheckBox"
             CheckBox:
                 id: cb501e
                 name: "cb501e"
+                allow_no_selection: False
                 color: 0.4,0.3,0.2,1
                 group: "gameCheckBox"
 
@@ -127,9 +137,13 @@ WindowManager:
             cols: 2
             Button:
                 text: "Zatwierdź"
+                name: "confirmButton"
+                id: confirmButton
+                disabled: 'True'   
                 color:
                 # on_release: root.saveNames()
-                on_press: app.root.current = "game";root.manager.transition.direction = "left"   
+                on_press: root.validatePlayers()
+                # on_press: app.root.current = "game";root.manager.transition.direction = "left"   
             Button:
                 text: "Powrót"
                 color:

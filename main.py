@@ -43,6 +43,7 @@ class GameWindow(Screen):
     finish = 0 #kontolna zmienna by nie powielać kroku gdy zakonczy sie runde przed trecim rzutem
     left = 3
     def bindButton(self,j):
+        
         self.finish = 0
         multiplier = 1 
         if self.multiplierList[1].active:
@@ -340,6 +341,7 @@ class ChoosePlayers(Screen):
         for i in range (0,i):
             self.playerGrid.add_widget(Label(text='Gracz '+str(i+1)))
             self.playerGrid.add_widget(MaxLengthInput(multiline = False,name = str(i+1),max_characters = 12)) #dlugosc nazwy gracza
+        self.manager.get_screen('chooseplayers').confirmButton.disabled = False
     
     def create(self):
         self.chooseGrid.clear_widgets()
@@ -349,7 +351,35 @@ class ChoosePlayers(Screen):
             x.id = i
             self.chooseGrid.add_widget(x)
             x.bind(on_release = lambda x :(self.buttonclicked(x.id)))
-        
+
+    def validatePlayers(self):
+        result = 0
+        nameslist = []
+        for i in range (0,len(self.playerGrid.children),2):
+            nameslist.append(self.playerGrid.children[i].text.lstrip())
+        for i in range (0,len(self.playerGrid.children),2):
+            if self.playerGrid.children[i].text.lstrip() == '':
+              self.playerGrid.children[i+1].color = 1,0,0,1   
+              result = 1
+            else:
+                self.playerGrid.children[i+1].color = 1,1,1,1  
+        # for i in range (0,len(nameslist)):
+        #     if nameslist.count(nameslist[i])>1:
+        #         for j in range (0,len(nameslist)):
+        #             if self.playerGrid.children[j].text == nameslist[i]:
+        #                 self.playerGrid.children[j].color = 1,0,0,1 
+        #                 result = 1
+        #             else:
+        #                 self.playerGrid.children[j].color = 1,1,1,1 
+        if result == 1:
+            pass
+        else:
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "game"
+            
+            
+
+             
 
     # def clear(self):
     #     self.playerGrid.clear_widgets()
@@ -359,9 +389,7 @@ class ChoosePlayers(Screen):
 class ScoreBoard(Screen):
     
     def create(self):
-        newDict = {}
-        newDict = {k: v for k, v in sorted(self.manager.get_screen('game').placeList.items(), key=lambda item: item[1])}
-        print(newDict)
+        newDict = dict(sorted(self.manager.get_screen('game').placeList.items(), key=lambda item: int(item[1])))
         place = 1
         # for key, value in self.manager.get_screen('game').placeList.items():
         for key, value in newDict.items():
