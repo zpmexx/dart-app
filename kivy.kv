@@ -148,7 +148,8 @@ WindowManager:
                 text: "Powrót"
                 color:
                 # on_release: root.clear();app.root.current = "main";root.manager.transition.direction = "right"   
-                on_release: app.root.current = "main"; root.manager.transition.direction = "right"      
+                # on_release: app.root.current = "main"; root.manager.transition.direction = "right"    
+                on_release: root.backFunction()  
                     
             
         
@@ -366,9 +367,17 @@ WindowManager:
             size: self.size
             source: 'background.jpg'
     GridLayout:
+        size_hint: 1, 0.6
+        pos_hint: {'x':0 , 'y':0.3 }
         id: scoreboardGrid
         name: "scoreboardGrid"  
         cols: 3
         spacing: '20dp'
+    
+    Button:
+        text:'Powrót'
+        # on_release:app.root.current = "main";root.manager.transition.direction = "left"
+        on_release: root.backFunction()
+        size_hint: 1,0.2 
 
 
