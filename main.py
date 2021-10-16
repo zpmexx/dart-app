@@ -346,6 +346,7 @@ class ChoosePlayers(Screen):
             self.playerGrid.add_widget(Label(text='Gracz '+str(i+1)))
             self.playerGrid.add_widget(MaxLengthInput(multiline = False,name = str(i+1),max_characters = 12)) #dlugosc nazwy gracza
         self.manager.get_screen('chooseplayers').confirmButton.disabled = False
+        
     
     def create(self):
         self.chooseGrid.clear_widgets()
@@ -385,6 +386,7 @@ class ChoosePlayers(Screen):
     def backFunction(self):
         self.chooseGrid.clear_widgets()
         self.playerGrid.clear_widgets()
+        self.confirmButton.disabled = True
         self.cb180.active = True
         App.get_running_app().root.current = "main"
         App.get_running_app().root.transition.direction = "right" 
