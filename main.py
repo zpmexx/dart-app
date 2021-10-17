@@ -23,7 +23,101 @@ from kivy.properties import NumericProperty
 import time
 
 class SoloWindow(Screen):
-    pass
+    game = 0 #wybrana gra: 
+    """
+    0 - 180
+    1 - 301
+    2 - 501
+    3 - 701
+    4 - min
+    5 - max
+    6 - trening
+    7- trening losowy
+    """
+    def choose(self,index):
+        if index >=0 or index <=3:
+
+            if index == 0:
+                self.manager.get_screen('solo180701').leftLabel.text = "180"
+                self.manager.get_screen('solo180701').playerPoints = 180
+                self.game = index
+            elif index == 1:
+                self.manager.get_screen('solo180701').leftLabel.text = "301"
+                self.game = index
+                self.manager.get_screen('solo180701').playerPoints = 301
+            elif index == 2:
+                self.manager.get_screen('solo180701').leftLabel.text = "501"
+                self.game = index
+                self.manager.get_screen('solo180701').playerPoints = 501
+            elif index == 3:
+                self.manager.get_screen('solo180701').leftLabel.text = "701"
+                self.game = index
+                self.manager.get_screen('solo180701').playerPoints = 701
+
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "solo180701"
+
+class Solo180701(Screen):
+    multiplierList = []
+    navbarList = [] #0-leftLabel, 1-countLabel, 2-avgLabel
+    bindbtn = 0
+    finish = 0
+    playerPoints = 0
+    throwCount = 0
+    throwSum = 0
+    avg = 0
+
+    def bindButton(self,j):
+        self.finish = 0
+        multiplier = 1 
+        if self.multiplierList[1].active:
+            multiplier = 2
+        if self.multiplierList[2].active:
+            multiplier = 3
+
+        if int(j) == 25 or int(j) == 50: #25 oraz 50 nie maja mnożnika
+            multiplier = 1
+
+        
+        if self.playerPoints - int(j)*multiplier > 0:
+            self.playerPoints -= int(j)*multiplier
+            self.throwSum += int(j)*multiplier
+            self.navbarList[0].text = str(self.playerPoints)
+            self.throwCount +=1
+            self.navbarList[1].text = str(self.throwCount)
+            self.navbarList[2].text = str(round(float(self.throwSum)/float(self.throwCount),2))
+        elif self.playerPoints - int(j)*multiplier == 0:
+            #koniec gry
+            pass
+        else:
+            pass
+
+
+
+    def create(self):
+        for i in self.children:
+            if (hasattr(i, 'buttonsGrid')):
+                self.multiplierList.append(i.boxx1)
+                self.multiplierList.append(i.boxx2)
+                self.multiplierList.append(i.boxx3)
+                break
+        self.navbarList.append(self.leftLabel)           
+        self.navbarList.append(self.countLabel)
+        self.navbarList.append(self.avgLabel)
+
+        if self.bindbtn == 0:
+            self.bindbtn = 1
+            for i in self.children:
+                if (hasattr(i, 'buttonsGrid')):
+                    temp = []
+                    for j in range (0,21):
+                        temp.append(getattr(i, 'button'+str(j))) 
+                        temp[j].bind(on_release = lambda x: self.bindButton(x.text))
+                    temp.append(getattr(i, 'button25')) 
+                    temp[21].bind(on_release = lambda x: self.bindButton(x.text))
+                    temp.append(getattr(i, 'button50')) 
+                    temp[22].bind(on_release = lambda x: self.bindButton(x.text))
+
 
 class GameWindow(Screen):
 
@@ -52,7 +146,7 @@ class GameWindow(Screen):
             multiplier = 3
         self.left -= 1
 
-        if int(j) == 25 or int(j) == 50:
+        if int(j) == 25 or int(j) == 50: #25 oraz 50 nie maja mnożnika
             multiplier = 1
         
         if self.eliminator == 0: #gra klasyczna
@@ -101,7 +195,7 @@ class GameWindow(Screen):
                         App.get_running_app().root.current = "scoreboard"
                         self.navbarList[0].text = '0'
                         self.navbarList[1].text = '1'
-                        self.navbarList[2].text = '3'
+                        self.navbarList[2].text = '3'#wartosci domyslne do nowej gry
                         return
                         
 

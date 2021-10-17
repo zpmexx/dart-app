@@ -8,6 +8,7 @@ WindowManager:
     GameWindow:
     ChoosePlayers:
     ScoreBoard:
+    Solo180701:
 
 <MainWindow>:
     solobutton: solobutton
@@ -169,7 +170,7 @@ WindowManager:
         spacing: '10dp'
         GridLayout:
             cols: 2
-            rows: 3
+            rows: 4
             # size_hint: .6,.6
             # pos_hint: {'x': 0.2 , 'y': 0.2}
             # size_hint: 0.5,0.5
@@ -177,28 +178,36 @@ WindowManager:
             Button:
                 text: "180"
                 color: 0.4,0.3,0.2,1
-                on_release: app.root.current = "game"; root.manager.transition.direction = "left"     
+                on_release: root.choose(0)
             Button:
                 text: "301"
                 color: 0.4,0.3,0.2,1
-                on_release: app.root.current = "solo"
+                on_release: root.choose(1)
                 background_colour: 1,1,1,1
             Button:
                 text: "501"
                 color: 0.4,0.3,0.2,1
-                on_release: app.root.current = "solo"
+                on_release: root.choose(2)
             Button:
                 text: "701"
                 color: 0.4,0.3,0.2,1
-                on_release: app.root.current = "solo"
+                on_release: root.choose(3)
+            Button:
+                text: "Min"
+                color: 0.4,0.3,0.2,1
+                on_release: root.choose(4)
+            Button:
+                text: "Max"
+                color: 0.4,0.3,0.2,1
+                on_release: root.choose(5)
             Button:
                 text: "Trening"
                 color: 0.4,0.3,0.2,1
-                on_release: app.root.current = "solo"
+                on_release: root.choose(6)
             Button:
                 text: "Trening losowy"
                 color: 0.4,0.3,0.2,1
-                on_release: app.root.current = "solo"
+                on_release: root.choose(7)
         Button:
             text: "Powrót"
             # font_size: self.width / 15
@@ -380,4 +389,54 @@ WindowManager:
         on_release: root.backFunction()
         size_hint: 1,0.2 
 
+<Solo180701>:
+    name: "solo180701"
+    usersGrid: statsGrid
+    countLabel: countLabel
+    leftLabel: leftLabel
+    avgLabel: avgLabel
+    size_hint: 1, 1
+    on_enter: root.create()
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+        size_hint: 1, 0.5
+        pos_hint: {'x':0 , 'y':0.5 }
+        cols: 3
+        id: statsGrid
+        name: "statsGrid"  
+
+        Label:
+            text: "Pozostało"
+            color:
+
+        Label:
+            text: "Liczba rzutów"
+            color:        
+        
+        Label:
+            text: "Średnia rzutu"
+            color:
+
+        Label:
+            id: leftLabel
+            name: "leftLabel"
+            text: ""
+            color:
+
+        Label:
+            id: countLabel
+            name: "countLabel"       
+            text: "0"
+            color:
+
+        Label:
+            id: avgLabel
+            name: "avgLabel"        
+            text: "0"
+            color:
+    Buttons:
 
