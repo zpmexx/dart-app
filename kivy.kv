@@ -10,6 +10,7 @@ WindowManager:
     ScoreBoard:
     Solo180701:
     MinmaxWindow:
+    SoloScoreBoard:
 
 <MainWindow>:
     solobutton: solobutton
@@ -477,7 +478,7 @@ WindowManager:
         Label:
             id: leftLabel
             name: "leftLabel"
-            text: "23"
+            text: "20"
             color:
 
         Label:
@@ -501,3 +502,33 @@ WindowManager:
 
 
     Buttons:
+
+
+<SoloScoreBoard>:
+    soloscoreboardGrid: soloscoreboardGrid
+    name: "soloscoreboard"
+    on_enter: root.create()
+    size_hint: 1, 1
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+        size_hint: 1, 0.6
+        pos_hint: {'x':0 , 'y':0.3 }
+        id: soloscoreboardGrid
+        name: "soloscoreboardGrid"  
+        cols: 2
+        spacing: '20dp'
+    
+    GridLayout:  
+        cols: 2
+        size_hint: 1,0.2  
+        Button:
+            text: 'Zapisz wynik'
+                
+        Button:
+            text:'Powrót'
+            # on_release:app.root.current = "main";root.manager.transition.direction = "left"
+            on_release: root.backFunction()

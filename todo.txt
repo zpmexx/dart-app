@@ -1,0 +1,17 @@
+co do zrobienia:
+solo games
+baza danych
+cofnij button
+zakonczenie na double*
+
+180,301,501,701: liczba rzutow, srednia punktow, pozostało punktow
+min,max: pozostało rzutów, srednia punktów, lista trafionych
+trening losowy: pozostało rzutów, trafiony, nietrafiony, %skutecznosći, następny cel
+trening: liczba rzutów, % trafień, następny cel + ile pozostało z danego celu
+
+
+baza danych:
+minmax - gra, liczba rzutów, średnia rzutów, suma, użytkownik, liczba jedynek,liczba 20
+1800701 - gra, liczba rzutów, średnia rzutów, użytkowni, liczba 60, liczba 57
+trening - gra, liczba rzutów, % trafień, największa passa nietrafionych
+trening losowy - gra, liczba rzutów, liczba trafień, licza chybień, % trafie 

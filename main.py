@@ -23,7 +23,8 @@ from kivy.properties import NumericProperty
 import time
 
 class SoloWindow(Screen):
-    game = 0 #wybrana gra: 
+    game = 0 #wybrana gra:
+    
     """
     0 - 180
     1 - 301
@@ -35,7 +36,6 @@ class SoloWindow(Screen):
     7- trening losowy
     """
     def choose(self,index):
-        print('index sss', index)
         if index >=0 and index <=3:
             if index == 0:
                 self.manager.get_screen('solo180701').leftLabel.text = "180"
@@ -58,7 +58,6 @@ class SoloWindow(Screen):
             App.get_running_app().root.current = "solo180701"
             return
         elif index >=4 and index <=5:
-            print ('ch')
             self.game = index
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "minmaxwindow"
@@ -67,10 +66,14 @@ class MinmaxWindow(Screen):
     multiplierList = []
     navbarList = [] #0-leftLabel, 1-avgLabel, 2-sumLabel
     throwSum = 0
-    left = 20
+    left = rounds = 20
     throwCount = 0
     thrownGrid = []
     bindbtn = 0
+    ones = 0
+    twenties = 0
+    avg = 0
+    scores = {}
 
     def bindButton(self,j):
         multiplier = 1 
@@ -81,9 +84,13 @@ class MinmaxWindow(Screen):
 
         if int(j) == 25 or int(j) == 50: #25 oraz 50 nie maja mnożnika
             multiplier = 1
-        if self.left > 0:
+        if self.left > 1:
             self.throwSum += int(j) * multiplier
             self.navbarList[2].text = str(self.throwSum)
+            if int(j) == 0:
+                if self.manager.get_screen('solo').game == 4:
+                    self.throwSum += 70
+                    self.navbarList[2].text = str(self.throwSum)  
             self.throwCount += 1
             self.navbarList[1].text = str(round(float(self.throwSum)/float(self.throwCount),2))
             self.left -= 1
@@ -91,10 +98,28 @@ class MinmaxWindow(Screen):
 
             x = Label()
             x.text = str (int(j) * multiplier)
-
             self.thrownGrid.add_widget(x)
+            if int(j) == 1:
+                self.ones += 1
+            elif int(j) == 20:
+                self.twenties += 1
         else:
-            pass #konic
+            self.throwSum += int(j)*multiplier
+            self.throwCount += 1
+            self.avg = round(float(self.throwSum)/float(self.throwCount),2)
+
+            if self.manager.get_screen('solo').game == 4:
+                self.scores['Gra'] = 'Min'
+            elif self.manager.get_screen('solo').game == 5:
+                self.scores['Gra'] = 'Max'
+            self.scores['Liczba rzutów'] = self.throwCount
+            self.scores['Średnia rzutów'] = self.avg
+            self.scores['Suma'] = self.throwSum
+            self.scores['Liczba 1'] = self.ones
+            self.scores['Liczba 20'] = self.twenties
+
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "soloscoreboard"
 
     def create(self):
         for i in self.children:
@@ -130,7 +155,11 @@ class Solo180701(Screen):
     throwCount = 0
     throwSum = 0
     bindbtn = 0
+    sixties = 0
+    fiftysevens = 0
+    scores = {}
     avg = 0
+    game = ''
 
     def bindButton(self,j):
         multiplier = 1 
@@ -150,12 +179,29 @@ class Solo180701(Screen):
             self.throwCount +=1
             self.navbarList[1].text = str(self.throwCount)
             self.navbarList[2].text = str(round(float(self.throwSum)/float(self.throwCount),2))
+
+            if int(j) * multiplier == 57:
+                self.fiftysevens += 1
+
+            if int(j) * multiplier == 60:
+                self.sixties += 1
+
         elif self.playerPoints - int(j)*multiplier == 0:
-            #koniec gry
-            pass
+            self.throwSum += int(j)*multiplier
+            self.throwCount += 1
+            self.avg = round(float(self.throwSum)/float(self.throwCount),2)
+
+            self.scores['Gra'] = self.game
+            self.scores['Liczba rzutów'] = self.throwCount
+            self.scores['Średnia rzutów'] = self.avg
+            self.scores['Liczba 60'] = self.sixties
+            self.scores['Liczba 57'] = self.fiftysevens
+
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "soloscoreboard"
+            
         else:
             pass
-
 
 
     def create(self):
@@ -181,6 +227,7 @@ class Solo180701(Screen):
                     temp[21].bind(on_release = lambda x: self.bindButton(x.text))
                     temp.append(getattr(i, 'button50')) 
                     temp[22].bind(on_release = lambda x: self.bindButton(x.text))
+        self.game = str(self.leftLabel.text)
 
 
 class GameWindow(Screen):
@@ -552,7 +599,8 @@ class ChoosePlayers(Screen):
 class ScoreBoard(Screen):
     
     def create(self):
-        if self.manager.get_screen('game').eliminator == 0 or self.manager.get_screen('game').eliminator == 2:
+        game = self.manager.get_screen('solo').game
+        if self.manager.get_screen('solo').eliminator == 0 or self.manager.get_screen('game').eliminator == 2:
             newDict = dict(sorted(self.manager.get_screen('game').placeList.items(), key=lambda item: int(item[1])))
         else:
             newDict = dict(sorted(self.manager.get_screen('game').placeList.items(), key=lambda item: int(item[1]),reverse=True))
@@ -616,6 +664,56 @@ class ScoreBoard(Screen):
 
         App.get_running_app().root.current = "main"
         App.get_running_app().root.transition.direction = "left" 
+
+
+class SoloScoreBoard(Screen):
+    def create(self):
+        if self.manager.get_screen('solo').game >= 0 and self.manager.get_screen('solo').game <=3:
+            for i,j in self.manager.get_screen('solo180701').scores.items():
+                x = Label()
+                y = Label()
+                x.text = str(i)
+                y.text = str(j)
+                self.soloscoreboardGrid.add_widget(x)
+                self.soloscoreboardGrid.add_widget(y)
+        elif self.manager.get_screen('solo').game >= 4 and self.manager.get_screen('solo').game <=5:
+            for i,j in self.manager.get_screen('minmaxwindow').scores.items():
+                x = Label()
+                y = Label()
+                x.text = str(i)
+                y.text = str(j)
+                self.soloscoreboardGrid.add_widget(x)
+                self.soloscoreboardGrid.add_widget(y)
+
+            
+
+    # def backFunction(self):
+
+    #     self.manager.get_screen('game').navbarList = [] 
+    #     self.manager.get_screen('game').playersNamesList = [] 
+    #     self.manager.get_screen('game').playersPointsList = [] 
+    #     self.manager.get_screen('game').playersPointsListTemp = []
+    #     self.manager.get_screen('game').playersCount = 0
+    #     self.manager.get_screen('game').currentPlayer = 0
+    #     self.manager.get_screen('game').buttonList = []
+    #     self.manager.get_screen('game').multiplierList = []
+    #     self.manager.get_screen('game').placeList = {} 
+    #     self.manager.get_screen('game').eliminator = 0 
+    #     self.manager.get_screen('game').game = 0 
+    #     self.manager.get_screen('game').roundsCount = 0
+    #     self.manager.get_screen('game').round = 1 
+    #     self.manager.get_screen('game').finish = 0 
+    #     self.manager.get_screen('game').left = 3
+
+    #     self.manager.get_screen('chooseplayers').chooseGrid.clear_widgets()
+    #     self.manager.get_screen('chooseplayers').cb180.active = True
+    #     self.manager.get_screen('chooseplayers').playerGrid.clear_widgets()
+    #     self.manager.get_screen('game').usersGrid.clear_widgets()
+
+    #     self.scoreboardGrid.clear_widgets()
+
+    #     App.get_running_app().root.current = "main"
+    #     App.get_running_app().root.transition.direction = "left" 
 
 
 class Buttons(Widget):
