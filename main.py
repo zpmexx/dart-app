@@ -35,8 +35,8 @@ class SoloWindow(Screen):
     7- trening losowy
     """
     def choose(self,index):
-        if index >=0 or index <=3:
-
+        print('index sss', index)
+        if index >=0 and index <=3:
             if index == 0:
                 self.manager.get_screen('solo180701').leftLabel.text = "180"
                 self.manager.get_screen('solo180701').playerPoints = 180
@@ -56,19 +56,83 @@ class SoloWindow(Screen):
 
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "solo180701"
+            return
+        elif index >=4 and index <=5:
+            print ('ch')
+            self.game = index
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "minmaxwindow"
+
+class MinmaxWindow(Screen):
+    multiplierList = []
+    navbarList = [] #0-leftLabel, 1-avgLabel, 2-sumLabel
+    throwSum = 0
+    left = 20
+    throwCount = 0
+    thrownGrid = []
+    bindbtn = 0
+
+    def bindButton(self,j):
+        multiplier = 1 
+        if self.multiplierList[1].active:
+            multiplier = 2
+        if self.multiplierList[2].active:
+            multiplier = 3
+
+        if int(j) == 25 or int(j) == 50: #25 oraz 50 nie maja mnożnika
+            multiplier = 1
+        if self.left > 0:
+            self.throwSum += int(j) * multiplier
+            self.navbarList[2].text = str(self.throwSum)
+            self.throwCount += 1
+            self.navbarList[1].text = str(round(float(self.throwSum)/float(self.throwCount),2))
+            self.left -= 1
+            self.navbarList[0].text = str(self.left)
+
+            x = Label()
+            x.text = str (int(j) * multiplier)
+
+            self.thrownGrid.add_widget(x)
+        else:
+            pass #konic
+
+    def create(self):
+        for i in self.children:
+            if (hasattr(i, 'buttonsGrid')):
+                self.multiplierList.append(i.boxx1)
+                self.multiplierList.append(i.boxx2)
+                self.multiplierList.append(i.boxx3)
+                break
+        self.navbarList.append(self.leftLabel)           
+        self.navbarList.append(self.avgLabel)
+        self.navbarList.append(self.sumLabel)
+
+        if self.bindbtn == 0:
+            self.bindbtn = 1
+            for i in self.children:
+                if (hasattr(i, 'buttonsGrid')):
+                    temp = []
+                    for j in range (0,21):
+                        temp.append(getattr(i, 'button'+str(j))) 
+                        temp[j].bind(on_release = lambda x: self.bindButton(x.text))
+                    temp.append(getattr(i, 'button25')) 
+                    temp[21].bind(on_release = lambda x: self.bindButton(x.text))
+                    temp.append(getattr(i, 'button50')) 
+                    temp[22].bind(on_release = lambda x: self.bindButton(x.text))
+
+
+
 
 class Solo180701(Screen):
     multiplierList = []
     navbarList = [] #0-leftLabel, 1-countLabel, 2-avgLabel
-    bindbtn = 0
-    finish = 0
     playerPoints = 0
     throwCount = 0
     throwSum = 0
+    bindbtn = 0
     avg = 0
 
     def bindButton(self,j):
-        self.finish = 0
         multiplier = 1 
         if self.multiplierList[1].active:
             multiplier = 2
@@ -484,16 +548,6 @@ class ChoosePlayers(Screen):
         self.cb180.active = True
         App.get_running_app().root.current = "main"
         App.get_running_app().root.transition.direction = "right" 
-        
-            
-            
-
-             
-
-    # def clear(self):
-    #     self.playerGrid.clear_widgets()
-    #     self.playersInput.text = ''
-    #     self.playersButton.disabled = False
 
 class ScoreBoard(Screen):
     

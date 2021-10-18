@@ -9,6 +9,7 @@ WindowManager:
     ChoosePlayers:
     ScoreBoard:
     Solo180701:
+    MinmaxWindow:
 
 <MainWindow>:
     solobutton: solobutton
@@ -391,7 +392,7 @@ WindowManager:
 
 <Solo180701>:
     name: "solo180701"
-    usersGrid: statsGrid
+    statsGrid: statsGrid
     countLabel: countLabel
     leftLabel: leftLabel
     avgLabel: avgLabel
@@ -440,3 +441,63 @@ WindowManager:
             color:
     Buttons:
 
+<MinmaxWindow>:
+    name: "minmaxwindow"
+    leftLabel: leftLabel
+    avgLabel: avgLabel
+    statsGrid: statsGrid
+    thrownGrid: thrownGrid
+    sumLabel: sumLabel
+    size_hint: 1, 1
+    on_enter: root.create()
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+        size_hint: 1, 0.3
+        pos_hint: {'x':0 , 'y':0.7 }
+        cols: 3
+        id: statsGrid
+        name: "statsGrid"  
+
+        Label:
+            text: "Pozostało"
+            color:
+
+        Label:
+            text: "Średnia rzutów"
+            color:   
+        
+        Label:
+            text: "Suma"
+            color:   
+    
+        Label:
+            id: leftLabel
+            name: "leftLabel"
+            text: "23"
+            color:
+
+        Label:
+            id: avgLabel
+            name: "avgLabel"        
+            text: "0"
+            color:
+
+        Label:
+            id: sumLabel
+            name: "sumLabel"        
+            text: "0"
+            color:
+        
+    GridLayout:
+        size_hint: 1, 0.3
+        pos_hint: {'x':0 , 'y':0.4 }
+        cols: 10
+        id: thrownGrid
+        name: "thrownGrid" 
+
+
+    Buttons:
