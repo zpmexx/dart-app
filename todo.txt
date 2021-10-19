@@ -10,7 +10,7 @@ trening losowy: pozostało rzutów, trafiony, nietrafiony, %skutecznosći, nast�
 trening: liczba rzutów, % trafień, następny cel + ile pozostało z danego celu
 
 
-baza danych:
+baza danych: data wszedzie
 minmax - gra, liczba rzutów, średnia rzutów, suma, użytkownik, liczba jedynek,liczba 20
 1800701 - gra, liczba rzutów, średnia rzutów, użytkowni, liczba 60, liczba 57
 trening - gra, liczba rzutów, % trafień, największa passa nietrafionych

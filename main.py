@@ -4,6 +4,7 @@ Config.set('graphics', 'height', '600')
 Config.set('graphics', 'minimum_width', '300')
 Config.set('graphics', 'minimum_height', '400')
 
+import sqlite3
 from kivy.app import App
 from kivy.core import text
 from kivy.uix.button import Button
@@ -21,6 +22,7 @@ from functools import partial
 from kivy.properties import ListProperty
 from kivy.properties import NumericProperty
 import time
+from datetime import date, datetime
 
 class SoloWindow(Screen):
     game = 0 #wybrana gra:
@@ -68,7 +70,7 @@ class MinmaxWindow(Screen):
     throwSum = 0
     left = rounds = 20
     throwCount = 0
-    thrownGrid = []
+    thrownGridList = []
     bindbtn = 0
     ones = 0
     twenties = 0
@@ -107,6 +109,10 @@ class MinmaxWindow(Screen):
             self.throwSum += int(j)*multiplier
             self.throwCount += 1
             self.avg = round(float(self.throwSum)/float(self.throwCount),2)
+            if int(j) == 1:
+                self.ones += 1
+            elif int(j) == 20:
+                self.twenties += 1
 
             if self.manager.get_screen('solo').game == 4:
                 self.scores['Gra'] = 'Min'
@@ -322,6 +328,7 @@ class GameWindow(Screen):
                     self.currentPlayer+=1
                     self.playersNamesList[self.currentPlayer].color = (1,0,0,1)
                     self.playersNamesList[self.currentPlayer-1].color = (1,1,1,1)
+            
             
 
 
@@ -687,34 +694,90 @@ class SoloScoreBoard(Screen):
 
             
 
-    # def backFunction(self):
+    def backFunction(self):
+        if self.manager.get_screen('solo').game >= 0 and self.manager.get_screen('solo').game <=3:
+            self.manager.get_screen('solo180701').multiplierList = []
+            self.manager.get_screen('solo180701').navbarList = [] #0-leftLabel, 1-countLabel, 2-avgLabel
+            self.manager.get_screen('solo180701').playerPoints = 0
+            self.manager.get_screen('solo180701').throwCount = 0
+            self.manager.get_screen('solo180701').throwSum = 0
+            self.manager.get_screen('solo180701').sixties = 0
+            self.manager.get_screen('solo180701').fiftysevens = 0
+            self.manager.get_screen('solo180701').scores = {}
+            self.manager.get_screen('solo180701').avg = 0
+            self.manager.get_screen('solo180701').game = ''
+            self.manager.get_screen('solo180701').countLabel.text = '0'
+            self.manager.get_screen('solo180701').avgLabel.text = '0'
+            
+        elif self.manager.get_screen('solo').game >= 4 and self.manager.get_screen('solo').game <=5:
+            self.manager.get_screen('minmaxwindow').multiplierList = []
+            self.manager.get_screen('minmaxwindow').navbarList = [] #0-leftLabel, 1-avgLabel, 2-sumLabel
+            self.manager.get_screen('minmaxwindow').throwSum = 0
+            self.manager.get_screen('minmaxwindow').left = rounds = 20
+            self.manager.get_screen('minmaxwindow').throwCount = 0
+            self.manager.get_screen('minmaxwindow').thrownGridList = []
+            self.manager.get_screen('minmaxwindow').ones = 0
+            self.manager.get_screen('minmaxwindow').twenties = 0
+            self.manager.get_screen('minmaxwindow').avg = 0
+            self.manager.get_screen('minmaxwindow').scores = {}
+            self.manager.get_screen('minmaxwindow').leftLabel.text = '20'
+            self.manager.get_screen('minmaxwindow').avgLabel.text = '0'
+            self.manager.get_screen('minmaxwindow').sumLabel.text = '0'
+            self.manager.get_screen('minmaxwindow').thrownGrid.clear_widgets()
+            
+        self.soloscoreboardGrid.clear_widgets()
+        App.get_running_app().root.current = "main"
+        App.get_running_app().root.transition.direction = "left" 
 
-    #     self.manager.get_screen('game').navbarList = [] 
-    #     self.manager.get_screen('game').playersNamesList = [] 
-    #     self.manager.get_screen('game').playersPointsList = [] 
-    #     self.manager.get_screen('game').playersPointsListTemp = []
-    #     self.manager.get_screen('game').playersCount = 0
-    #     self.manager.get_screen('game').currentPlayer = 0
-    #     self.manager.get_screen('game').buttonList = []
-    #     self.manager.get_screen('game').multiplierList = []
-    #     self.manager.get_screen('game').placeList = {} 
-    #     self.manager.get_screen('game').eliminator = 0 
-    #     self.manager.get_screen('game').game = 0 
-    #     self.manager.get_screen('game').roundsCount = 0
-    #     self.manager.get_screen('game').round = 1 
-    #     self.manager.get_screen('game').finish = 0 
-    #     self.manager.get_screen('game').left = 3
-
-    #     self.manager.get_screen('chooseplayers').chooseGrid.clear_widgets()
-    #     self.manager.get_screen('chooseplayers').cb180.active = True
-    #     self.manager.get_screen('chooseplayers').playerGrid.clear_widgets()
-    #     self.manager.get_screen('game').usersGrid.clear_widgets()
-
-    #     self.scoreboardGrid.clear_widgets()
-
-    #     App.get_running_app().root.current = "main"
-    #     App.get_running_app().root.transition.direction = "left" 
-
+    def saveFunction(self):
+        data = datetime.now()
+        connection = sqlite3.connect('dart.db')
+        cursor = connection.cursor()
+        if self.manager.get_screen('solo').game >= 0 and self.manager.get_screen('solo').game <=3:
+            
+            result = self.manager.get_screen('solo180701').scores
+            game = result['Gra']
+            throws = result['Liczba rzutów']
+            avg = result['Średnia rzutów']
+            sixties = result['Liczba 60']
+            fiftysevens = result['Liczba 57']
+            
+                
+            cursor.execute(""" CREATE TABLE IF NOT EXISTS solo180701 (
+            id INTEGER PRIMARY KEY,
+            date TEXT,
+            user TEXT,
+            game TEXT,
+            throws INTEGER,
+            avg REAL,
+            sixties INTEGER,
+            fiftysevens INTEGER
+        ) """)
+            cursor.execute("INSERT INTO solo180701 (date,user,game,throws,avg,sixties,fiftysevens) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,avg,sixties,fiftysevens))
+        
+        if self.manager.get_screen('solo').game >= 4 and self.manager.get_screen('solo').game <=5:
+            result = self.manager.get_screen('minmaxwindow').scores
+            game = result['Gra']
+            throws = result['Liczba rzutów']
+            avg = result['Średnia rzutów']
+            suma = result['Suma']
+            ones = result['Liczba 1']
+            twenties = result['Liczba 20']
+                 
+            cursor.execute(""" CREATE TABLE IF NOT EXISTS minmax (
+            id INTEGER PRIMARY KEY,
+            date TEXT,
+            user TEXT,
+            game TEXT,
+            throws INTEGER,
+            avg REAL,
+            ones INTEGER,
+            twenties INTEGER
+        ) """)
+            cursor.execute("INSERT INTO minmax (date,user,game,throws,avg,ones,twenties) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,avg,ones,twenties))
+        connection.commit()
+        connection.close()
+        self.backFunction() # na zakoczenie funkcji
 
 class Buttons(Widget):
     Builder.load_file("buttons.kv")
