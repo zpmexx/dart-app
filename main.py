@@ -236,6 +236,51 @@ class Solo180701(Screen):
         self.game = str(self.leftLabel.text)
 
 
+class Records(Screen):
+    pass
+
+class Database(Screen):
+    
+    def find(self):
+        self.databaseGrid.clear_widgets()
+        game = self.gameSpinner.text
+        user = self.userInput.text
+         
+
+        connection = sqlite3.connect('dart.db')
+        cursor = connection.cursor()
+
+        if game in ('180','301','501','701'):
+            databasetable = 'solo180701'
+            headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 60','Liczba 57',]
+        elif game in ('Min','Max'):
+            headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 1','Liczba 20',]
+            databasetable = 'minmax'
+        
+        cursor.execute("SELECT * from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
+        result = cursor.fetchall()
+        print(result)
+        self.databaseGrid.cols = len(result[0])
+        for i in headers:
+            x = Label()
+            x.text = i
+            self.databaseGrid.add_widget(x)
+        for i in result:
+            for j in i:
+                x = Label()
+                x.text = str(j)
+                self.databaseGrid.add_widget(x)
+                
+
+
+    def backFunction(self):
+        self.databaseGrid.clear_widgets()
+        self.gameSpinner.text = 'Wybierz gre'
+        self.userInput.text = ''
+        App.get_running_app().root.current = "solo"
+        App.get_running_app().root.transition.direction = "right" 
+
+
 class GameWindow(Screen):
 
     navbarList = [] #0 - sumLabel, 1 - roundLabel, 2 - leftLabel
@@ -775,6 +820,7 @@ class SoloScoreBoard(Screen):
             twenties INTEGER
         ) """)
             cursor.execute("INSERT INTO minmax (date,user,game,throws,avg,ones,twenties) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,avg,ones,twenties))
+
         connection.commit()
         connection.close()
         self.backFunction() # na zakoczenie funkcji

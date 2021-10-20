@@ -11,6 +11,8 @@ WindowManager:
     Solo180701:
     MinmaxWindow:
     SoloScoreBoard:
+    Database:
+    Records:
 
 <MainWindow>:
     solobutton: solobutton
@@ -210,6 +212,22 @@ WindowManager:
                 text: "Trening losowy"
                 color: 0.4,0.3,0.2,1
                 on_release: root.choose(7)
+
+        Button:
+            text: "Rekordy"
+            # font_size: self.width / 15
+            size_hint_y: 0.35
+            on_release: 
+                app.root.current = "records"       
+                root.manager.transition.direction = "right"     
+
+        Button:
+            text: "Baza danych"
+            # font_size: self.width / 15
+            size_hint_y: 0.35
+            on_release: 
+                app.root.current = "database"       
+                root.manager.transition.direction = "left"     
         Button:
             text: "Powrót"
             # font_size: self.width / 15
@@ -533,3 +551,67 @@ WindowManager:
             text:'Powrót'
             # on_release:app.root.current = "main";root.manager.transition.direction = "left"
             on_release: root.backFunction()
+
+
+
+<Records>:
+    name: "records"
+    size_hint: 1, 1
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+
+<Database>:
+    userInput: userInput
+    gameSpinner: gameSpinner
+    databaseGrid: databaseGrid
+    name: "database"
+    size_hint: 1, 1
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+        cols:3
+        size_hint: 0.8, 0.2
+        pos_hint: {'x': 0.1, 'y': 0.8}
+        spacing: '20dp'
+        Spinner:
+            size_hint: 1, 1
+            id: gameSpinner
+            text: "Wybierz gre"
+            values: ["180","301","501","701","Min","Max"]
+            # on_text: root.spinner(gameSpinner.text)
+    
+
+        TextInput:
+            id: userInput
+            name: "userInput"            
+            hint_text: 'Nazwa użytkownika'
+            multiline: False
+        
+        Button:
+            text: "Szukaj"
+            on_press: root.find()
+    GridLayout:
+        id: databaseGrid
+        size_hint: 0.8, 0.6
+        pos_hint: {'x': 0.1 , 'y':0.2 }
+
+    Button:
+        size_hint: 0.8, 0.2
+        pos_hint: {'x': 0.1 , 'y':0 }
+        text: "Powrót"
+        color:    
+        on_release: root.backFunction()
+
+        
+            
+
+            
+
+
+            
