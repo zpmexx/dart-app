@@ -3,7 +3,7 @@ solo games
 baza danych
 cofnij button
 zakonczenie na double*
-baza danych tworzona przy pierwszym uruchomieniu aplikacji w main wszystkie tabele
+baza danych: podzial na baze, rekordy oraz statystyki dla danego zawodnika
 
 180,301,501,701: liczba rzutow, srednia punktow, pozostało punktow
 min,max: pozostało rzutów, srednia punktów, lista trafionych

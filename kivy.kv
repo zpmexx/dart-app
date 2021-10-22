@@ -13,6 +13,7 @@ WindowManager:
     SoloScoreBoard:
     Database:
     Records:
+    RandomTraining:
 
 <MainWindow>:
     solobutton: solobutton
@@ -608,10 +609,77 @@ WindowManager:
         color:    
         on_release: root.backFunction()
 
+<RandomTraining>
+    name: "randomtraining"    
+    leftLabel: leftLabel
+    accuracyLabel: accuracyLabel
+    targetLabel: targetLabel
+    missButton: missButton
+    hutButton: hitButton
+    rewindButton: rewindButton
+
+    size_hint: 1, 1
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+
+
+    GridLayout:
+        id: navbarGrid
+        cols: 3
+        size_hint: 1, 0.2
+        pos_hint: {'x':0 , 'y':0.8}
+        Label:
+            text:'Pozostało'
+        Label:
+            text:'Skuteczność'
+        Label:
+            text:'Cel'
+    
+    GridLayout:
+        id: statsGrid
+        cols: 3
+        size_hint: 1, 0.4
+        pos_hint: {'x':0 , 'y':0.6}
+        Label:
+            text:'20'
+            name: "leftLabel"
+            id: leftLabel
+        Label:
+            text:'0%'
+            name: "accuracyLabel"
+            id: accuracyLabel
+        Label:
+            text:''
+            name: "targetLabel"
+            id: targetLabel
+
+    GridLayout:
+        id: buttonsGrid
+        name: "buttonsGrid"
+        cols: 3
+        size_hint: 1, 0.3
+
+        Button:
+            text: "Trafiony"
+            color:
+            id: hitButton
+            name: "hitButton"
         
-            
-
-            
-
+        Button:
+            text: "Chybiony"
+            color:
+            id: missButton
+            name: "missButton"
+        
+        Button:
+            text: "Cofnij"
+            color:
+            id: rewindButton
+            name: "rewindButton"
+        
+    
 
             

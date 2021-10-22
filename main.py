@@ -62,6 +62,14 @@ class SoloWindow(Screen):
             self.game = index
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "minmaxwindow"
+        elif index == 7:
+            self.game = index
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "randomtraining"
+        # else:
+        #     self.game = index
+        #     App.get_running_app().root.transition.direction = "left"  
+        #     App.get_running_app().root.current = "training"
 
 class MinmaxWindow(Screen):
     multiplierList = [] #
@@ -233,6 +241,9 @@ class Solo180701(Screen):
 class Records(Screen):
     pass
 
+class RandomTraining(Screen):
+    pass
+
 class Database(Screen):
     
     def find(self):
@@ -257,6 +268,7 @@ class Database(Screen):
                 cursor.execute("SELECT * from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
             result = cursor.fetchall()
             self.databaseGrid.cols = len(result[0]) #dynamiczne tworzenie liczby kolumn względem odpowiedniej tabeli z db
+
             for i in headers:
                 x = Label()
                 x.text = i
