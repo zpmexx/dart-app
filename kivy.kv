@@ -11,9 +11,12 @@ WindowManager:
     Solo180701:
     MinmaxWindow:
     SoloScoreBoard:
+    FullDatabase:
     Database:
     Records:
+    Stats:
     RandomTraining:
+    Training:
 
 <MainWindow>:
     solobutton: solobutton
@@ -213,14 +216,6 @@ WindowManager:
                 text: "Trening losowy"
                 color: 0.4,0.3,0.2,1
                 on_release: root.choose(7)
-
-        Button:
-            text: "Rekordy"
-            # font_size: self.width / 15
-            size_hint_y: 0.35
-            on_release: 
-                app.root.current = "records"       
-                root.manager.transition.direction = "right"     
 
         Button:
             text: "Baza danych"
@@ -564,11 +559,11 @@ WindowManager:
             size: self.size
             source: 'background.jpg'
 
-<Database>:
+<FullDatabase>:
     userInput: userInput
     gameSpinner: gameSpinner
     databaseGrid: databaseGrid
-    name: "database"
+    name: "fulldatabase"
     size_hint: 1, 1
     canvas.before:
         Rectangle:
@@ -615,7 +610,7 @@ WindowManager:
     accuracyLabel: accuracyLabel
     targetLabel: targetLabel
     missButton: missButton
-    hutButton: hitButton
+    hitButton: hitButton
     rewindButton: rewindButton
 
     size_hint: 1, 1
@@ -682,4 +677,147 @@ WindowManager:
         
     
 
+<Training>
+    name: "training"    
+    throwsLabel: throwsLabel
+    accuracyLabel: accuracyLabel
+    targetLabel: targetLabel
+    targetLeftLabel: targetLeftLabel
+    missButton: missButton
+    x1Button: x1Button
+    x2Button: x2Button
+    x3Button: x3Button
+    rewindButton: rewindButton
+
+    size_hint: 1, 1
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+
+    GridLayout:
+        id: navbarGrid
+        cols: 4
+        size_hint: 1, 0.2
+        pos_hint: {'x':0 , 'y':0.8}
+        Label:
+            text:'Liczba rzutów'
+        Label:
+            text:'Skuteczność'
+        Label:
+            text:'Cel'
+        Label:
+            text:'Pozostało z celu'
+    
+    GridLayout:
+        id: statsGrid
+        cols: 4
+        size_hint: 1, 0.4
+        pos_hint: {'x':0 , 'y':0.4}
+        Label:
+            text:'0'
+            name: "throwsLabel"
+            id: throwsLabel
+        Label:
+            text:'0%'
+            name: "accuracyLabel"
+            id: accuracyLabel
+        Label:
+            text:'1'
+            name: "targetLabel"
+            id: targetLabel
+        Label:
+            text:'3'
+            name: "targetLeftLabel"
+            id: targetLeftLabel
+
+    GridLayout:
+        id: hitGrid
+        name: "buttonsGrid"
+        cols: 3
+        size_hint: 1, 0.2
+        pos_hint: {'x':0 , 'y':0.2}
+        Button:
+            text: "Trafiony x1"
+            color:
+            id: x1Button
+            name: "x1Button"
+        Button:
+            text: "Trafiony x2"
+            color:
+            id: x2Button
+            name: "x2Button"
+        Button:
+            text: "Trafiony x3"
+            color:
+            id: x3Button
+            name: "x3Button"
+    
+    GridLayout:
+        id: missGrid
+        name: "missGrid"
+        cols: 2
+        size_hint: 1, 0.2
+        Button:
+            text: "Chybiony"
+            color:
+            id: missButton
+            name: "missButton"
+        
+        Button:
+            text: "Cofnij"
+            color:
+            id: rewindButton
+            name: "rewindButton"
+        
+
+<Database>:
+    name: "database"
+    size: root.width,root.height
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+    GridLayout:
+        cols: 1
+        size_hint: .4,.4
+        pos_hint: {'x': 0.3 , 'y': 0.3}
+        spacing: '20dp'
+        Button:
+            text: "Statystyki"
+            background_color: (1.0, 0.0, 0.0, 1.0)
+            # size_hint: 0.3, 0.3
+            on_release: 
+                app.root.current = "stats";root.manager.transition.direction = "left"   
+        Button:
+            text: "Rekordy"
+            background_color: (1.0, 0.0, 0.0, 1.0)
+            # size_hint: 0.3, 0.3
+            # on_release: app.root.current = "group"
+            on_release:app.root.current = "records";root.manager.transition.direction = "left"
+        Button:
+            text: "Baza danych"
+            background_color: (1.0, 0.0, 0.0, 1.0)
+            # size_hint: 0.3, 0.3
+            # on_release: app.root.current = "group"
+            on_release:app.root.current = "fulldatabase";root.manager.transition.direction = "left"
+
+<Records>:
+    name: "records"
+    size: root.width,root.height
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
             
+<Stats>:
+    name: "stats"
+    size: root.width,root.height
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'

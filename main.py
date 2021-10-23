@@ -66,10 +66,10 @@ class SoloWindow(Screen):
             self.game = index
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "randomtraining"
-        # else:
-        #     self.game = index
-        #     App.get_running_app().root.transition.direction = "left"  
-        #     App.get_running_app().root.current = "training"
+        else:
+            self.game = index
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "training"
 
 class MinmaxWindow(Screen):
     multiplierList = [] #
@@ -241,10 +241,19 @@ class Solo180701(Screen):
 class Records(Screen):
     pass
 
-class RandomTraining(Screen):
+class Stats(Screen):
     pass
 
 class Database(Screen):
+    pass
+
+class RandomTraining(Screen):
+    pass
+
+class Training(Screen):
+    pass
+
+class FullDatabase(Screen):
     
     def find(self):
         self.databaseGrid.clear_widgets()
