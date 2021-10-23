@@ -248,7 +248,75 @@ class Database(Screen):
     pass
 
 class RandomTraining(Screen):
-    pass
+    target = 0 #cel do wyrzucenia
+    hitCount = 0
+    accuracy = 0
+    throwsCount = 0
+    left = 20
+    throwsList = []
+    bindbtn = 0
+    scores = {}
+
+    def bindButton(self,index):
+        self.throwsCount += 1
+        self.left -= 1
+        #0 - trafiony, 1-nietrafiony, 2-cofnij
+        if index == 0:
+            self.hitCount += 1
+            self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+            self.accuracy = round(self.accuracy * 100,2)
+            self.leftLabel.text = str(self.left)
+            self.accuracyLabel.text = str(self.accuracy)+'%'
+            self.target = randint(1,20)
+            self.targetLabel.text = str(self.target)
+
+            x = Label()
+            x.text = str(self.target)
+            self.resultsGrid.add_widget(x)
+            self.throwsList.append(x)
+
+
+        elif index == 1:
+            self.accuracy = float(self.hitCount) / float(self.throwsCount)
+            self.accuracy = round(self.accuracy * 100,2)
+            self.accuracyLabel.text = str(self.accuracy)+'%'
+            self.leftLabel.text = str(self.left)
+            self.target = randint(1,20)
+            self.targetLabel.text = str(self.target)
+            
+            x = Label()
+            x.text = str(self.target)
+            self.resultsGrid.add_widget(x)
+            self.throwsList.append(x)
+            self.throwsList[self.throwsCount-1].color = (1,0,0,1)
+        else:
+            pass
+
+        if self.left == 0: #koniec gry
+            self.scores['Gra'] = 'Trening losowy'
+            self.scores['Liczba rzutów'] = self.throwsCount
+            self.scores['Liczba trafień'] = self.hitCount
+            self.scores['Liczba chybień'] = self.throwsCount - self.hitCount
+            self.scores['Procent trafień'] = self.accuracy
+
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "soloscoreboard"
+            
+
+    def create(self):
+        self.target = randint(1,20)
+        x = Label()
+        x.text = str(self.target)
+        self.resultsGrid.add_widget(x)
+        self.throwsList.append(x)
+        self.targetLabel.text = str(self.target)
+        if self.bindbtn == 0:
+            self.bindbtn = 1 
+            self.hitButton.bind(on_release=lambda x: self.bindButton(0))
+            self.missButton.bind(on_release=lambda x: self.bindButton(1))
+            self.rewindButton.bind(on_release=lambda x: self.bindButton(2))
+
+
 
 class Training(Screen):
     pass
@@ -733,6 +801,14 @@ class SoloScoreBoard(Screen):
                 y.text = str(j)
                 self.soloscoreboardGrid.add_widget(x)
                 self.soloscoreboardGrid.add_widget(y)
+        elif self.manager.get_screen('solo').game == 7:
+            for i,j in self.manager.get_screen('randomtraining').scores.items():
+                x = Label()
+                y = Label()
+                x.text = str(i)
+                y.text = str(j)
+                self.soloscoreboardGrid.add_widget(x)
+                self.soloscoreboardGrid.add_widget(y)
 
     def backFunction(self):
         if self.manager.get_screen('solo').game >= 0 and self.manager.get_screen('solo').game <=3:
@@ -763,6 +839,18 @@ class SoloScoreBoard(Screen):
             self.manager.get_screen('minmaxwindow').avgLabel.text = '0'
             self.manager.get_screen('minmaxwindow').sumLabel.text = '0'
             self.manager.get_screen('minmaxwindow').thrownGrid.clear_widgets()
+        
+        elif self.manager.get_screen('solo').game == 7:
+            self.manager.get_screen('randomtraining').target = 0
+            self.manager.get_screen('randomtraining').hitCount = 0
+            self.manager.get_screen('randomtraining').accuracy = 0
+            self.manager.get_screen('randomtraining').throwsCount = 0
+            self.manager.get_screen('randomtraining').left = 20
+            self.manager.get_screen('randomtraining').throwsList = []
+            self.manager.get_screen('randomtraining').scores = {}
+            self.manager.get_screen('randomtraining').leftLabel.text = '0'
+            self.manager.get_screen('randomtraining').accuracyLabel.text = '0%'
+            self.manager.get_screen('randomtraining').resultsGrid.clear_widgets()
             
         self.soloscoreboardGrid.clear_widgets()
         App.get_running_app().root.current = "main"

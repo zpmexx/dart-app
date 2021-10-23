@@ -612,6 +612,8 @@ WindowManager:
     missButton: missButton
     hitButton: hitButton
     rewindButton: rewindButton
+    resultsGrid: resultsGrid
+    on_enter: root.create()
 
     size_hint: 1, 1
     canvas.before:
@@ -619,7 +621,6 @@ WindowManager:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
-
 
     GridLayout:
         id: navbarGrid
@@ -652,6 +653,12 @@ WindowManager:
             id: targetLabel
 
     GridLayout:
+        cols: 10
+        id: resultsGrid
+        size_hint: 0.8, 0.3
+        pos_hint: {'x':0.1 , 'y':0.3}
+
+    GridLayout:
         id: buttonsGrid
         name: "buttonsGrid"
         cols: 3
@@ -675,7 +682,6 @@ WindowManager:
             id: rewindButton
             name: "rewindButton"
         
-    
 
 <Training>
     name: "training"    
@@ -804,6 +810,7 @@ WindowManager:
             # on_release: app.root.current = "group"
             on_release:app.root.current = "fulldatabase";root.manager.transition.direction = "left"
 
+
 <Records>:
     name: "records"
     size: root.width,root.height
@@ -812,7 +819,8 @@ WindowManager:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
-            
+
+
 <Stats>:
     name: "stats"
     size: root.width,root.height
