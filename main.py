@@ -305,8 +305,6 @@ class RandomTraining(Screen):
                 pass
 
 
-            
-
     def create(self):
         self.target = randint(1,20)
         x = Label()
@@ -323,7 +321,151 @@ class RandomTraining(Screen):
 
 
 class Training(Screen):
-    pass
+    throwsCount = 0
+    accuracy = 0
+    hitCount = 0
+    missCount = 0
+    target = 1
+    left = 3
+    bindbtn = 0
+    finish = 0 #kontrola konca gry, 0 to gra sie toczy, 1 to bull, 2 to koniec
+    scores = {}
+
+    #0 - x1button, 1-x2, 2-x3, 3-missButton, 4-rewindButton
+    def bindButton(self,index):
+
+        self.throwsCount+=1
+        self.throwsLabel.text = str(self.throwsCount)
+        if self.finish == 0: #wszystko przed bull
+            if index == 0:
+                self.left -= 1
+                self.hitCount += 1
+                self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                self.accuracy = round(self.accuracy * 100,2)
+                self.accuracyLabel.text = str(self.accuracy)+'%'
+
+                if self.left >0:
+                    self.targetLeftLabel.text = str(self.left)
+                else:
+                    if self.target +1 < 21: #
+                        self.left = 3
+                        self.targetLeftLabel.text = str(self.left)
+                        self.target += 1
+                        self.targetLabel.text = str(self.target)
+                    else:
+                        self.finish = 1
+                        self.hitCount += 3
+                        self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                        self.accuracy = round(self.accuracy * 100,2)
+                        self.x3Button.disabled = True
+                        self.left = 2
+                        self.targetLeftLabel.text = str(self.left)
+                        self.targetLabel.text = 'BULL'
+
+            elif index == 1:
+                self.left -= 2
+                self.hitCount += 2
+                self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                self.accuracy = round(self.accuracy * 100,2)
+                self.accuracyLabel.text = str(self.accuracy)+'%'
+
+                if self.left >0:
+                    self.targetLeftLabel.text = str(self.left)
+                else:
+                    if self.target +1 < 21: #
+                        self.left = 3
+                        self.targetLeftLabel.text = str(self.left)
+                        self.target += 1
+                        self.targetLabel.text = str(self.target)
+                    else:
+                        self.finish = 1
+                        self.hitCount += 2
+                        self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                        self.accuracy = round(self.accuracy * 100,2)
+                        self.x3Button.disabled = True
+                        self.left = 2
+                        self.targetLeftLabel.text = str(self.left)
+                        self.targetLabel.text = 'BULL'
+
+            elif index == 2:
+                if self.target +1 < 21: #
+                    self.left = 3
+                    self.target += 1
+                    self.hitCount += 3
+                    self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                    self.accuracy = round(self.accuracy * 100,2)
+                    self.accuracyLabel.text = str(self.accuracy)+'%'
+                    self.targetLeftLabel.text = str(self.left)
+                    self.targetLabel.text = str(self.target)
+                else:
+                    self.finish = 1
+                    self.hitCount += 3
+                    self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                    self.accuracy = round(self.accuracy * 100,2)
+                    self.x3Button.disabled = True
+                    self.left = 2
+                    self.targetLeftLabel.text = str(self.left)
+                    self.targetLabel.text = 'BULL'
+        
+        else: #rzucamy środek
+            if index == 0:
+                self.left -= 1
+                self.hitCount += 1
+                self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                self.accuracy = round(self.accuracy * 100,2)
+                self.accuracyLabel.text = str(self.accuracy)+'%'
+
+                if self.left >0:
+                    self.targetLeftLabel.text = str(self.left)
+                else:
+                    self.scores['Gra'] = 'Trening'
+                    self.scores['Liczba rzutów'] = self.throwsCount
+                    self.scores['Liczba trafień'] = self.hitCount
+                    self.scores['Liczba chybień'] = self.missCount
+                    self.scores['Procent trafień'] = self.accuracy
+
+                    App.get_running_app().root.transition.direction = "left"  
+                    App.get_running_app().root.current = "soloscoreboard"
+
+                    return
+
+            elif index == 1:
+                self.hitCount += 3
+                self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                self.accuracy = round(self.accuracy * 100,2)
+                self.accuracyLabel.text = str(self.accuracy)+'%'
+                self.scores['Gra'] = 'Trening'
+                self.scores['Liczba rzutów'] = self.throwsCount
+                self.scores['Liczba trafień'] = self.hitCount
+                self.scores['Liczba chybień'] = self.missCount
+                self.scores['Procent trafień'] = self.accuracy
+
+                App.get_running_app().root.transition.direction = "left"  
+                App.get_running_app().root.current = "soloscoreboard"
+
+                return
+
+        if index == 3:
+            self.missCount += 1
+            self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+            self.accuracy = round(self.accuracy * 100,2)
+            self.accuracyLabel.text = str(self.accuracy)+'%'
+        
+        elif index == 4: #cofnijButton
+            pass
+
+
+
+
+
+    def create(self):
+        if self.bindbtn == 0:
+            self.bindbtn = 1 
+            self.x1Button.bind(on_release=lambda x: self.bindButton(0))
+            self.x2Button.bind(on_release=lambda x: self.bindButton(1))
+            self.x3Button.bind(on_release=lambda x: self.bindButton(2))
+            self.missButton.bind(on_release=lambda x: self.bindButton(3))
+            self.rewindButton.bind(on_release=lambda x: self.bindButton(4))
 
 class FullDatabase(Screen):
     
@@ -341,10 +483,10 @@ class FullDatabase(Screen):
         elif game in ('Min','Max'):
             headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 1','Liczba 20',]
             databasetable = 'minmax'
-        elif game == 'Trening losowy':
+        elif game in ('Trening losowy','Trening'):
             headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień',]
             databasetable = 'randomtraining'
-        
+
         try:
             if user == '':
                 cursor.execute("SELECT * from "+databasetable+" WHERE game = ?", (game,))
@@ -817,6 +959,15 @@ class SoloScoreBoard(Screen):
                 self.soloscoreboardGrid.add_widget(x)
                 self.soloscoreboardGrid.add_widget(y)
 
+        elif self.manager.get_screen('solo').game == 6:
+            for i,j in self.manager.get_screen('training').scores.items():
+                x = Label()
+                y = Label()
+                x.text = str(i)
+                y.text = str(j)
+                self.soloscoreboardGrid.add_widget(x)
+                self.soloscoreboardGrid.add_widget(y)
+
     def backFunction(self):
         if self.manager.get_screen('solo').game >= 0 and self.manager.get_screen('solo').game <=3:
             self.manager.get_screen('solo180701').multiplierList = []
@@ -876,7 +1027,6 @@ class SoloScoreBoard(Screen):
             sixties = result['Liczba 60']
             fiftysevens = result['Liczba 57']
             
-                
             cursor.execute(""" CREATE TABLE IF NOT EXISTS solo180701 (
             id INTEGER PRIMARY KEY,
             date TEXT,
@@ -910,8 +1060,11 @@ class SoloScoreBoard(Screen):
         ) """)
             cursor.execute("INSERT INTO minmax (date,user,game,throws,avg,ones,twenties) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,avg,ones,twenties))
 
-        elif self.manager.get_screen('solo').game == 7:
-            result = self.manager.get_screen('randomtraining').scores
+        elif self.manager.get_screen('solo').game >= 6 and self.manager.get_screen('solo').game <= 7:
+            if self.manager.get_screen('solo').game == 6:
+                result = self.manager.get_screen('training').scores
+            else:
+                result = self.manager.get_screen('randomtraining').scores
             game = result['Gra']
             throws = result['Liczba rzutów']
             hits = result['Liczba trafień']
