@@ -261,37 +261,6 @@ class RandomTraining(Screen):
         self.throwsCount += 1
         self.left -= 1
         #0 - trafiony, 1-nietrafiony, 2-cofnij
-        if index == 0:
-            self.hitCount += 1
-            self.accuracy =  float(self.hitCount) / float(self.throwsCount)
-            self.accuracy = round(self.accuracy * 100,2)
-            self.leftLabel.text = str(self.left)
-            self.accuracyLabel.text = str(self.accuracy)+'%'
-            self.target = randint(1,20)
-            self.targetLabel.text = str(self.target)
-
-            x = Label()
-            x.text = str(self.target)
-            self.resultsGrid.add_widget(x)
-            self.throwsList.append(x)
-
-
-        elif index == 1:
-            self.accuracy = float(self.hitCount) / float(self.throwsCount)
-            self.accuracy = round(self.accuracy * 100,2)
-            self.accuracyLabel.text = str(self.accuracy)+'%'
-            self.leftLabel.text = str(self.left)
-            self.target = randint(1,20)
-            self.targetLabel.text = str(self.target)
-            
-            x = Label()
-            x.text = str(self.target)
-            self.resultsGrid.add_widget(x)
-            self.throwsList.append(x)
-            self.throwsList[self.throwsCount-1].color = (1,0,0,1)
-        else:
-            pass
-
         if self.left == 0: #koniec gry
             self.scores['Gra'] = 'Trening losowy'
             self.scores['Liczba rzutów'] = self.throwsCount
@@ -301,6 +270,41 @@ class RandomTraining(Screen):
 
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "soloscoreboard"
+
+            return
+        else:    
+            if index == 0:
+                self.hitCount += 1
+                self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+                self.accuracy = round(self.accuracy * 100,2)
+                self.leftLabel.text = str(self.left)
+                self.accuracyLabel.text = str(self.accuracy)+'%'
+                self.target = randint(1,20)
+                self.targetLabel.text = str(self.target)
+
+                x = Label()
+                x.text = str(self.target)
+                self.resultsGrid.add_widget(x)
+                self.throwsList.append(x)
+
+
+            elif index == 1:
+                self.accuracy = float(self.hitCount) / float(self.throwsCount)
+                self.accuracy = round(self.accuracy * 100,2)
+                self.accuracyLabel.text = str(self.accuracy)+'%'
+                self.leftLabel.text = str(self.left)
+                self.target = randint(1,20)
+                self.targetLabel.text = str(self.target)
+                
+                x = Label()
+                x.text = str(self.target)
+                self.resultsGrid.add_widget(x)
+                self.throwsList.append(x)
+                self.throwsList[self.throwsCount-1].color = (1,0,0,1)
+            else:
+                pass
+
+
             
 
     def create(self):
@@ -337,6 +341,9 @@ class FullDatabase(Screen):
         elif game in ('Min','Max'):
             headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 1','Liczba 20',]
             databasetable = 'minmax'
+        elif game == 'Trening losowy':
+            headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień',]
+            databasetable = 'randomtraining'
         
         try:
             if user == '':
@@ -882,7 +889,7 @@ class SoloScoreBoard(Screen):
         ) """)
             cursor.execute("INSERT INTO solo180701 (date,user,game,throws,avg,sixties,fiftysevens) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,avg,sixties,fiftysevens))
         
-        if self.manager.get_screen('solo').game >= 4 and self.manager.get_screen('solo').game <=5:
+        elif self.manager.get_screen('solo').game >= 4 and self.manager.get_screen('solo').game <=5:
             result = self.manager.get_screen('minmaxwindow').scores
             game = result['Gra']
             throws = result['Liczba rzutów']
@@ -902,6 +909,26 @@ class SoloScoreBoard(Screen):
             twenties INTEGER
         ) """)
             cursor.execute("INSERT INTO minmax (date,user,game,throws,avg,ones,twenties) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,avg,ones,twenties))
+
+        elif self.manager.get_screen('solo').game == 7:
+            result = self.manager.get_screen('randomtraining').scores
+            game = result['Gra']
+            throws = result['Liczba rzutów']
+            hits = result['Liczba trafień']
+            misses = result['Liczba chybień']
+            accuracy = result['Procent trafień']
+                 
+            cursor.execute(""" CREATE TABLE IF NOT EXISTS randomtraining (
+            id INTEGER PRIMARY KEY,
+            date TEXT,
+            user TEXT,
+            game TEXT,
+            throws INTEGER,
+            hits INTEGER,
+            misses INTEGER,
+            accuracy REAL
+        ) """)
+            cursor.execute("INSERT INTO randomtraining (date,user,game,throws,hits,misses,accuracy) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,hits,misses,accuracy))
 
         connection.commit()
         connection.close()
