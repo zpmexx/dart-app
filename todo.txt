@@ -1,7 +1,12 @@
 co do zrobienia:
-solo games
-baza danych
-cofnij button
+
+czcionka dopasowana do rozmiarow screen
+statystyki dla gracza (wpisanie Nicku gracza, ewentualnie wybor gry)
+paginacja w tabelach
+w full database filtrowanie
+tabela przerobiona
+
+cofnij button* (po wszystkim ewentualnie + raczej ostatni ruch tylko)
 zakonczenie na double*
 baza danych: podzial na baze, rekordy oraz statystyki dla danego zawodnika
 

@@ -13,7 +13,6 @@ WindowManager:
     SoloScoreBoard:
     FullDatabase:
     Database:
-    Records:
     Stats:
     RandomTraining:
     Training:
@@ -793,40 +792,60 @@ WindowManager:
         pos_hint: {'x': 0.3 , 'y': 0.3}
         spacing: '20dp'
         Button:
-            text: "Statystyki"
+            text: "Statystyki gracza"
             background_color: (1.0, 0.0, 0.0, 1.0)
             # size_hint: 0.3, 0.3
             on_release: 
                 app.root.current = "stats";root.manager.transition.direction = "left"   
         Button:
-            text: "Rekordy"
-            background_color: (1.0, 0.0, 0.0, 1.0)
-            # size_hint: 0.3, 0.3
-            # on_release: app.root.current = "group"
-            on_release:app.root.current = "records";root.manager.transition.direction = "left"
-        Button:
             text: "Baza danych"
             background_color: (1.0, 0.0, 0.0, 1.0)
             # size_hint: 0.3, 0.3
-            # on_release: app.root.current = "group"
             on_release:app.root.current = "fulldatabase";root.manager.transition.direction = "left"
-
-
-<Records>:
-    name: "records"
-    size: root.width,root.height
-    canvas.before:
-        Rectangle:
-            pos: self.pos
-            size: self.size
-            source: 'background.jpg'
-
+        Button:
+            text: "Powrót"
+            background_color: (1.0, 0.0, 0.0, 1.0)
+            on_release:app.root.current = "solo";root.manager.transition.direction = "right"
 
 <Stats>:
+    userInput: userInput
+    gameSpinner: gameSpinner
+    databaseGrid: databaseGrid
     name: "stats"
-    size: root.width,root.height
+    size_hint: 1, 1
     canvas.before:
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
+    GridLayout:
+        cols:3
+        size_hint: 0.8, 0.2
+        pos_hint: {'x': 0.1, 'y': 0.8}
+        spacing: '20dp'
+        Spinner:
+            size_hint: 1, 1
+            id: gameSpinner
+            text: "Wybierz gre"
+            values: ["180","301","501","701","Min","Max",'Trening','Trening losowy']
+
+        TextInput:
+            id: userInput
+            name: "userInput"            
+            hint_text: 'Nazwa użytkownika'
+            multiline: False
+        
+        Button:
+            text: "Szukaj"
+            on_press: root.find()
+    GridLayout:
+        id: databaseGrid
+        size_hint: 0.8, 0.6
+        pos_hint: {'x': 0.1 , 'y':0.2 }
+
+    Button:
+        size_hint: 0.8, 0.2
+        pos_hint: {'x': 0.1 , 'y':0 }
+        text: "Powrót"
+        color:    
+        on_release: root.backFunction()

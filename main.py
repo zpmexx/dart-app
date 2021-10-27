@@ -134,6 +134,10 @@ class MinmaxWindow(Screen):
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "soloscoreboard"
 
+    def goBack(self):
+        App.get_running_app().root.transition.direction = "right"  
+        App.get_running_app().root.current = "solo"
+
     def create(self):
         for i in self.children:
             if (hasattr(i, 'buttonsGrid')): #dopisywanie mnożników do listy
@@ -157,6 +161,8 @@ class MinmaxWindow(Screen):
                     temp[21].bind(on_release = lambda x: self.bindButton(x.text))
                     temp.append(getattr(i, 'button50')) 
                     temp[22].bind(on_release = lambda x: self.bindButton(x.text))
+                    temp.append(getattr(i, 'buttonBack')) 
+                    temp[23].bind(on_release = lambda x: self.goBack())
 
 class Solo180701(Screen):
     multiplierList = []
@@ -212,6 +218,10 @@ class Solo180701(Screen):
         else: #przypadek gdy gracz przekroczy wartośc docelową
             pass
 
+    def goBack(self):
+        App.get_running_app().root.transition.direction = "right"  
+        App.get_running_app().root.current = "solo"
+            
     def create(self):
         for i in self.children:
             if (hasattr(i, 'buttonsGrid')):
@@ -235,14 +245,48 @@ class Solo180701(Screen):
                     temp[21].bind(on_release = lambda x: self.bindButton(x.text))
                     temp.append(getattr(i, 'button50')) 
                     temp[22].bind(on_release = lambda x: self.bindButton(x.text))
+                    temp.append(getattr(i, 'buttonBack')) 
+                    temp[23].bind(on_release = lambda x: self.goBack())
+
         self.game = str(self.leftLabel.text)
 
-
-class Records(Screen):
-    pass
-
 class Stats(Screen):
-    pass
+
+    def find(self):
+        self.databaseGrid.clear_widgets()
+        game = self.gameSpinner.text
+        user = self.userInput.text
+        choose = 0 #dane z której gry wyświetlić
+        connection = sqlite3.connect('dart.db') #otwarcie połaczenia z bazą
+        cursor = connection.cursor()
+        """wpisanie nagłówków oraz nazwy tabeli dla konkretnych gier"""
+        if game in ('180','301','501','701'):
+            databasetable = 'solo180701'
+            headers = ['Liczba rzutów','Średnia rzutów','Liczba 60','Liczba 57','Najkrótsza gra', 'Najdłuższa gra']
+        elif game in ('Min','Max'):
+            headers = ['Liczba rzutów','Średnia rzutów','Liczba 1 ','Liczba 20','Najlepsza gra', 'Najgorsza gra']
+            databasetable = 'minmax'
+            choose = 1
+        elif game in ('Trening losowy','Trening'):
+            headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień',]
+            databasetable = 'randomtraining'
+            choose = 2
+        try:
+           if choose == 0:
+               cursor.execute("SELECT SUM(throws), AVG(avg),SUM(sixties),SUM(fiftysevens) from "+databasetable+" WHERE game = ?", (game,))
+        except:
+            self.databaseGrid.cols = 1
+            x = Label()
+            x.text = 'Brak danych w bazie na podane parametry'
+            self.databaseGrid.add_widget(x)
+                
+
+    def backFunction(self):
+        self.databaseGrid.clear_widgets()
+        self.gameSpinner.text = 'Wybierz gre'
+        self.userInput.text = ''
+        App.get_running_app().root.current = "database"
+        App.get_running_app().root.transition.direction = "right" 
 
 class Database(Screen):
     pass
@@ -303,7 +347,6 @@ class RandomTraining(Screen):
                 self.throwsList[self.throwsCount-1].color = (1,0,0,1)
             else:
                 pass
-
 
     def create(self):
         self.target = randint(1,20)
@@ -454,10 +497,6 @@ class Training(Screen):
         elif index == 4: #cofnijButton
             pass
 
-
-
-
-
     def create(self):
         if self.bindbtn == 0:
             self.bindbtn = 1 
@@ -515,7 +554,7 @@ class FullDatabase(Screen):
         self.databaseGrid.clear_widgets()
         self.gameSpinner.text = 'Wybierz gre'
         self.userInput.text = ''
-        App.get_running_app().root.current = "solo"
+        App.get_running_app().root.current = "database"
         App.get_running_app().root.transition.direction = "right" 
 
 
