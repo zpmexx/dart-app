@@ -254,8 +254,12 @@ class Stats(Screen):
 
     def find(self):
         self.databaseGrid.clear_widgets()
+        results = []
         game = self.gameSpinner.text
         user = self.userInput.text
+        user = user.lstrip()
+        user = user.rstrip()
+        self.databaseGrid.cols = 4 #liczba kolumn w wyswietlanej tabeli
         choose = 0 #dane z której gry wyświetlić
         connection = sqlite3.connect('dart.db') #otwarcie połaczenia z bazą
         cursor = connection.cursor()
@@ -267,17 +271,144 @@ class Stats(Screen):
             headers = ['Liczba rzutów','Średnia rzutów','Liczba 1 ','Liczba 20','Najlepsza gra', 'Najgorsza gra']
             databasetable = 'minmax'
             choose = 1
-        elif game in ('Trening losowy','Trening'):
-            headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień',]
+        elif game == 'Trening losowy':
+            headers = ['Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień','Liczba gier 20/20', 'Liczba gier 0/20']
             databasetable = 'randomtraining'
             choose = 2
+        elif game == 'Trening':
+            headers = ['Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień','Najkrótsza gra', 'Najdłuższa gra']
+            databasetable = 'randomtraining'
+            choose = 3
+
         try:
-           if choose == 0:
-               cursor.execute("SELECT SUM(throws), AVG(avg),SUM(sixties),SUM(fiftysevens) from "+databasetable+" WHERE game = ?", (game,))
+            if choose == 0:
+                cursor.execute("SELECT SUM(throws), AVG(avg),SUM(sixties),SUM(fiftysevens) from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                        results.append(j)
+
+                cursor.execute("SELECT MIN(throws), MAX(throws) from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                            results.append(j)
+                
+                if None in results:
+                    self.databaseGrid.cols = 1
+                    x = Label()
+                    x.text = 'Brak gracza w bazie danych.'
+                    self.databaseGrid.add_widget(x)
+                
+                else:
+                    for i in range(0,len(headers)):
+                        x = Label()
+                        x.text = headers[i]
+                        self.databaseGrid.add_widget(x)
+
+                        y = Label()
+                        if headers[i] == 'Średnia rzutów':
+                            y.text = str(round(results[i],2))
+                        else:
+                            y.text = str(results[i])
+                        self.databaseGrid.add_widget(y)
+
+            elif choose == 1:    
+                cursor.execute("SELECT SUM(throws), AVG(avg),SUM(ones),SUM(twenties) from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                        results.append(j)
+
+                cursor.execute("SELECT MIN(throws), MAX(throws) from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                            results.append(j)
+                
+                if None in results:
+                    self.databaseGrid.cols = 1
+                    x = Label()
+                    x.text = 'Brak gracza w bazie danych.'
+                    self.databaseGrid.add_widget(x)
+                
+                else:
+                    for i in range(0,len(headers)):
+                        x = Label()
+                        x.text = headers[i]
+                        self.databaseGrid.add_widget(x)
+
+                        y = Label()
+                        if headers[i] == 'Średnia rzutów':
+                            y.text = str(round(results[i],2))
+                        else:
+                            y.text = str(results[i])
+                        self.databaseGrid.add_widget(y)      
+
+            elif choose == 2:
+                cursor.execute("SELECT SUM(throws), SUM(hits),SUM(misses),AVG(accuracy) from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                        results.append(j)
+
+                cursor.execute("SELECT COUNT(*) from "+databasetable+" WHERE game = ? and user = ? and misses = 0", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                            results.append(j)
+
+                cursor.execute("SELECT COUNT(*) from "+databasetable+" WHERE game = ? and user = ? and hits = 0", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                            results.append(j)
+                
+                if None in results:
+                    self.databaseGrid.cols = 1
+                    x = Label()
+                    x.text = 'Brak gracza w bazie danych.'
+                    self.databaseGrid.add_widget(x)
+                
+                else:
+                    for i in range(0,len(headers)):
+                        x = Label()
+                        x.text = headers[i]
+                        self.databaseGrid.add_widget(x)
+
+                        y = Label()
+                        if headers[i] == 'Procent trafień':
+                            y.text = str(round(results[i],2))
+                        else:
+                            y.text = str(results[i])
+                        self.databaseGrid.add_widget(y)    
+
+            elif choose == 3:
+                cursor.execute("SELECT SUM(throws), SUM(hits),SUM(misses),AVG(accuracy) from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                        results.append(j)
+
+                cursor.execute("SELECT MIN(throws),MAX(throws) from "+databasetable+" WHERE game = ? and user = ? ", (game,user,))
+                for i in cursor.fetchall():
+                    for j in i:
+                            results.append(j)
+                
+                if None in results:
+                    self.databaseGrid.cols = 1
+                    x = Label()
+                    x.text = 'Brak gracza w bazie danych.'
+                    self.databaseGrid.add_widget(x)
+                
+                else:
+                    for i in range(0,len(headers)):
+                        x = Label()
+                        x.text = headers[i]
+                        self.databaseGrid.add_widget(x)
+
+                        y = Label()
+                        if headers[i] == 'Procent trafień':
+                            y.text = str(round(results[i],2))
+                        else:
+                            y.text = str(results[i])
+                        self.databaseGrid.add_widget(y)      
         except:
             self.databaseGrid.cols = 1
             x = Label()
-            x.text = 'Brak danych w bazie na podane parametry'
+            x.text = 'Wybierz gre!'
             self.databaseGrid.add_widget(x)
                 
 
@@ -300,12 +431,47 @@ class RandomTraining(Screen):
     throwsList = []
     bindbtn = 0
     scores = {}
+    finish = 0
 
     def bindButton(self,index):
         self.throwsCount += 1
         self.left -= 1
         #0 - trafiony, 1-nietrafiony, 2-cofnij
         if self.left == 0: #koniec gry
+            self.finish = 1
+        
+        if index == 0:
+            self.hitCount += 1
+            self.accuracy =  float(self.hitCount) / float(self.throwsCount)
+            self.accuracy = round(self.accuracy * 100,2)
+            self.leftLabel.text = str(self.left)
+            self.accuracyLabel.text = str(self.accuracy)+'%'
+            self.target = randint(1,20)
+            self.targetLabel.text = str(self.target)
+            if self.finish == 0:
+                x = Label()
+                x.text = str(self.target)
+                self.resultsGrid.add_widget(x)
+                self.throwsList.append(x)
+
+
+        elif index == 1:
+            self.accuracy = float(self.hitCount) / float(self.throwsCount)
+            self.accuracy = round(self.accuracy * 100,2)
+            self.accuracyLabel.text = str(self.accuracy)+'%'
+            self.leftLabel.text = str(self.left)
+            self.target = randint(1,20)
+            self.targetLabel.text = str(self.target)
+            
+            x = Label()
+            x.text = str(self.target)
+            self.resultsGrid.add_widget(x)
+            self.throwsList.append(x)
+            self.throwsList[self.throwsCount-1].color = (1,0,0,1)
+        else:
+            pass
+
+        if self.finish == 1:
             self.scores['Gra'] = 'Trening losowy'
             self.scores['Liczba rzutów'] = self.throwsCount
             self.scores['Liczba trafień'] = self.hitCount
@@ -316,37 +482,6 @@ class RandomTraining(Screen):
             App.get_running_app().root.current = "soloscoreboard"
 
             return
-        else:    
-            if index == 0:
-                self.hitCount += 1
-                self.accuracy =  float(self.hitCount) / float(self.throwsCount)
-                self.accuracy = round(self.accuracy * 100,2)
-                self.leftLabel.text = str(self.left)
-                self.accuracyLabel.text = str(self.accuracy)+'%'
-                self.target = randint(1,20)
-                self.targetLabel.text = str(self.target)
-
-                x = Label()
-                x.text = str(self.target)
-                self.resultsGrid.add_widget(x)
-                self.throwsList.append(x)
-
-
-            elif index == 1:
-                self.accuracy = float(self.hitCount) / float(self.throwsCount)
-                self.accuracy = round(self.accuracy * 100,2)
-                self.accuracyLabel.text = str(self.accuracy)+'%'
-                self.leftLabel.text = str(self.left)
-                self.target = randint(1,20)
-                self.targetLabel.text = str(self.target)
-                
-                x = Label()
-                x.text = str(self.target)
-                self.resultsGrid.add_widget(x)
-                self.throwsList.append(x)
-                self.throwsList[self.throwsCount-1].color = (1,0,0,1)
-            else:
-                pass
 
     def create(self):
         self.target = randint(1,20)
@@ -1043,6 +1178,7 @@ class SoloScoreBoard(Screen):
             self.manager.get_screen('randomtraining').accuracy = 0
             self.manager.get_screen('randomtraining').throwsCount = 0
             self.manager.get_screen('randomtraining').left = 20
+            self.manager.get_screen('randomtraining').finish = 0
             self.manager.get_screen('randomtraining').throwsList = []
             self.manager.get_screen('randomtraining').scores = {}
             self.manager.get_screen('randomtraining').leftLabel.text = '0'
