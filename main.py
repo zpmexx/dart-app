@@ -429,11 +429,13 @@ class RandomTraining(Screen):
     throwsCount = 0
     left = 20
     throwsList = []
+    throwsPointer = 0
     bindbtn = 0
     scores = {}
     finish = 0
 
     def bindButton(self,index):
+        self.throwsPointer += 1
         self.throwsCount += 1
         self.left -= 1
         #0 - trafiony, 1-nietrafiony, 2-cofnij
@@ -446,28 +448,22 @@ class RandomTraining(Screen):
             self.accuracy = round(self.accuracy * 100,2)
             self.leftLabel.text = str(self.left)
             self.accuracyLabel.text = str(self.accuracy)+'%'
-            self.target = randint(1,20)
-            self.targetLabel.text = str(self.target)
-            if self.finish == 0:
-                x = Label()
-                x.text = str(self.target)
-                self.resultsGrid.add_widget(x)
-                self.throwsList.append(x)
-
+            self.throwsList[self.throwsCount-1].color = (1,1,1,1)
+            if self.throwsPointer <20:
+                self.target = self.throwsList[self.throwsPointer]
+                self.targetLabel.text = str(self.target.text)
+                self.throwsList[self.throwsPointer].color = (0,0,0,1)
 
         elif index == 1:
             self.accuracy = float(self.hitCount) / float(self.throwsCount)
             self.accuracy = round(self.accuracy * 100,2)
             self.accuracyLabel.text = str(self.accuracy)+'%'
             self.leftLabel.text = str(self.left)
-            self.target = randint(1,20)
-            self.targetLabel.text = str(self.target)
-            
-            x = Label()
-            x.text = str(self.target)
-            self.resultsGrid.add_widget(x)
-            self.throwsList.append(x)
             self.throwsList[self.throwsCount-1].color = (1,0,0,1)
+            if self.throwsPointer <20:
+                self.target = self.throwsList[self.throwsPointer]
+                self.targetLabel.text = str(self.target.text)
+                self.throwsList[self.throwsPointer].color = (0,0,0,1)
         else:
             pass
 
@@ -484,17 +480,21 @@ class RandomTraining(Screen):
             return
 
     def create(self):
-        self.target = randint(1,20)
-        x = Label()
-        x.text = str(self.target)
-        self.resultsGrid.add_widget(x)
-        self.throwsList.append(x)
-        self.targetLabel.text = str(self.target)
         if self.bindbtn == 0:
             self.bindbtn = 1 
             self.hitButton.bind(on_release=lambda x: self.bindButton(0))
             self.missButton.bind(on_release=lambda x: self.bindButton(1))
             self.rewindButton.bind(on_release=lambda x: self.bindButton(2))
+        for i in range (0,20):
+            target = randint(1,20)
+            x = Label()
+            x.text = str(target)
+            self.resultsGrid.add_widget(x)
+            self.throwsList.append(x)
+        self.throwsList[0].color = (0,0,0,1)
+        self.target = self.throwsList[0]
+        self.targetLabel.text = str(self.target.text)
+
 
 
 
