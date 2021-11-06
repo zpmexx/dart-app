@@ -562,6 +562,7 @@ WindowManager:
     userInput: userInput
     gameSpinner: gameSpinner
     databaseGrid: databaseGrid
+    filterGrid: filterGrid
     name: "fulldatabase"
     size_hint: 1, 1
     canvas.before:
@@ -591,9 +592,14 @@ WindowManager:
         Button:
             text: "Szukaj"
             on_press: root.find()
+
+    GridLayout:
+        id: filterGrid
+        size_hint: 0.8, 0.1
+        pos_hint: {'x': 0.1 , 'y':0.7 }
     GridLayout:
         id: databaseGrid
-        size_hint: 0.8, 0.6
+        size_hint: 0.8, 0.5
         pos_hint: {'x': 0.1 , 'y':0.2 }
 
     Button:

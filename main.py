@@ -642,37 +642,63 @@ class Training(Screen):
             self.rewindButton.bind(on_release=lambda x: self.bindButton(4))
 
 class FullDatabase(Screen):
-    
+    user = ''
+    game = ''
+    databasetable = ''
+    headers = []
+
+    connection = sqlite3.connect('dart.db') #otwarcie połaczenia z bazą
+    cursor = connection.cursor()
     def find(self):
         self.databaseGrid.clear_widgets()
+        self.filterGrid.clear_widgets()
         game = self.gameSpinner.text
         user = self.userInput.text
+        self.user = user
+        self.game = game
+        headers = []
+        databasetable = ''
+        ifname = 0 #jeśli podano nick w wyszukiwaniu, 0 to brak i przeszkuje cala baze
          
-        connection = sqlite3.connect('dart.db') #otwarcie połaczenia z bazą
-        cursor = connection.cursor()
-        """wpisanie nagłówków oraz nazwy tabeli dla konkretnych gier"""
-        if game in ('180','301','501','701'):
-            databasetable = 'solo180701'
-            headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 60','Liczba 57',]
-        elif game in ('Min','Max'):
-            headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 1','Liczba 20',]
-            databasetable = 'minmax'
-        elif game in ('Trening losowy','Trening'):
-            headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień',]
-            databasetable = 'randomtraining'
-
         try:
+            """wpisanie nagłówków oraz nazwy tabeli dla konkretnych gier"""
+            if game in ('180','301','501','701'):
+                databasecolumns = ['id','date','user','game','throws','avg','sixties','fiftysevens']
+                databasetable = 'solo180701'
+                headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 60','Liczba 57',]
+            elif game in ('Min','Max'):
+                headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 1','Liczba 20',]
+                databasetable = 'minmax'
+            elif game in ('Trening losowy','Trening'):
+                headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień',]
+                databasetable = 'randomtraining'
+            self.headers = headers
+            self.databasetable = databasetable
+            self.game = game
+        
             if user == '':
-                cursor.execute("SELECT * from "+databasetable+" WHERE game = ?", (game,))
+                self.cursor.execute("SELECT * from "+databasetable+" WHERE game = ?", (game,))
             else:
-                cursor.execute("SELECT * from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
-            result = cursor.fetchall()
+                ifname = 1
+                self.cursor.execute("SELECT * from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
+            result = self.cursor.fetchall()
             self.databaseGrid.cols = len(result[0]) #dynamiczne tworzenie liczby kolumn względem odpowiedniej tabeli z db
-
+            self.filterGrid.cols = len(result[0])
+            counter = 0
+            temp = []
             for i in headers:
-                x = Label()
-                x.text = i
-                self.databaseGrid.add_widget(x)
+                temp.append(Button())
+                temp[counter].text = i
+                counter +=1
+
+            counter = 0
+            for i in headers:
+                strs = databasecolumns[counter]
+                temp[counter].bind(on_release = lambda x:self.getFromDb(strs,ifname))
+                self.filterGrid.add_widget(temp[counter])
+                print(databasecolumns[counter])
+                print(counter)
+                counter +=1
             for i in result:
                 for j in i:
                     x = Label()
@@ -683,14 +709,31 @@ class FullDatabase(Screen):
             x = Label()
             x.text = 'Brak danych w bazie na podane parametry'
             self.databaseGrid.add_widget(x)
+
+
                 
            
     def backFunction(self):
         self.databaseGrid.clear_widgets()
         self.gameSpinner.text = 'Wybierz gre'
         self.userInput.text = ''
+        self.connection.close()
         App.get_running_app().root.current = "database"
         App.get_running_app().root.transition.direction = "right" 
+
+    def getFromDb(self,columnName,ifName):
+        print(columnName)
+        self.databaseGrid.clear_widgets()
+        if ifName == 0:
+            self.cursor.execute("SELECT * from "+self.databasetable+" WHERE game = ? ORDER BY {} DESC".format(columnName), (self.game,))
+            result = self.cursor.fetchall()
+            self.databaseGrid.cols = len(result[0])
+            print(result)
+            for i in result:
+                for j in i:
+                    x = Label()
+                    x.text = str(j)
+                    self.databaseGrid.add_widget(x)
 
 
 class GameWindow(Screen):
