@@ -1,3 +1,4 @@
+from logging import info
 from kivy import Config
 Config.set('graphics', 'width', '400')
 Config.set('graphics', 'height', '600')
@@ -23,6 +24,7 @@ from kivy.properties import ListProperty
 from kivy.properties import NumericProperty
 import time
 from datetime import date, datetime
+from functools import partial
 
 class SoloWindow(Screen):
     game = 0 #wybrana gra:
@@ -646,10 +648,14 @@ class FullDatabase(Screen):
     game = ''
     databasetable = ''
     headers = []
+    databaseFilterState = 0 # 0 - rosnaco, 1 malejaco
+    previousColumnNameState = ''
+    currentColumnNameState = ''
 
     connection = sqlite3.connect('dart.db') #otwarcie połaczenia z bazą
     cursor = connection.cursor()
     def find(self):
+        
         self.databaseGrid.clear_widgets()
         self.filterGrid.clear_widgets()
         game = self.gameSpinner.text
@@ -694,7 +700,7 @@ class FullDatabase(Screen):
             counter = 0
             for i in headers:
                 strs = databasecolumns[counter]
-                temp[counter].bind(on_release = lambda x:self.getFromDb(strs,ifname))
+                temp[counter].bind(on_release = partial(self.getFromDb,(strs,ifname)))
                 self.filterGrid.add_widget(temp[counter])
                 print(databasecolumns[counter])
                 print(counter)
@@ -717,16 +723,35 @@ class FullDatabase(Screen):
         self.databaseGrid.clear_widgets()
         self.gameSpinner.text = 'Wybierz gre'
         self.userInput.text = ''
-        self.connection.close()
+        self.user = ''
+        self.game = ''
+        self.databasetable = ''
+        self.headers = []
+        self.databaseFilterState = 0 # 0 - rosnaco, 1 malejaco
+        self.previousColumnNameState = ''
+        self.currentColumnNameState = ''
+        self.filterGrid.clear_widgets()
+        # self.connection.close()
         App.get_running_app().root.current = "database"
         App.get_running_app().root.transition.direction = "right" 
 
     def getFromDb(self,columnName,ifName):
-        print(columnName)
+        ifName = columnName[1]
+        columnName = columnName[0]
+        self.currentColumnNameState = columnName
+        if self.currentColumnNameState == self.previousColumnNameState:
+            self.databaseFilterState=0
+        
         self.databaseGrid.clear_widgets()
         if ifName == 0:
-            self.cursor.execute("SELECT * from "+self.databasetable+" WHERE game = ? ORDER BY {} DESC".format(columnName), (self.game,))
+            if self.databaseFilterState==0:
+                self.cursor.execute("SELECT * from "+self.databasetable+" WHERE game = ? ORDER BY {} DESC".format(columnName), (self.game,))
+                self.databaseFilterState=1
+            else:
+                self.cursor.execute("SELECT * from "+self.databasetable+" WHERE game = ? ORDER BY {}".format(columnName), (self.game,))
+                self.databaseFilterState=0
             result = self.cursor.fetchall()
+
             self.databaseGrid.cols = len(result[0])
             print(result)
             for i in result:
