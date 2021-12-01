@@ -597,10 +597,17 @@ WindowManager:
         id: filterGrid
         size_hint: 0.8, 0.1
         pos_hint: {'x': 0.1 , 'y':0.7 }
-    GridLayout:
-        id: databaseGrid
+    ScrollView:
         size_hint: 0.8, 0.5
         pos_hint: {'x': 0.1 , 'y':0.2 }
+        do_scroll_y: True
+        GridLayout:
+            id: databaseGrid
+            size: root.width, root.height
+            size_hint_x: None
+            size_hint_y: None
+            
+   
 
     Button:
         size_hint: 0.8, 0.2

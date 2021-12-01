@@ -25,6 +25,8 @@ from kivy.properties import NumericProperty
 import time
 from datetime import date, datetime
 from functools import partial
+from kivymd.uix.datatables import MDDataTable
+from kivy.metrics import dp
 
 class SoloWindow(Screen):
     game = 0 #wybrana gra:
@@ -674,10 +676,12 @@ class FullDatabase(Screen):
                 headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 60','Liczba 57',]
             elif game in ('Min','Max'):
                 headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Średnia rzutu','Liczba 1','Liczba 20',]
+                databasecolumns = ['id','date','user','game','throws','avg','ones','twenties']
                 databasetable = 'minmax'
             elif game in ('Trening losowy','Trening'):
                 headers = ['Numer','Data','Użytkownik','Gra','Liczba rzutów','Liczba trafień','Liczba chybień','Procent trafień',]
                 databasetable = 'randomtraining'
+                databasecolumns = ['id','date','user','game','throws','hits','misses','accuracy']
             self.headers = headers
             self.databasetable = databasetable
             self.game = game
@@ -702,8 +706,6 @@ class FullDatabase(Screen):
                 strs = databasecolumns[counter]
                 temp[counter].bind(on_release = partial(self.getFromDb,(strs,ifname)))
                 self.filterGrid.add_widget(temp[counter])
-                print(databasecolumns[counter])
-                print(counter)
                 counter +=1
             for i in result:
                 for j in i:
