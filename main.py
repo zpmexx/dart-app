@@ -657,7 +657,9 @@ class FullDatabase(Screen):
     connection = sqlite3.connect('dart.db') #otwarcie połaczenia z bazą
     cursor = connection.cursor()
     def find(self):
-        
+
+        self.databaseScroll.scroll_y = 1 #powrót do początku scrollView
+
         self.databaseGrid.clear_widgets()
         self.filterGrid.clear_widgets()
         game = self.gameSpinner.text
@@ -692,6 +694,13 @@ class FullDatabase(Screen):
                 ifname = 1
                 self.cursor.execute("SELECT * from "+databasetable+" WHERE game = ? and user = ?", (game,user,))
             result = self.cursor.fetchall()
+
+            self.databaseScroll.do_scroll_y = False
+            print(len(result))
+            if len(result)>=5:
+                self.databaseScroll.do_scroll_y = True
+            self.databaseGrid.size_hint_x = None
+
             self.databaseGrid.cols = len(result[0]) #dynamiczne tworzenie liczby kolumn względem odpowiedniej tabeli z db
             self.filterGrid.cols = len(result[0])
             counter = 0
@@ -714,6 +723,7 @@ class FullDatabase(Screen):
                     self.databaseGrid.add_widget(x)
         except:
             self.databaseGrid.cols = 1
+            self.databaseGrid.size_hint_x = 1
             x = Label()
             x.text = 'Brak danych w bazie na podane parametry'
             self.databaseGrid.add_widget(x)

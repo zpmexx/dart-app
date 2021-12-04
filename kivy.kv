@@ -563,6 +563,7 @@ WindowManager:
     gameSpinner: gameSpinner
     databaseGrid: databaseGrid
     filterGrid: filterGrid
+    databaseScroll: databaseScroll
     name: "fulldatabase"
     size_hint: 1, 1
     canvas.before:
@@ -598,14 +599,17 @@ WindowManager:
         size_hint: 0.8, 0.1
         pos_hint: {'x': 0.1 , 'y':0.7 }
     ScrollView:
+        id: databaseScroll
         size_hint: 0.8, 0.5
         pos_hint: {'x': 0.1 , 'y':0.2 }
-        do_scroll_y: True
+        do_scroll_y: False
         GridLayout:
             id: databaseGrid
-            size: root.width, root.height
+            size: root.width, root.height 
             size_hint_x: None
             size_hint_y: None
+            row_default_height: root.height * 0.1
+            row_force_default: True
             
    
 
