@@ -1,10 +1,14 @@
 co do zrobienia:
 
-czcionka dopasowana do rozmiarow screen
-statystyki dla gracza (wpisanie Nicku gracza, ewentualnie wybor gry)
-paginacja w tabelach
-w full database filtrowanie
-tabela przerobiona
+baza danych dla multiplayers (tabela o 8 - reszta null)
+zasady w poszczególne gry
+cofnij button
+Liczba rzutów w grach solo zwiększana gdy nie jset zakończone przy finiszu
+minmax trzeba czyscic po wyjsciu
+back button popout czy napewno wyjsc
+baza danych po zakończeniu gry w mutliplayer
+LAYout
+
 
 cofnij button* (po wszystkim ewentualnie + raczej ostatni ruch tylko)
 zakonczenie na double*

@@ -16,6 +16,7 @@ WindowManager:
     Stats:
     RandomTraining:
     Training:
+    Rules:
 
 <MainWindow>:
     solobutton: solobutton
@@ -44,7 +45,46 @@ WindowManager:
             # size_hint: 0.3, 0.3
             # on_release: app.root.current = "group"
             on_release:app.root.current = "chooseplayers";root.manager.transition.direction = "left"
+        Button:
+            text: "Zasady"
+            background_color: (1.0, 0.0, 0.0, 1.0)
+            # size_hint: 0.3, 0.3
+            # on_release: app.root.current = "group"
+            on_release:app.root.current = "rules";root.manager.transition.direction = "left"
 
+<Rules>:
+    name: "rules"
+    size: root.width,root.height
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
+
+    ScrollView:
+        size_hint: 0.7, 0.8
+        pos_hint: {'x': 0.1 , 'y':0.15 }
+        do_scroll_y: True
+        do_scrolly_x: False
+
+        GridLayout:
+            size: root.width, root.height 
+            size_hint_x: None
+            size_hint_y: None
+            row_default_height: root.height * 0.1
+            row_force_default: True
+            cols: 1
+            Label:
+                text:'180'
+            Label:
+                text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently sktop publishing software like Aldus PageMaker including" * 10
+                text_size: self.width, None
+                size_hint: 1, None
+
+
+
+
+        
 <ChoosePlayers>:
     playerGrid: playerGrid
     chooseGrid: chooseGrid

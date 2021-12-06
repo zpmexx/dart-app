@@ -75,6 +75,9 @@ class SoloWindow(Screen):
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "training"
 
+class Rules(Screen):
+    pass
+
 class MinmaxWindow(Screen):
     multiplierList = [] #
     navbarList = [] #0-leftLabel, 1-avgLabel, 2-sumLabel
@@ -727,9 +730,6 @@ class FullDatabase(Screen):
             x = Label()
             x.text = 'Brak danych w bazie na podane parametry'
             self.databaseGrid.add_widget(x)
-
-
-                
            
     def backFunction(self):
         self.databaseGrid.clear_widgets()
