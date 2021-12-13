@@ -1,12 +1,10 @@
 co do zrobienia:
 
-baza danych dla multiplayers (tabela o 8 - reszta null)
 zasady w poszczególne gry
 cofnij button
 Liczba rzutów w grach solo zwiększana gdy nie jset zakończone przy finiszu
 minmax trzeba czyscic po wyjsciu
 back button popout czy napewno wyjsc
-baza danych po zakończeniu gry w mutliplayer
 LAYout
 
 

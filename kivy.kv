@@ -53,6 +53,7 @@ WindowManager:
             on_release:app.root.current = "rules";root.manager.transition.direction = "left"
 
 <Rules>:
+    scrollViewGrid : scrollViewGrid
     name: "rules"
     size: root.width,root.height
     canvas.before:
@@ -60,26 +61,49 @@ WindowManager:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
-
+    on_enter: root.create()
+    # GridLayout:
+    #     cols: 1
+    #     size: root.width,root.height
+    #     size_hint_y: None
+    Label:
+        text:'ZASADY'
+        pos_hint: {'x': 0, 'y':0.85 }
+        size_hint: 1, 0.15
     ScrollView:
-        size_hint: 0.7, 0.8
-        pos_hint: {'x': 0.1 , 'y':0.15 }
+        # id: scrollViewGrid
+        # size: root.width, root.height
+        size_hint_y: 1
+        size_hint_x: 1
+        # pos_hint: {'x': 0.2 , 'y':0.1 }
         do_scroll_y: True
-        do_scrolly_x: False
+        # do_scrolly_x: False
+        # scroll_y: 1
 
-        GridLayout:
-            size: root.width, root.height 
+        FloatLayout:
+            id: scrollViewGrid
+            size: root.width, root.height + 1000
             size_hint_x: None
             size_hint_y: None
-            row_default_height: root.height * 0.1
-            row_force_default: True
-            cols: 1
-            Label:
-                text:'180'
-            Label:
-                text: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently sktop publishing software like Aldus PageMaker including" * 10
-                text_size: self.width, None
-                size_hint: 1, None
+            # height: self.minimum_height
+            # row_default_height: 100
+            # row_force_default: True
+            # minimum_height: self.height
+            # cols: 1
+            # spacing: '30dp'
+            # Label:
+            #     text:'180'
+            #     font_size: 40
+            #     text_size: self.size
+            # Label:
+            #     text: "wspólne: x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt) 180,301,501,701 - Liczba Pozostało oznacza sume punktów które należy wyrzucić by zakończyć gre. W grach chodzi o jak najszybsze uzbieranie danej liczby punktów i zakończenie odpowiednią lotką opartą o liczbe punktów min Pozostało oznacza liczbe rzutów do końca,  pudlo skutkuje karą 70 pkt, w grze chodzi o zdobycie jak najmniejszej ilości punktów max Pozostało oznacza liczbe rzutów do końca, w grze chodzi o zdobycie jak największej ilości punktów bez koniećzności zakańczania konkretą lotką opartą o punkty trening Cel oznacza konkretna wartosc do wyrzucenia, mnożnik x1-x3 oznacza które pole na wartości zostało rzucone, chybiony oznacza nietrafiony rzut, pozostało z celu oznacza liczbe koniecznych trafien danego celu by przejśc do nastepnego trening losowy Wyświetlana lista liczb oznacza cele do trafienia w kolejnosci"
+            #     text_size: self.width*0.8, None
+    Button:
+        text: 'Powrót'
+        size_hint: 1, 0.15
+        pos_hint: {'x': 0, 'y':0 }
+
+    
 
 
 
