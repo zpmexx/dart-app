@@ -70,21 +70,24 @@ WindowManager:
         text:'ZASADY'
         pos_hint: {'x': 0, 'y':0.85 }
         size_hint: 1, 0.15
+
+        
     ScrollView:
         # id: scrollViewGrid
         # size: root.width, root.height
-        size_hint_y: 1
-        size_hint_x: 1
-        # pos_hint: {'x': 0.2 , 'y':0.1 }
+        size_hint: 0.8, 0.65
+        pos_hint: {'x': 0.1 , 'y':0.2 }
         do_scroll_y: True
-        # do_scrolly_x: False
-        # scroll_y: 1
-
-        FloatLayout:
+        do_scrolly_x: False
+        scroll_y: 1
+        GridLayout:
+            cols:1  
+            rows: 10
             id: scrollViewGrid
-            size: root.width, root.height + 1000
+            size: root.width * 0.8, 1800
             size_hint_x: None
             size_hint_y: None
+        
             # height: self.minimum_height
             # row_default_height: 100
             # row_force_default: True

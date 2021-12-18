@@ -80,25 +80,59 @@ class SoloWindow(Screen):
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "training"
 
+class WrappedLabel(Label):
+    # Based on Tshirtman's answer
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.bind(
+            width=lambda *x:
+            self.setter('text_size')(self, (self.width, None)),
+            texture_size=lambda *x: self.setter('height')(self, self.texture_size[1]))
+
 class Rules(Screen):
     def create(self):
-        x = Label()
-        x.text = '''Zx1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt)
-# 180,301,501,701 - Liczba "Pozostało" oznacza sume punktów które należy wyrzucić by zakończyć gre. W grach chodzi o jak najszybsze uzbieranie danej liczby punktów i zakończenie odpowiednią lotką opartą o liczbe punktów
-# min Pozostało oznacza liczbe rzutów do końca,  pudlo skutkuje karą 70 pkt, w grze chodzi o zdobycie jak najmniejszej ilości punktów
-# max Pozostało oznacza liczbe rzutów do końca, w grze chodzi o zdobycie jak największej ilości punktów bez koniećzności zakańczania konkretą lotką opartą o punkty
-# trening Cel oznacza konkretna wartosc do wyrzucenia, mnożnik x1-x3 oznacza które pole na wartości zostało rzucone, chybiony oznacza nietrafiony rzut, pozostało z celu oznacza liczbe koniecznych trafien danego celu by przejśc do nastepnego
-# trening losowy Wyświetlana lista liczb oznacza cele do trafienia w kolejnosci'''
-        x.pos_hint = {'x': 0.4, 'y': 0.38}
-        x.text_size = self.size
+        x = WrappedLabel()
+        x.text = '''Zasady wspólne: x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt).'''     
+
+        self.scrollViewGrid.add_widget(x)
+        x = WrappedLabel()
+        x.text = '''Gry solo 180-701: Liczba "Pozostało" oznacza sume punktów które należy wyrzucić by zakończyć gre. W grach chodzi o jak najszybsze uzbieranie danej liczby punktów i zakończenie odpowiednią lotką opartą o liczbe punktów.'''
+        self.scrollViewGrid.add_widget(x)
+        x = WrappedLabel()
+        x.text = '''Gra solo min:  W grze chodzi o zdobycie jak najmniejszej ilości punktów, "Pozostało" oznacza liczbe rzutów do końca, pudło skutkuje karą 70 pkt.'''
+
+        self.scrollViewGrid.add_widget(x)
+        x = WrappedLabel()
+        x.text = '''Gra solo max: W grze chodzi o zdobycie jak największej ilości punktów, "Pozostało" oznacza liczbe rzutów do końca.'''
+
+        self.scrollViewGrid.add_widget(x)
+        x = WrappedLabel()
+        x.text = '''Gra solo trening: Gra polega na wyrzuceniu wszystkich pól na tarczy trzykrotnie (poza środkiem, który wyrzuca się po razie mały i duży). Cel oznacza konkretna wartosc do wyrzucenia, mnożnik x1-x3 oznacza które pole na wartości zostało rzucone i jak jest ono punktowane, "chybiony" oznacza nietrafiony rzut, pozostało z celu oznacza liczbe koniecznych trafien danego celu by przejśc do nastepnej wartości.'''
+
+        self.scrollViewGrid.add_widget(x)
+        x = WrappedLabel()
+        x.text = '''Gra solo trening losowy: Wyświetlana lista liczb oznacza cele do trafienia w kolejnosci.'''
+
+        self.scrollViewGrid.add_widget(x)
+        x = WrappedLabel()
+        x.text = '''Gry drużynowe: Górna lista oznacza grę do wyboru, kafelki z liczbami poniżej oznaczają liczbę graczy, nazwa żadnego z graczy nie może być pusta. Gracz podświetlany na czerwono wykonuje rzut. Gry 180-501 oraz min/max posiadają analogiczne zasady co odpowiadając im gry solo.'''
+        
+        self.scrollViewGrid.add_widget(x)
+
+        x = WrappedLabel()
+        x.text = '''Gry 180e-501e: Gry typu eliminator. Gry tak jak klasyczne 180-501 polegają na jak najszybszym zdobyciu określonej liczby punktów z tą różnicą, że gdy zawodnik wykonujący rzut w konsekwencji osiągnie sume punktów posiadaną już przez innego zawodnika to wartość jego punktów jest zerowana. Gdy zawodnik osiągnie przy rzucie wartość większą niż docelowa to róznica punktów od wartości docelowej jest odejmowana.'''
+
+        self.scrollViewGrid.add_widget(x)
+        
+        # x.pos_hint = {'x': 0, 'y': 0.5}
         # x.pos_hint = (0.8,0.7)
-        x.size_hint = 0.1,1
-        y = MDIcon(icon =  'gmail')
-        y.pos_hint = {'x': 0.15, 'y': 0.1}
-        y.size_hint = 0.1,1
-        # y.size_hint = 0.7,0.3
-        # y.pos_hint = (1,1)
-        self.scrollViewGrid.add_widget(y)
+        
+        # y = MDIcon(icon =  'gmail')
+        # y.pos_hint = {'x': 0.15, 'y': 0.1}
+        # y.size_hint = 0.1,1
+        # # y.size_hint = 0.7,0.3
+        # # y.pos_hint = (1,1)
+        # self.scrollViewGrid.add_widget(y)
         # self.scrollViewGrid.add_widget(y)
 #         x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt)
 # 180,301,501,701 - Liczba "Pozostało" oznacza sume punktów które należy wyrzucić by zakończyć gre. W grach chodzi o jak najszybsze uzbieranie danej liczby punktów i zakończenie odpowiednią lotką opartą o liczbe punktów
@@ -107,7 +141,7 @@ class Rules(Screen):
 # trening Cel oznacza konkretna wartosc do wyrzucenia, mnożnik x1-x3 oznacza które pole na wartości zostało rzucone, chybiony oznacza nietrafiony rzut, pozostało z celu oznacza liczbe koniecznych trafien danego celu by przejśc do nastepnego
 # trening losowy Wyświetlana lista liczb oznacza cele do trafienia w kolejnosci'''
         # x.text_size = self.width * 0.8, None
-        self.scrollViewGrid.add_widget(x)
+        
         # x = Label()
         # x.text = 'wspólne: x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bulls Eye (50 pkt)'
         # x.text_size =  self.width, None

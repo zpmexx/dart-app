@@ -1,6 +1,6 @@
 co do zrobienia:
 
-zasady w poszczególne gry
+zasady w poszczególne gry zamiast scroll lista jak w bazie
 cofnij button
 Liczba rzutów w grach solo zwiększana gdy nie jset zakończone przy finiszu
 minmax trzeba czyscic po wyjsciu
