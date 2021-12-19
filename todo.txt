@@ -1,10 +1,9 @@
 co do zrobienia:
 
-zasady w poszczególne gry zamiast scroll lista jak w bazie
 cofnij button
-Liczba rzutów w grach solo zwiększana gdy nie jset zakończone przy finiszu
-minmax trzeba czyscic po wyjsciu
-back button popout czy napewno wyjsc
+startowy ekran zmieniony przy ladowaniu
+back przycisk w kazdym screeni na poprzedni
+minmax trzeba czyscic po wyjsciu (back function popup potwierdzenie jestli tak toczyscimy)
 LAYout
 
 

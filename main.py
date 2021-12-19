@@ -2,8 +2,8 @@ from logging import info
 from kivy import Config
 Config.set('graphics', 'width', '400')
 Config.set('graphics', 'height', '600')
-Config.set('graphics', 'minimum_width', '300')
-Config.set('graphics', 'minimum_height', '400')
+# Config.set('graphics', 'minimum_width', '300')
+# Config.set('graphics', 'minimum_height', '400')
 
 import sqlite3
 from kivy.app import App
@@ -26,12 +26,14 @@ import time
 from datetime import date, datetime
 from functools import partial
 from kivymd.uix.datatables import MDDataTable
+from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton
 from kivy.metrics import dp
 from kivy.uix.scrollview import ScrollView
 from kivymd.app import MDApp
 from kivymd.uix.list import MDList, OneLineListItem
 from kivymd.uix.label import MDLabel
 from kivymd.uix.label import MDIcon
+from kivymd.uix.dialog import MDDialog
 
 class SoloWindow(Screen):
     game = 0 #wybrana gra:
@@ -90,7 +92,14 @@ class WrappedLabel(Label):
             texture_size=lambda *x: self.setter('height')(self, self.texture_size[1]))
 
 class Rules(Screen):
+
+    def hook_keyboard(self, window, key, *largs):
+        if key == 27:
+            print("bs")
+            return True
     def create(self):
+        from kivy.base import EventLoop
+        EventLoop.window.bind(on_keyboard=self.hook_keyboard)     
         x = WrappedLabel()
         x.text = '''Zasady wspólne: x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt).'''     
 
@@ -123,6 +132,8 @@ class Rules(Screen):
         x.text = '''Gry 180e-501e: Gry typu eliminator. Gry tak jak klasyczne 180-501 polegają na jak najszybszym zdobyciu określonej liczby punktów z tą różnicą, że gdy zawodnik wykonujący rzut w konsekwencji osiągnie sume punktów posiadaną już przez innego zawodnika to wartość jego punktów jest zerowana. Gdy zawodnik osiągnie przy rzucie wartość większą niż docelowa to róznica punktów od wartości docelowej jest odejmowana.'''
 
         self.scrollViewGrid.add_widget(x)
+
+        
         
         # x.pos_hint = {'x': 0, 'y': 0.5}
         # x.pos_hint = (0.8,0.7)
@@ -295,13 +306,37 @@ class Solo180701(Screen):
             App.get_running_app().root.current = "soloscoreboard"
             
         else: #przypadek gdy gracz przekroczy wartośc docelową
+            self.throwCount +=1
+            self.navbarList[1].text = str(self.throwCount)
+            self.navbarList[2].text = str(round(float(self.throwSum)/float(self.throwCount),2))
             pass
 
     def goBack(self):
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
+        #self.dialog.dismiss()
             
+    def popUp(self,obj):
+        self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
+        size_hint=(0.5, 0.5), 
+        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
+                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        
+        self.dialog.open()
+    
+    def close_dialog(self,obj):
+        self.dialog.dismiss()
+
+    def hook_keyboard(self, window, key, *largs):
+        if key == 27:
+            print("ss")
+            self.goBack()
+            return True
+       # do what you want, return True for stopping the propagation
+
     def create(self):
+        from kivy.base import EventLoop
+        EventLoop.window.bind(on_keyboard=self.hook_keyboard)
         for i in self.children:
             if (hasattr(i, 'buttonsGrid')):
                 self.multiplierList.append(i.boxx1)
@@ -325,7 +360,8 @@ class Solo180701(Screen):
                     temp.append(getattr(i, 'button50')) 
                     temp[22].bind(on_release = lambda x: self.bindButton(x.text))
                     temp.append(getattr(i, 'buttonBack')) 
-                    temp[23].bind(on_release = lambda x: self.goBack())
+                    # temp[23].bind(on_release = lambda x: self.goBack())
+                    temp[23].bind(on_release =self.popUp)
 
         self.game = str(self.leftLabel.text)
 
@@ -1463,9 +1499,7 @@ class GroupWindow(Screen):
 #         self.errorLabel.text = "Złe hasło"
 
 class MainWindow(Screen):
-    def btn(self):
-        show_popup()
-
+    pass
 
 class WindowManager(ScreenManager):
     pass  
@@ -1475,6 +1509,7 @@ kv = Builder.load_file("kivy.kv")
 
 
 class DartApp(MDApp):
+
     def build(self):
         return kv
 

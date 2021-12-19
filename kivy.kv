@@ -127,6 +127,12 @@ WindowManager:
     confirmButton: confirmButton
     name: "chooseplayers"
     on_pre_enter: root.create()
+    size_hint: 1, 1
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'background.jpg'
     GridLayout:
         cols: 1
         # size_hint: 1,1
@@ -388,8 +394,8 @@ WindowManager:
             
 
 <GroupWindow>:
-    popupInput: popupInput
-    pop: pop
+    # popupInput: popupInput
+    # pop: pop
     name: "group"
     grid: grid
     size: root.width,root.height
@@ -398,23 +404,23 @@ WindowManager:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
-    Popup:
-        id: pop
-        name: 'pop'
-        title: 'Wpisz liczbe graczy'
-        size_hint: 1,.5
-        pos_hint: {'x': 0 , 'y': 0.5}
-        GridLayout:
-            cols: 2    
-            TextInput:
-                id: popupInput
-                name: 'popupInput'
-                multiline: False
-            Button:
-                text: "Wyślij"
-                color:
-                id: popupButton
-                on_press:  root.popDismiss()
+    # Popup:
+    #     id: pop
+    #     name: 'pop'
+    #     title: 'Wpisz liczbe graczy'
+    #     size_hint: 1,.5
+    #     pos_hint: {'x': 0 , 'y': 0.5}
+    #     GridLayout:
+    #         cols: 2    
+    #         TextInput:
+    #             id: popupInput
+    #             name: 'popupInput'
+    #             multiline: False
+    #         Button:
+    #             text: "Wyślij"
+    #             color:
+    #             id: popupButton
+    #             on_press:  root.popDismiss()
     GridLayout:
         id: grid
         cols: 2
