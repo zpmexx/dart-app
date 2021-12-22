@@ -1,9 +1,10 @@
 co do zrobienia:
-
-cofnij button
 startowy ekran zmieniony przy ladowaniu
 back przycisk w kazdym screeni na poprzedni
 minmax trzeba czyscic po wyjsciu (back function popup potwierdzenie jestli tak toczyscimy)
+czyszczenie gier po nacisnieciu esc
+logowanie na solo games + zmiana zapisu do bazy jako login
+cofnij button
 LAYout
 
 
@@ -22,3 +23,17 @@ minmax - gra, liczba rzutów, średnia rzutów, suma, użytkownik, liczba jedyne
 1800701 - gra, liczba rzutów, średnia rzutów, użytkowni, liczba 60, liczba 57
 trening - gra, liczba rzutów, % trafień, największa passa nietrafionych
 trening losowy - gra, liczba rzutów, liczba trafień, licza chybień, % trafie 
+
+zasady -> mainwindow
+gry druzynowe -> mainwindow
+gry solo -> mainwindow
+gamewindow -> mainwindow
+ScoreBoard -> mainwindow
+SoloScoreBoard -> solowindow
+database ->solowindow
+solo180701 -> solowindow
+training -> solowindow
+minmaxwindow -> solowindow
+randomtraining -> solowindow
+stats -> database
+fulldatabase -> database

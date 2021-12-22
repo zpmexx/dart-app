@@ -220,6 +220,17 @@ class MinmaxWindow(Screen):
     def goBack(self):
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
+        self.dialog.dismiss()
+
+    def popUp(self,obj):
+        self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
+        size_hint=(0.5, 0.5), 
+        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
+                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        self.dialog.open()
+    
+    def close_dialog(self,obj):
+        self.dialog.dismiss()
 
     def create(self):
         for i in self.children:
@@ -310,7 +321,6 @@ class Solo180701(Screen):
         self.dialog.dismiss()
 
     def popUp(self,obj):
-        print('s')
         self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
         size_hint=(0.5, 0.5), 
         buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
@@ -595,7 +605,20 @@ class RandomTraining(Screen):
         self.target = self.throwsList[0]
         self.targetLabel.text = str(self.target.text)
 
+    def goBack(self):
+        App.get_running_app().root.transition.direction = "right"  
+        App.get_running_app().root.current = "solo"
+        self.dialog.dismiss()
 
+    def popUp(self,obj):
+        self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
+        size_hint=(0.5, 0.5), 
+        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
+                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        self.dialog.open()
+    
+    def close_dialog(self,obj):
+        self.dialog.dismiss()
 
 
 class Training(Screen):
@@ -740,6 +763,21 @@ class Training(Screen):
             self.x3Button.bind(on_release=lambda x: self.bindButton(2))
             self.missButton.bind(on_release=lambda x: self.bindButton(3))
             self.rewindButton.bind(on_release=lambda x: self.bindButton(4))
+
+    def goBack(self):
+        App.get_running_app().root.transition.direction = "right"  
+        App.get_running_app().root.current = "solo"
+        self.dialog.dismiss()
+
+    def popUp(self,obj):
+        self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
+        size_hint=(0.5, 0.5), 
+        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
+                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        self.dialog.open()
+    
+    def close_dialog(self,obj):
+        self.dialog.dismiss()
 
 class FullDatabase(Screen):
     user = ''
@@ -1160,6 +1198,21 @@ class GameWindow(Screen):
         self.playersNamesList[0].color = (1,0,0,1)
         self.multiplierList[0].active = True
 
+    def goBack(self):
+        App.get_running_app().root.transition.direction = "right"  
+        App.get_running_app().root.current = "solo"
+        self.dialog.dismiss()
+
+    def popUp(self,obj):
+        self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
+        size_hint=(0.5, 0.5), 
+        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
+                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        self.dialog.open()
+    
+    def close_dialog(self,obj):
+        self.dialog.dismiss()
+
 #klasa zawierajaca funkcje ograniczającą wpisywanie ilości znaków
 class MaxLengthInput(TextInput):
     max_characters = NumericProperty(0)
@@ -1190,6 +1243,7 @@ class ChoosePlayers(Screen):
     #funkcja weryfikująca czy nazwa któregoś z graczy nie jest pusta
     def validatePlayers(self):
         result = 0
+        countOccurrences = {}
         nameslist = []
         for i in range (0,len(self.playerGrid.children),2):
             nameslist.append(self.playerGrid.children[i].text.lstrip())
@@ -1202,9 +1256,20 @@ class ChoosePlayers(Screen):
         if result == 1:
             pass
         else:
-            self.chooseGrid.clear_widgets()
-            App.get_running_app().root.transition.direction = "left"  
-            App.get_running_app().root.current = "game"
+            for i in nameslist:
+                countOccurrences[i] = nameslist.count(i)
+            for k,v in countOccurrences.items():
+                if v > 1:
+                    result = 1
+                    for i in range (0,len(self.playerGrid.children),2):
+                        if self.playerGrid.children[i].text.lstrip() == k:
+                            self.playerGrid.children[i+1].color = 1,0,0,1 
+            if result == 1:
+                pass
+            else:     
+                self.chooseGrid.clear_widgets()
+                App.get_running_app().root.transition.direction = "left"  
+                App.get_running_app().root.current = "game"
     
     def backFunction(self):
         self.chooseGrid.clear_widgets()
@@ -1218,9 +1283,8 @@ class ChoosePlayers(Screen):
 class ScoreBoard(Screen):
     
     def create(self):
-        game = self.manager.get_screen('solo').game
         """sortowanie wyników w zależności od gry"""
-        if self.manager.get_screen('solo').eliminator == 0 or self.manager.get_screen('game').eliminator == 2:
+        if self.manager.get_screen('game').eliminator == 0 or self.manager.get_screen('game').eliminator == 2:
             newDict = dict(sorted(self.manager.get_screen('game').placeList.items(), key=lambda item: int(item[1])))
         else:
             newDict = dict(sorted(self.manager.get_screen('game').placeList.items(), key=lambda item: int(item[1]),reverse=True))
@@ -1487,7 +1551,7 @@ class MainWindow(Screen):
     checker = 0 #check if bind esc first time
     #esc binding for android
     def create(self):
-        if self.checker == 0:
+        if self.checker == 0:  #binduje tylko raz
             from kivy.base import EventLoop
             EventLoop.window.bind(on_keyboard=self.hook_keyboard)
             self.checker +=1
@@ -1499,9 +1563,72 @@ class MainWindow(Screen):
     def hook_keyboard(self, window, key, *largs):
         if key == 27:
             if(App.get_running_app().root.current == 'solo180701'):
-                print('solo180')
                 print(self.manager.get_screen('solo180701').popUp(self))
                 return True
+
+            elif(App.get_running_app().root.current == 'rules'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "main"
+                return True
+
+            elif(App.get_running_app().root.current == 'chooseplayers'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "main"
+                return True      
+
+            elif(App.get_running_app().root.current == 'solo'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "main"
+                return True        
+
+            elif(App.get_running_app().root.current == 'game'):
+                self.manager.get_screen('game').popUp(self)
+                return True   
+
+            elif(App.get_running_app().root.current == 'scoreboard'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "main"
+                return True       
+
+            elif(App.get_running_app().root.current == 'soloscoreboard'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "solo"
+                return True        
+
+            elif(App.get_running_app().root.current == 'database'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "solo"
+                return True   
+
+            elif(App.get_running_app().root.current == 'solo180701'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "solo"
+                return True        
+
+            elif(App.get_running_app().root.current == 'training'):
+                self.manager.get_screen('training').popUp(self)
+                return True            
+
+            elif(App.get_running_app().root.current == 'minmaxwindow'):
+                self.manager.get_screen('minmaxwindow').popUp(self)
+                return True         
+
+            elif(App.get_running_app().root.current == 'randomtraining'):
+                self.manager.get_screen('randomtraining').popUp(self)
+                # App.get_running_app().root.transition.direction = "right"  
+                # App.get_running_app().root.current = "solo"
+                return True        
+
+            elif(App.get_running_app().root.current == 'stats'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "database"
+                return True        
+
+            elif(App.get_running_app().root.current == 'fulldatabase'):
+                App.get_running_app().root.transition.direction = "right"  
+                App.get_running_app().root.current = "database"
+                return True        
+
             else:
                 print("ema")
                 return True
