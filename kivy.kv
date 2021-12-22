@@ -22,6 +22,7 @@ WindowManager:
     solobutton: solobutton
     name: "main"
     size: root.width,root.height
+    on_leave: root.create()
     canvas.before:
         Rectangle:
             pos: self.pos
