@@ -1,8 +1,6 @@
 co do zrobienia:
+
 startowy ekran zmieniony przy ladowaniu
-back przycisk w kazdym screeni na poprzedni
-minmax trzeba czyscic po wyjsciu (back function popup potwierdzenie jestli tak toczyscimy)
-czyszczenie gier po nacisnieciu esc
 logowanie na solo games + zmiana zapisu do bazy jako login
 cofnij button
 LAYout

@@ -220,6 +220,7 @@ class MinmaxWindow(Screen):
     def goBack(self):
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
+        self.manager.get_screen('soloscoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -318,6 +319,7 @@ class Solo180701(Screen):
     def goBack(self):
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
+        self.manager.get_screen('soloscoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -355,7 +357,6 @@ class Solo180701(Screen):
                     temp.append(getattr(i, 'button50')) 
                     temp[22].bind(on_release = lambda x: self.bindButton(x.text))
                     temp.append(getattr(i, 'buttonBack')) 
-                    # temp[23].bind(on_release = lambda x: self.goBack())
                     temp[23].bind(on_release =self.popUp)
 
         self.game = str(self.leftLabel.text)
@@ -608,6 +609,7 @@ class RandomTraining(Screen):
     def goBack(self):
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
+        self.manager.get_screen('soloscoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -634,7 +636,6 @@ class Training(Screen):
 
     #0 - x1button, 1-x2, 2-x3, 3-missButton, 4-rewindButton
     def bindButton(self,index):
-
         self.throwsCount+=1
         self.throwsLabel.text = str(self.throwsCount)
         if self.finish == 0: #wszystko przed bull
@@ -767,6 +768,7 @@ class Training(Screen):
     def goBack(self):
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
+        self.manager.get_screen('soloscoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -1200,7 +1202,8 @@ class GameWindow(Screen):
 
     def goBack(self):
         App.get_running_app().root.transition.direction = "right"  
-        App.get_running_app().root.current = "solo"
+        App.get_running_app().root.current = "main"
+        self.manager.get_screen('scoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -1281,7 +1284,6 @@ class ChoosePlayers(Screen):
 
 
 class ScoreBoard(Screen):
-    
     def create(self):
         """sortowanie wyników w zależności od gry"""
         if self.manager.get_screen('game').eliminator == 0 or self.manager.get_screen('game').eliminator == 2:
@@ -1316,8 +1318,9 @@ class ScoreBoard(Screen):
             place +=1
 
     def backFunction(self):
-
-        self.manager.get_screen('game').navbarList = [] 
+        self.manager.get_screen('game').navbarList[0].text = '0'
+        self.manager.get_screen('game').navbarList[1].text = '1'
+        self.manager.get_screen('game').navbarList[2].text = '3'
         self.manager.get_screen('game').playersNamesList = [] 
         self.manager.get_screen('game').playersPointsList = [] 
         self.manager.get_screen('game').playersPointsListTemp = []
@@ -1409,11 +1412,27 @@ class SoloScoreBoard(Screen):
             self.manager.get_screen('minmaxwindow').sumLabel.text = '0'
             self.manager.get_screen('minmaxwindow').thrownGrid.clear_widgets()
         
+        elif self.manager.get_screen('solo').game == 6:
+            self.manager.get_screen('training').throwsCount = 0
+            self.manager.get_screen('training').accuracy = 0
+            self.manager.get_screen('training').hitCount = 0
+            self.manager.get_screen('training').missCount = 0
+            self.manager.get_screen('training').target = 1
+            self.manager.get_screen('training').left = 3
+            self.manager.get_screen('training').fimish = 0
+            self.manager.get_screen('training').scores = {}
+            self.manager.get_screen('training').target = 0
+            self.manager.get_screen('training').accuracyLabel.text = '0%'
+            self.manager.get_screen('training').targetLeftLabel.text = '3'
+            self.manager.get_screen('training').targetLabel.text = '1'
+            self.manager.get_screen('training').throwsLabel.text = '0'
+        
         elif self.manager.get_screen('solo').game == 7:
             self.manager.get_screen('randomtraining').target = 0
             self.manager.get_screen('randomtraining').hitCount = 0
             self.manager.get_screen('randomtraining').accuracy = 0
             self.manager.get_screen('randomtraining').throwsCount = 0
+            self.manager.get_screen('randomtraining').throwsPointer = 0
             self.manager.get_screen('randomtraining').left = 20
             self.manager.get_screen('randomtraining').finish = 0
             self.manager.get_screen('randomtraining').throwsList = []
@@ -1563,7 +1582,7 @@ class MainWindow(Screen):
     def hook_keyboard(self, window, key, *largs):
         if key == 27:
             if(App.get_running_app().root.current == 'solo180701'):
-                print(self.manager.get_screen('solo180701').popUp(self))
+                self.manager.get_screen('solo180701').popUp(self)
                 return True
 
             elif(App.get_running_app().root.current == 'rules'):
