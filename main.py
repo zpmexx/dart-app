@@ -37,6 +37,7 @@ from kivymd.uix.dialog import MDDialog
 
 class SoloWindow(Screen):
     game = 0 #wybrana gra:
+    playerName = ''
     """
     0 - 180
     1 - 301
@@ -47,6 +48,10 @@ class SoloWindow(Screen):
     6 - trening
     7- trening losowy
     """
+
+    def create(self):
+        print(self.playerName)
+
     def choose(self,index): #wybór gry, parametr index przekazywany z .kv
         if index >=0 and index <=3:
             if index == 0:
@@ -1448,6 +1453,7 @@ class SoloScoreBoard(Screen):
     def saveFunction(self):
         data = datetime.now()
         connection = sqlite3.connect('dart.db')
+        user = self.manager.get_screen('solo').playerName
         cursor = connection.cursor()
         if self.manager.get_screen('solo').game >= 0 and self.manager.get_screen('solo').game <=3:
             
@@ -1468,7 +1474,7 @@ class SoloScoreBoard(Screen):
             sixties INTEGER,
             fiftysevens INTEGER
         ) """)
-            cursor.execute("INSERT INTO solo180701 (date,user,game,throws,avg,sixties,fiftysevens) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,avg,sixties,fiftysevens))
+            cursor.execute("INSERT INTO solo180701 (date,user,game,throws,avg,sixties,fiftysevens) VALUES (?,?,?,?,?,?,?)", (data,user,game,throws,avg,sixties,fiftysevens))
         
         elif self.manager.get_screen('solo').game >= 4 and self.manager.get_screen('solo').game <=5:
             result = self.manager.get_screen('minmaxwindow').scores
@@ -1489,7 +1495,7 @@ class SoloScoreBoard(Screen):
             ones INTEGER,
             twenties INTEGER
         ) """)
-            cursor.execute("INSERT INTO minmax (date,user,game,throws,avg,ones,twenties) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,avg,ones,twenties))
+            cursor.execute("INSERT INTO minmax (date,user,game,throws,avg,ones,twenties) VALUES (?,?,?,?,?,?,?)", (data,user,game,throws,avg,ones,twenties))
 
         elif self.manager.get_screen('solo').game >= 6 and self.manager.get_screen('solo').game <= 7:
             if self.manager.get_screen('solo').game == 6:
@@ -1512,7 +1518,7 @@ class SoloScoreBoard(Screen):
             misses INTEGER,
             accuracy REAL
         ) """)
-            cursor.execute("INSERT INTO randomtraining (date,user,game,throws,hits,misses,accuracy) VALUES (?,?,?,?,?,?,?)", (data,'Ziemo',game,throws,hits,misses,accuracy))
+            cursor.execute("INSERT INTO randomtraining (date,user,game,throws,hits,misses,accuracy) VALUES (?,?,?,?,?,?,?)", (data,user,game,throws,hits,misses,accuracy))
 
         connection.commit()
         connection.close()
@@ -1554,17 +1560,24 @@ class GroupWindow(Screen):
             self.grid.add_widget(Label(text=str(i)))
     
     
-# class LoginWindow(Screen):
-#     errorLabel = ObjectProperty(None)
-#     passwordLabel = ObjectProperty(None)
-#     passwordInput = ObjectProperty(None)
-#     usernameInput = ObjectProperty(None)
+class LoginWindow(Screen):
+    errorLabel = ObjectProperty(None)
+    passwordLabel = ObjectProperty(None)
+    passwordInput = ObjectProperty(None)
     
-#     def badUsernameMessage(self):
-#         self.errorLabel.text = 'Zła nazwa użytkownika'
+
+    def verify(self):
+        self.manager.get_screen('solo').playerName = self.usernameInput.text
+        self.usernameInput.text = self.passwordInput.text = self.errorLabel.text = ""
+        App.get_running_app().root.transition.direction = "left"  
+        App.get_running_app().root.current = "solo"
+      
     
-#     def badPasswordMessage(self):
-#         self.errorLabel.text = "Złe hasło"
+    def badUsernameMessage(self):
+        self.errorLabel.text = 'Zła nazwa użytkownika'
+    
+    def badPasswordMessage(self):
+        self.errorLabel.text = "Złe hasło"
 
 class MainWindow(Screen):
     checker = 0 #check if bind esc first time
@@ -1662,6 +1675,7 @@ kv = Builder.load_file("kivy.kv")
 class DartApp(MDApp):
 
     def build(self):
+        self.title = 'DartApp'
         return kv
 
 if __name__ == '__main__':

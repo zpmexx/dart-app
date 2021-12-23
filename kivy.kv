@@ -4,7 +4,7 @@ WindowManager:
     MainWindow:
     SoloWindow:
     GroupWindow:
-    # LoginWindow:
+    LoginWindow:
     GameWindow:
     ChoosePlayers:
     ScoreBoard:
@@ -39,7 +39,7 @@ WindowManager:
             background_color: (1.0, 0.0, 0.0, 1.0)
             # size_hint: 0.3, 0.3
             on_release: 
-                app.root.current = "solo";root.manager.transition.direction = "left"   
+                app.root.current = "login";root.manager.transition.direction = "left"   
         Button:
             text: "Gry drużynowe"
             background_color: (1.0, 0.0, 0.0, 1.0)
@@ -238,7 +238,7 @@ WindowManager:
 <SoloWindow>:
     name: "solo"
     size: root.width,root.height
-    # on_enter: root.printhi()
+    on_enter: root.create()
     canvas.before:
         Rectangle:
             pos: self.pos
@@ -319,7 +319,6 @@ WindowManager:
             size: self.size
             source: 'background.jpg'
     GridLayout:
-
         cols: 1
         size_hint: .6,.6
         pos_hint: {'x': 0.2 , 'y': 0.2}
@@ -337,7 +336,7 @@ WindowManager:
         TextInput:
             id: usernameInput
             name: "usernameInput"
-            hint_text:
+            hint_text: 'Nazwa użytkownika'
             multiline: False
 
         Label:
@@ -363,12 +362,7 @@ WindowManager:
 
         Button:
             text: "Zaloguj"
-            on_press: 
-                if usernameInput.text != 'Ziemo': root.badUsernameMessage()
-                
-                elif passwordInput.text != 'Ziemo': root.badPasswordMessage()
-                else: app.root.current = "solo";usernameInput.text = passwordInput.text = errorLabel.text = "";root.manager.transition.direction = "left"
-            
+            on_press: root.verify()
 
 <P>:
     cancel: cancel

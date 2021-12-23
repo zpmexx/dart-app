@@ -1,6 +1,5 @@
 co do zrobienia:
 
-startowy ekran zmieniony przy ladowaniu
 logowanie na solo games + zmiana zapisu do bazy jako login
 cofnij button
 LAYout
