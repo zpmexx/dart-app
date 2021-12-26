@@ -1563,21 +1563,20 @@ class GroupWindow(Screen):
 class LoginWindow(Screen):
     errorLabel = ObjectProperty(None)
     passwordLabel = ObjectProperty(None)
-    passwordInput = ObjectProperty(None)
-    
 
     def verify(self):
-        self.manager.get_screen('solo').playerName = self.usernameInput.text
-        self.usernameInput.text = self.passwordInput.text = self.errorLabel.text = ""
-        App.get_running_app().root.transition.direction = "left"  
-        App.get_running_app().root.current = "solo"
-      
-    
-    def badUsernameMessage(self):
-        self.errorLabel.text = 'Zła nazwa użytkownika'
-    
-    def badPasswordMessage(self):
-        self.errorLabel.text = "Złe hasło"
+        if self.usernameInput.text == '':
+            self.errorLabel.text = 'Nazwa użytkownika nie może być pusta'
+        elif len(self.usernameInput.text) <3:
+            self.errorLabel.text = 'Nazwa użytkownika musi miec przynajmniej 3 znaki'
+            self.usernameInput.foreground_color = (1,0,0,1)
+        else:
+            self.manager.get_screen('solo').playerName = self.usernameInput.text
+            self.usernameInput.foreground_color = (0,0,0,1)
+            self.usernameInput.text  = self.errorLabel.text = ""
+            App.get_running_app().root.transition.direction = "left"  
+            App.get_running_app().root.current = "solo"
+
 
 class MainWindow(Screen):
     checker = 0 #check if bind esc first time

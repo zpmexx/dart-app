@@ -307,9 +307,7 @@ WindowManager:
 
 <LoginWindow>:
     errorLabel: errorLabel
-    passwordLabel: passwordLabel
     usernameInput: usernameInput
-    passwordInput: passwordInput
 
     name: "login"
     size: root.width,root.height
@@ -321,7 +319,7 @@ WindowManager:
     GridLayout:
         cols: 1
         size_hint: .6,.6
-        pos_hint: {'x': 0.2 , 'y': 0.2}
+        pos_hint: {'x': 0.2 , 'y': 0.3}
         spacing: '10dp'
 
         Label:
@@ -339,30 +337,16 @@ WindowManager:
             hint_text: 'Nazwa użytkownika'
             multiline: False
 
-        Label:
-            id: passwordLabel
-            name: "passwordLabel"
-            text: "Hasło"
-            color:
-            font_size: root.width / 20 + 10
-            background_color: 1,1,1,1
+        Button:
+            text: "Zaloguj"
+            on_press: root.verify()
 
-        TextInput:
-            id: passwordInput
-            password: True
-            name: "passwordInput"
-            hint_text:
-            multiline: False
-
+        
         Label:
             id: errorLabel
             name: "errorLabel"
             text: ""
             color:
-
-        Button:
-            text: "Zaloguj"
-            on_press: root.verify()
 
 <P>:
     cancel: cancel

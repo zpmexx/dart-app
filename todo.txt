@@ -1,6 +1,5 @@
 co do zrobienia:
 
-logowanie na solo games + zmiana zapisu do bazy jako login
 cofnij button
 LAYout
 
