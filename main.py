@@ -223,9 +223,9 @@ class MinmaxWindow(Screen):
             App.get_running_app().root.current = "soloscoreboard"
 
     def goBack(self):
+        self.manager.get_screen('soloscoreboard').backFunction()
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
-        self.manager.get_screen('soloscoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -322,9 +322,9 @@ class Solo180701(Screen):
             pass
 
     def goBack(self):
+        self.manager.get_screen('soloscoreboard').backFunction()
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
-        self.manager.get_screen('soloscoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -362,9 +362,13 @@ class Solo180701(Screen):
                     temp.append(getattr(i, 'button50')) 
                     temp[22].bind(on_release = lambda x: self.bindButton(x.text))
                     temp.append(getattr(i, 'buttonBack')) 
-                    temp[23].bind(on_release =self.popUp)
+                    temp[23].bind(on_release = lambda x: self.previousState())
+
 
         self.game = str(self.leftLabel.text)
+
+    def previousState(self):
+        print("s")
 
 class Stats(Screen):
 
@@ -612,9 +616,9 @@ class RandomTraining(Screen):
         self.targetLabel.text = str(self.target.text)
 
     def goBack(self):
+        self.manager.get_screen('soloscoreboard').backFunction()
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
-        self.manager.get_screen('soloscoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -771,9 +775,9 @@ class Training(Screen):
             self.rewindButton.bind(on_release=lambda x: self.bindButton(4))
 
     def goBack(self):
+        self.manager.get_screen('soloscoreboard').backFunction()
         App.get_running_app().root.transition.direction = "right"  
         App.get_running_app().root.current = "solo"
-        self.manager.get_screen('soloscoreboard').backFunction()
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -1206,9 +1210,9 @@ class GameWindow(Screen):
         self.multiplierList[0].active = True
 
     def goBack(self):
-        App.get_running_app().root.transition.direction = "right"  
-        App.get_running_app().root.current = "main"
         self.manager.get_screen('scoreboard').backFunction()
+        # App.get_running_app().root.transition.direction = "right"  
+        # App.get_running_app().root.current = "main"
         self.dialog.dismiss()
 
     def popUp(self,obj):
@@ -1534,16 +1538,16 @@ class Navbar(Widget):
     Builder.load_file("navbar.kv")
 
 
-def show_popup():
-    popupInput = ObjectProperty(None)
-    cancel = ObjectProperty(None)
-    show = P()
-    popupWindow = Popup(title =  'Wpisz liczbe graczy', content = show,  size_hint= (0.6,0.3),)
-    show.ids.cancel.on_release = popupWindow.dismiss
-    popupWindow.open()
+# def show_popup():
+#     popupInput = ObjectProperty(None)
+#     cancel = ObjectProperty(None)
+#     show = P()
+#     popupWindow = Popup(title =  'Wpisz liczbe graczy', content = show,  size_hint= (0.6,0.3),)
+#     show.ids.cancel.on_release = popupWindow.dismiss
+#     popupWindow.open()
 
-    def checkempty():
-        print(show.cancel)
+#     def checkempty():
+#         print(show.cancel)
 
 
 class P(FloatLayout):
@@ -1564,6 +1568,17 @@ class LoginWindow(Screen):
     errorLabel = ObjectProperty(None)
     passwordLabel = ObjectProperty(None)
 
+    def create(self):
+        self.connection = sqlite3.connect('dart.db')
+        self.cursor = self.connection.cursor()
+        self.cursor.execute(""" CREATE TABLE IF NOT EXISTS lastname (
+            username text
+        ) """)
+        self.cursor.execute("SELECT username from lastname")
+        self.result = self.cursor.fetchall()
+        if(len(self.result)) != 0:
+            self.usernameInput.text = str(self.result[0][0])
+
     def verify(self):
         if self.usernameInput.text == '':
             self.errorLabel.text = 'Nazwa użytkownika nie może być pusta'
@@ -1571,11 +1586,24 @@ class LoginWindow(Screen):
             self.errorLabel.text = 'Nazwa użytkownika musi miec przynajmniej 3 znaki'
             self.usernameInput.foreground_color = (1,0,0,1)
         else:
+            self.cursor.execute("SELECT username from lastname")
+            self.result = self.cursor.fetchall()
+            if(len(self.result)) != 0:
+                self.cursor.execute("DELETE FROM lastname")
+            self.cursor.execute("INSERT INTO lastname VALUES (?)", (self.usernameInput.text,))
             self.manager.get_screen('solo').playerName = self.usernameInput.text
             self.usernameInput.foreground_color = (0,0,0,1)
             self.usernameInput.text  = self.errorLabel.text = ""
+            self.connection.commit()
+            self.connection.close()
             App.get_running_app().root.transition.direction = "left"  
             App.get_running_app().root.current = "solo"
+
+    def backFunction(self):
+        self.connection.close()
+        self.usernameInput.text  = self.errorLabel.text = ""
+        App.get_running_app().root.transition.direction = "right"  
+        App.get_running_app().root.current = "main"
 
 
 class MainWindow(Screen):
@@ -1601,6 +1629,11 @@ class MainWindow(Screen):
                 App.get_running_app().root.transition.direction = "right"  
                 App.get_running_app().root.current = "main"
                 return True
+
+            elif(App.get_running_app().root.current == 'login'):
+                self.manager.get_screen('login').backFunction()
+
+                return True        
 
             elif(App.get_running_app().root.current == 'chooseplayers'):
                 App.get_running_app().root.transition.direction = "right"  
@@ -1660,9 +1693,6 @@ class MainWindow(Screen):
                 App.get_running_app().root.current = "database"
                 return True        
 
-            else:
-                print("ema")
-                return True
     
 
 class WindowManager(ScreenManager):

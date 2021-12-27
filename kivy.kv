@@ -308,7 +308,7 @@ WindowManager:
 <LoginWindow>:
     errorLabel: errorLabel
     usernameInput: usernameInput
-
+    on_enter: root.create()
     name: "login"
     size: root.width,root.height
     canvas.before:
@@ -344,6 +344,7 @@ WindowManager:
         
         Label:
             id: errorLabel
+            font_size: root.width / 24
             name: "errorLabel"
             text: ""
             color:
