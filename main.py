@@ -2,8 +2,8 @@ from logging import info
 from kivy import Config
 Config.set('graphics', 'width', '400')
 Config.set('graphics', 'height', '600')
-# Config.set('graphics', 'minimum_width', '300')
-# Config.set('graphics', 'minimum_height', '400')
+Config.set('graphics', 'minimum_width', '400')
+Config.set('graphics', 'minimum_height', '400')
 
 import sqlite3
 from kivy.app import App
@@ -26,7 +26,7 @@ import time
 from datetime import date, datetime
 from functools import partial
 from kivymd.uix.datatables import MDDataTable
-from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton
+from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRectangleFlatIconButton
 from kivy.metrics import dp
 from kivy.uix.scrollview import ScrollView
 from kivymd.app import MDApp
@@ -34,6 +34,7 @@ from kivymd.uix.list import MDList, OneLineListItem
 from kivymd.uix.label import MDLabel
 from kivymd.uix.label import MDIcon
 from kivymd.uix.dialog import MDDialog
+from kivy.core.window import Window
 
 class SoloWindow(Screen):
     game = 0 #wybrana gra:
@@ -98,37 +99,45 @@ class WrappedLabel(Label):
 
 class Rules(Screen):
     def create(self):  
+        fontsize = '14sp'
         x = WrappedLabel()
         x.text = '''Zasady wspólne: x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt).'''     
-
+        x.font_size = fontsize
         self.scrollViewGrid.add_widget(x)
+
         x = WrappedLabel()
         x.text = '''Gry solo 180-701: Liczba "Pozostało" oznacza sume punktów które należy wyrzucić by zakończyć gre. W grach chodzi o jak najszybsze uzbieranie danej liczby punktów i zakończenie odpowiednią lotką opartą o liczbe punktów.'''
+        x.font_size = fontsize
         self.scrollViewGrid.add_widget(x)
+
         x = WrappedLabel()
         x.text = '''Gra solo min:  W grze chodzi o zdobycie jak najmniejszej ilości punktów, "Pozostało" oznacza liczbe rzutów do końca, pudło skutkuje karą 70 pkt.'''
-
+        x.font_size = fontsize
         self.scrollViewGrid.add_widget(x)
+
         x = WrappedLabel()
         x.text = '''Gra solo max: W grze chodzi o zdobycie jak największej ilości punktów, "Pozostało" oznacza liczbe rzutów do końca.'''
-
+        x.font_size = fontsize
         self.scrollViewGrid.add_widget(x)
+
         x = WrappedLabel()
         x.text = '''Gra solo trening: Gra polega na wyrzuceniu wszystkich pól na tarczy trzykrotnie (poza środkiem, który wyrzuca się po razie mały i duży). Cel oznacza konkretna wartosc do wyrzucenia, mnożnik x1-x3 oznacza które pole na wartości zostało rzucone i jak jest ono punktowane, "chybiony" oznacza nietrafiony rzut, pozostało z celu oznacza liczbe koniecznych trafien danego celu by przejśc do nastepnej wartości.'''
-
+        x.font_size = fontsize
         self.scrollViewGrid.add_widget(x)
+
         x = WrappedLabel()
         x.text = '''Gra solo trening losowy: Wyświetlana lista liczb oznacza cele do trafienia w kolejnosci.'''
-
+        x.font_size = fontsize
         self.scrollViewGrid.add_widget(x)
+
         x = WrappedLabel()
         x.text = '''Gry drużynowe: Górna lista oznacza grę do wyboru, kafelki z liczbami poniżej oznaczają liczbę graczy, nazwa żadnego z graczy nie może być pusta. Gracz podświetlany na czerwono wykonuje rzut. Gry 180-501 oraz min/max posiadają analogiczne zasady co odpowiadając im gry solo.'''
-        
+        x.font_size = fontsize
         self.scrollViewGrid.add_widget(x)
 
         x = WrappedLabel()
         x.text = '''Gry 180e-501e: Gry typu eliminator. Gry tak jak klasyczne 180-501 polegają na jak najszybszym zdobyciu określonej liczby punktów z tą różnicą, że gdy zawodnik wykonujący rzut w konsekwencji osiągnie sume punktów posiadaną już przez innego zawodnika to wartość jego punktów jest zerowana. Gdy zawodnik osiągnie przy rzucie wartość większą niż docelowa to róznica punktów od wartości docelowej jest odejmowana.'''
-
+        x.font_size = fontsize
         self.scrollViewGrid.add_widget(x)
 
         
@@ -230,9 +239,11 @@ class MinmaxWindow(Screen):
 
     def popUp(self,obj):
         self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
-        size_hint=(0.5, 0.5), 
-        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
-                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        size_hint=(0.7, 0.2), 
+        buttons = [MDRectangleFlatIconButton(text='Wyjdź',on_release= lambda x:self.goBack()
+        , icon = "exit-run",font_size='11sp'),
+                MDRectangleFlatIconButton(text='Zostań', on_release=self.close_dialog
+                , icon = "emoticon-happy-outline",font_size='11sp')])
         self.dialog.open()
     
     def close_dialog(self,obj):
@@ -329,9 +340,11 @@ class Solo180701(Screen):
 
     def popUp(self,obj):
         self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
-        size_hint=(0.5, 0.5), 
-        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
-                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        size_hint=(0.7, 0.2), 
+        buttons = [MDRectangleFlatIconButton(text='Wyjdź',on_release= lambda x:self.goBack()
+        , icon = "exit-run",font_size='11sp'),
+                MDRectangleFlatIconButton(text='Zostań', on_release=self.close_dialog
+                , icon = "emoticon-happy-outline",font_size='11sp')])
         self.dialog.open()
     
     def close_dialog(self,obj):
@@ -623,9 +636,11 @@ class RandomTraining(Screen):
 
     def popUp(self,obj):
         self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
-        size_hint=(0.5, 0.5), 
-        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
-                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        size_hint=(0.7, 0.2), 
+        buttons = [MDRectangleFlatIconButton(text='Wyjdź',on_release= lambda x:self.goBack()
+        , icon = "exit-run",font_size='11sp'),
+                MDRectangleFlatIconButton(text='Zostań', on_release=self.close_dialog
+                , icon = "emoticon-happy-outline",font_size='11sp')])
         self.dialog.open()
     
     def close_dialog(self,obj):
@@ -782,9 +797,11 @@ class Training(Screen):
 
     def popUp(self,obj):
         self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
-        size_hint=(0.5, 0.5), 
-        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
-                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        size_hint=(0.7, 0.2), 
+        buttons = [MDRectangleFlatIconButton(text='Wyjdź',on_release= lambda x:self.goBack()
+        , icon = "exit-run",font_size='11sp'),
+                MDRectangleFlatIconButton(text='Zostań', on_release=self.close_dialog
+                , icon = "emoticon-happy-outline",font_size='11sp')])
         self.dialog.open()
     
     def close_dialog(self,obj):
@@ -1217,9 +1234,11 @@ class GameWindow(Screen):
 
     def popUp(self,obj):
         self.dialog = MDDialog(title = 'Potwierdzenie', text = 'Czy napewno chcesz wyjść?',
-        size_hint=(0.5, 0.5), 
-        buttons = [MDFlatButton(text='Zatwierdź',on_release= lambda x:self.goBack()),
-                MDFlatButton(text='Anuluj', on_release=self.close_dialog)])
+        size_hint=(0.7, 0.2), 
+        buttons = [MDRectangleFlatIconButton(text='Wyjdź',on_release= lambda x:self.goBack()
+        , icon = "exit-run",font_size='11sp'),
+                MDRectangleFlatIconButton(text='Zostań', on_release=self.close_dialog
+                , icon = "emoticon-happy-outline",font_size='11sp')])
         self.dialog.open()
     
     def close_dialog(self,obj):
@@ -1699,12 +1718,13 @@ class WindowManager(ScreenManager):
     pass  
 
 
-kv = Builder.load_file("kivy.kv")
+
 
 class DartApp(MDApp):
 
     def build(self):
         self.title = 'DartApp'
+        kv = Builder.load_file("kivy.kv")
         return kv
 
 if __name__ == '__main__':

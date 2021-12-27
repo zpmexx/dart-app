@@ -86,6 +86,7 @@ WindowManager:
             rows: 10
             id: scrollViewGrid
             size: root.width * 0.8, 1800
+            font_size: root.width
             size_hint_x: None
             size_hint_y: None
         
@@ -331,16 +332,19 @@ WindowManager:
             # halign: "left"
             # valign: "middle"
 
-        TextInput:
+        MDTextFieldRound:
             id: usernameInput
             name: "usernameInput"
             hint_text: 'Nazwa użytkownika'
             multiline: False
+            icon_left: "account"
 
-        Button:
+        MDRoundFlatButton:
             text: "Zaloguj"
             on_press: root.verify()
-
+            size: root.width * 0.6, root.height * 0.1
+            font_size: 20
+            
         
         Label:
             id: errorLabel
