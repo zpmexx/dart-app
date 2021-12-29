@@ -108,12 +108,6 @@ WindowManager:
         size_hint: 1, 0.15
         pos_hint: {'x': 0, 'y':0 }
 
-    
-
-
-
-
-        
 <ChoosePlayers>:
     playerGrid: playerGrid
     chooseGrid: chooseGrid
@@ -129,112 +123,128 @@ WindowManager:
     confirmButton: confirmButton
     name: "chooseplayers"
     on_pre_enter: root.create()
-    size_hint: 1, 1
+    size: root.width, root.height
     canvas.before:
         Rectangle:
             pos: self.pos
             size: self.size
             source: 'background.jpg'
+    # GridLayout:
+    #     cols: 1
+    #     size: root.width,root.height
+    #     # spacing: '50dp'
     GridLayout:
-        cols: 1
-        # size_hint: 1,1
-        spacing: '50dp'
-        GridLayout:
-            id: gamesGrid
-            cols: 8
-            Label:
-                text:'180'
-            Label:
-                text:'301'
-            Label:
-                text:'501'
-            Label:
-                text:'MIN'
-            Label:
-                text:'MAX'
-            Label:
-                text:'180e'
-            Label:
-                text:'301e'
-            Label:
-                text:'501e'
-            CheckBox:
-                id: cb180
-                name: "cb180"
-                active: True
-                allow_no_selection: False
-                color: 0.4,0.3,0.2,1
-                group: "gameCheckBox"
-            CheckBox:
-                id: cb301
-                name: "cb301"
-                allow_no_selection: False
-                color: 0.4,0.3,0.2,1
-                group: "gameCheckBox"
-            CheckBox:
-                id: cb501
-                name: "cb501"
-                allow_no_selection: False
-                color: 0.4,0.3,0.2,1
-                group: "gameCheckBox"
-            CheckBox:
-                id: cbmin
-                name: "cbmin"
-                allow_no_selection: False
-                color: 0.4,0.3,0.2,1
-                group: "gameCheckBox"
-            CheckBox:
-                id: cbmax
-                name: "cbmax"
-                allow_no_selection: False
-                color: 0.4,0.3,0.2,1
-                group: "gameCheckBox"
-            CheckBox:
-                id: cb180e
-                name: "cb180e"
-                allow_no_selection: False
-                color: 0.4,0.3,0.2,1
-                group: "gameCheckBox"
-            CheckBox:
-                id: cb301e
-                name: "cb301e"
-                allow_no_selection: False
-                color: 0.4,0.3,0.2,1
-                group: "gameCheckBox"
-            CheckBox:
-                id: cb501e
-                name: "cb501e"
-                allow_no_selection: False
-                color: 0.4,0.3,0.2,1
-                group: "gameCheckBox"
+        pos_hint: {'x': 0, 'y': 0.8 }
+        size_hint: 1,0.2
+        id: gamesGrid
+        cols: 8
+        Label:
+            text:'180'
+        Label:
+            text:'301'
+        Label:
+            text:'501'
+        Label:
+            text:'MIN'
+        Label:
+            text:'MAX'
+        Label:
+            text:'180e'
+        Label:
+            text:'301e'
+        Label:
+            text:'501e'
+        CheckBox:
+            id: cb180
+            name: "cb180"
+            active: True
+            allow_no_selection: False
+            color: 0.4,0.3,0.2,1
+            group: "gameCheckBox"
+        CheckBox:
+            id: cb301
+            name: "cb301"
+            allow_no_selection: False
+            color: 0.4,0.3,0.2,1
+            group: "gameCheckBox"
+        CheckBox:
+            id: cb501
+            name: "cb501"
+            allow_no_selection: False
+            color: 0.4,0.3,0.2,1
+            group: "gameCheckBox"
+        CheckBox:
+            id: cbmin
+            name: "cbmin"
+            allow_no_selection: False
+            color: 0.4,0.3,0.2,1
+            group: "gameCheckBox"
+        CheckBox:
+            id: cbmax
+            name: "cbmax"
+            allow_no_selection: False
+            color: 0.4,0.3,0.2,1
+            group: "gameCheckBox"
+        CheckBox:
+            id: cb180e
+            name: "cb180e"
+            allow_no_selection: False
+            color: 0.4,0.3,0.2,1
+            group: "gameCheckBox"
+        CheckBox:
+            id: cb301e
+            name: "cb301e"
+            allow_no_selection: False
+            color: 0.4,0.3,0.2,1
+            group: "gameCheckBox"
+        CheckBox:
+            id: cb501e
+            name: "cb501e"
+            allow_no_selection: False
+            color: 0.4,0.3,0.2,1
+            group: "gameCheckBox"
 
-        GridLayout:
-            id: chooseGrid
-            name: 'chooseGrid'
-            cols: 7
-        GridLayout:
-            id: playerGrid
-            name: "playerGrid"
-            cols: 4
-        GridLayout:
-            cols: 2
-            Button:
-                text: "Zatwierdź"
-                name: "confirmButton"
-                id: confirmButton
-                disabled: 'True'   
-                color:
-                # on_release: root.saveNames()
-                on_press: root.validatePlayers()
-                # on_press: app.root.current = "game";root.manager.transition.direction = "left"   
-            Button:
-                text: "Powrót"
-                color:
-                # on_release: root.clear();app.root.current = "main";root.manager.transition.direction = "right"   
-                # on_release: app.root.current = "main"; root.manager.transition.direction = "right"    
-                on_release: root.backFunction()  
-                    
-            
+    GridLayout:
+        id: chooseGrid
+        pos_hint: {'x': 0, 'y': 0.6 }
+        size_hint: 1,0.2
+        row_force_default: True
+        row_default_height: 40
+        name: 'chooseGrid'
+        cols: 7
+        spacing: '10dp'
+    GridLayout:
+        id: playerGrid
+        name: "playerGrid"
+        row_force_default: True
+        row_default_height: root.height / 8
+        
+        cols: 4
+        pos_hint: {'x': 0.05, 'y': 0.3 }
+        size_hint: 0.8,0.4
+    GridLayout:
+        cols: 2
+        pos_hint: {'x': 0, 'y': 0 }
+        size_hint: 1,0.1
+        MDRoundFlatButton:
+            text: "Zatwierdź"
+            name: "confirmButton"
+            id: confirmButton
+            disabled: 'True'   
+            color:
+            width: root.width / 2
+            # on_release: root.saveNames()
+            on_press: root.validatePlayers()
+            # on_press: app.root.current = "game";root.manager.transition.direction = "left"   
+        MDRoundFlatButton:
+            text: "Powrót"
+            color:
+            width: root.width / 2
+            # on_release: root.clear();app.root.current = "main";root.manager.transition.direction = "right"   
+            # on_release: app.root.current = "main"; root.manager.transition.direction = "right"    
+            on_release: root.backFunction()  
+                
+        
         
 <SoloWindow>:
     name: "solo"
@@ -321,16 +331,18 @@ WindowManager:
         cols: 1
         size_hint: .6,.6
         pos_hint: {'x': 0.2 , 'y': 0.3}
-        spacing: '10dp'
+        spacing: '20dp'
 
-        Label:
+        MDLabel:
             name: "usernameLabel"
             text: "Użytkownik"
-            color:
             # text_size: self.size
             font_size: root.width / 20 + 10
             # halign: "left"
             # valign: "middle"
+            theme_text_color: "Custom"
+            halign: "center"
+            text_color: 0, 0, 1, 1
 
         MDTextFieldRound:
             id: usernameInput

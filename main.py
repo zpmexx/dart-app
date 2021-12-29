@@ -1,5 +1,6 @@
 from logging import info
 from kivy import Config
+from kivy.uix.relativelayout import RelativeLayout
 Config.set('graphics', 'width', '400')
 Config.set('graphics', 'height', '600')
 Config.set('graphics', 'minimum_width', '400')
@@ -26,7 +27,7 @@ import time
 from datetime import date, datetime
 from functools import partial
 from kivymd.uix.datatables import MDDataTable
-from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRectangleFlatIconButton
+from kivymd.uix.button import MDRectangleFlatButton, MDFlatButton, MDRectangleFlatIconButton, MDIconButton
 from kivy.metrics import dp
 from kivy.uix.scrollview import ScrollView
 from kivymd.app import MDApp
@@ -1266,10 +1267,17 @@ class ChoosePlayers(Screen):
     def create(self):
         self.chooseGrid.clear_widgets()
         for i in range(2,9):
-            x = Button()
-            x.text = str(i)
+            y = RelativeLayout()
+            y.size = 1,1
+            buttonIcon = 'numeric-'+str(i)+'-box'
+            x = MDIconButton()
+            x.icon = buttonIcon
+            x.user_font_size = '30sp'
+            
+
             x.id = i
-            self.chooseGrid.add_widget(x)
+            self.chooseGrid.add_widget(y)
+            y.add_widget(x)
             x.bind(on_release = lambda x :(self.buttonclicked(x.id)))
     #funkcja weryfikująca czy nazwa któregoś z graczy nie jest pusta
     def validatePlayers(self):
