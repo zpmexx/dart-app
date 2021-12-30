@@ -139,65 +139,89 @@ WindowManager:
         id: gamesGrid
         cols: 8
         Label:
-            text:'180'
+            text:'[b][i][u]180[/b][/i][/u]'
+            color: (0.8,0.05,0.2,1)
+            markup: True
+            font_size: root.width / 20
         Label:
-            text:'301'
+            text:'[b][i][u]310[/b][/i][/u]'
+            color: (0.8,0.05,0.2,1)
+            markup: True
+            font_size: 20   
         Label:
-            text:'501'
+            text:'[b][i][u]501[/b][/i][/u]'
+            color: (0.8,0.05,0.2,1)
+            markup: True
+            font_size: 20
         Label:
-            text:'MIN'
+            text:'[b][i][u]MIN[/b][/i][/u]'
+            color: (0.8,0.05,0.2,1)
+            markup: True
+            font_size: 20
         Label:
-            text:'MAX'
+            text:'[b][i][u]MAX[/b][/i][/u]'
+            color: (0.8,0.05,0.2,1)
+            markup: True
+            font_size: 20
         Label:
-            text:'180e'
+            text:'[b][i][u]180e[/b][/i][/u]'
+            color: (0.8,0.05,0.2,1)
+            markup: True
+            font_size: 20
         Label:
-            text:'301e'
+            text:'[b][i][u]301e[/b][/i][/u]'
+            color: (0.8,0.05,0.2,1)
+            markup: True
+            font_size: 20
         Label:
-            text:'501e'
-        CheckBox:
+            text:'[b][i][u]501e[/b][/i][/u]'
+            color: (0.8,0.05,0.2,1)
+            markup: True
+            font_size: 20
+        MDCheckbox:
             id: cb180
             name: "cb180"
             active: True
             allow_no_selection: False
             color: 0.4,0.3,0.2,1
             group: "gameCheckBox"
-        CheckBox:
+        MDCheckbox:
             id: cb301
             name: "cb301"
             allow_no_selection: False
             color: 0.4,0.3,0.2,1
             group: "gameCheckBox"
-        CheckBox:
+        MDCheckbox:
             id: cb501
             name: "cb501"
             allow_no_selection: False
             color: 0.4,0.3,0.2,1
             group: "gameCheckBox"
-        CheckBox:
+        MDCheckbox:
             id: cbmin
             name: "cbmin"
             allow_no_selection: False
             color: 0.4,0.3,0.2,1
             group: "gameCheckBox"
-        CheckBox:
+        MDCheckbox:
             id: cbmax
             name: "cbmax"
             allow_no_selection: False
             color: 0.4,0.3,0.2,1
             group: "gameCheckBox"
-        CheckBox:
+        MDCheckbox:
             id: cb180e
             name: "cb180e"
             allow_no_selection: False
             color: 0.4,0.3,0.2,1
             group: "gameCheckBox"
-        CheckBox:
+        MDCheckbox:
             id: cb301e
             name: "cb301e"
             allow_no_selection: False
             color: 0.4,0.3,0.2,1
             group: "gameCheckBox"
-        CheckBox:
+        MDCheckbox:
             id: cb501e
             name: "cb501e"
             allow_no_selection: False
@@ -206,8 +230,8 @@ WindowManager:
 
     GridLayout:
         id: chooseGrid
-        pos_hint: {'x': 0, 'y': 0.6 }
-        size_hint: 1,0.2
+        pos_hint: {'x': 0.1, 'y': 0.6 }
+        size_hint: 0.8,0.2
         row_force_default: True
         row_default_height: 40
         name: 'chooseGrid'

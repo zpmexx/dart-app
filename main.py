@@ -1272,7 +1272,7 @@ class ChoosePlayers(Screen):
             buttonIcon = 'numeric-'+str(i)+'-box'
             x = MDIconButton()
             x.icon = buttonIcon
-            x.user_font_size = '30sp'
+            x.user_font_size = '35sp'
             
 
             x.id = i
