@@ -1269,9 +1269,10 @@ class ChoosePlayers(Screen):
         for i in range(2,9):
             y = RelativeLayout()
             y.size = 1,1
-            buttonIcon = 'numeric-'+str(i)+'-box'
-            x = MDIconButton()
-            x.icon = buttonIcon
+            # buttonIcon = 'numeric-'+str(i)+'-box'
+            buttonIcon = str(i)
+            x = Button()
+            x.text = buttonIcon
             x.user_font_size = '35sp'
             
 

@@ -39,7 +39,7 @@
             pos_hint: {'x': 0 , 'y': 0.6}
             Label:
                 text: "x1"
-            CheckBox:
+            MDCheckbox:
                 id: boxx1
                 name: "boxx1"
                 text: "1"
@@ -47,7 +47,7 @@
                 group: "multiplierCheckBox"
             Label:
                 text: "x2"
-            CheckBox:
+            MDCheckbox:
                 id: boxx2
                 name: "boxx2"
                 text: "2"
@@ -55,163 +55,259 @@
                 group: "multiplierCheckBox"
             Label:
                 text: "x3"
-            CheckBox:
+            MDCheckbox:
                 id: boxx3
                 name: "boxx3"
                 text: "3"
                 color: 0.4,0.3,0.2,1
                 group: "multiplierCheckBox"
 
-        GridLayout:
+        MDGridLayout:
+            size_hint: None, None
+            size: self.minimum_size
             id: buttonPointsGrid
+            #:set buttonColour  (1, 0, 1, 1)
+            #:set buttonSizeHint (0.8,0.8)
+            #:set buttonPosHint {'x': 0.1, 'y':0 }
             name: "buttonPointsGrid"
             cols: 4
             # size: root.width, root.height * 0.4
             size_hint: 1,.6
-            pos_hint: {'x': 0.2 , 'y': 0.2}
-            MDRaisedButton:
-                name: 'button0'
-                id: button0
-                text: "0"
-                color: 0.4,0.3,0.2,1
+            pos_hint: {'x': 0 , 'y': 0.2}
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button0'
+                    id: button0
+                    text: "0"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button25'
+                    id: button25
+                    text: "25"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button50'
+                    id: button50
+                    text: "50"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour
                 
-            MDRaisedButton:
-                name: 'button25'
-                id: button25
-                text: "25"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button50'
-                id: button50
-                text: "50"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'buttonBack'
-                id: buttonBack
-                text: "Cofnij"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button1'
-                id: button1
-                text: "1"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button1'
-                id: button2
-                text: "2"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button3'
-                id: button3
-                text: "3"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button4'
-                id: button4
-                text: "4"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button5'
-                id: button5
-                text: "5"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button6'
-                id: button6
-                text: "6"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button7'
-                id: button7
-                text: "7"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button8'
-                id: button8
-                text: "8"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button9'
-                id: button9
-                text: "9"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button10'
-                id: button10
-                text: "10"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button11'
-                id: button11
-                text: "11"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button12'
-                id: button12
-                text: "12"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button13'
-                id: button13
-                text: "13"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button14'
-                id: button14
-                text: "14"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button15'
-                id: button15
-                text: "15"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button16'
-                id: button16
-                text: "16"
-                color: 0.4,0.3,0.2,1
-                
-                verticalMDRaisedButton:
-            MDRaisedButton:
-                name: 'button17'
-                id: button17
-                text: "17"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button18'
-                id: button18
-                text: "18"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button19'
-                id: button19
-                text: "19"
-                color: 0.4,0.3,0.2,1
-                
-            MDRaisedButton:
-                name: 'button20'
-                id: button20
-                text: "20"
-                color: 0.4,0.3,0.2,1
-                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'buttonBack'
+                    id: buttonBack
+                    text: "cofnij"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour 
 
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button1'
+                    id: button1
+                    text: "1"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button2'
+                    id: button2
+                    text: "2"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button3'
+                    id: button3
+                    text: "3"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button4'
+                    id: button4
+                    text: "4"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button5'
+                    id: button5
+                    text: "5"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button6'
+                    id: button6
+                    text: "6"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button7'
+                    id: button7
+                    text: "7"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button8'
+                    id: button8
+                    text: "8"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button9'
+                    id: button9
+                    text: "9"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button10'
+                    id: button10
+                    text: "10"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button11'
+                    id: button11
+                    text: "11"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button12'
+                    id: button12
+                    text: "12"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button13'
+                    id: button13
+                    text: "13"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button14'
+                    id: button14
+                    text: "14"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button15'
+                    id: button15
+                    text: "15"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button16'
+                    id: button16
+                    text: "16"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+            
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button17'
+                    id: button17
+                    text: "17"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button18'
+                    id: button18
+                    text: "18"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button19'
+                    id: button19
+                    text: "19"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
+                
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    name: 'button20'
+                    id: button20
+                    text: "20"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour  
