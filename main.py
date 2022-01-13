@@ -1272,6 +1272,8 @@ class ChoosePlayers(Screen):
             # buttonIcon = 'numeric-'+str(i)+'-box'
             buttonIcon = str(i)
             x = Button()
+            x.background_color = (0.7, 0.6, 0.5, 0.8)
+            
             x.text = buttonIcon
             x.user_font_size = '35sp'
             
