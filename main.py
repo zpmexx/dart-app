@@ -36,6 +36,7 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.label import MDIcon
 from kivymd.uix.dialog import MDDialog
 from kivy.core.window import Window
+from spinner import *
 
 class SoloWindow(Screen):
     game = 0 #wybrana gra:
@@ -99,7 +100,8 @@ class WrappedLabel(Label):
             texture_size=lambda *x: self.setter('height')(self, self.texture_size[1]))
 
 class Rules(Screen):
-    def create(self):  
+    def create(self):
+        self.scrollViewGrid.clear_widgets()  
         fontsize = '14sp'
         x = WrappedLabel()
         x.text = '''Zasady wspólne: x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt).'''     
@@ -922,15 +924,24 @@ class FullDatabase(Screen):
             else:
                 self.cursor.execute("SELECT * from "+self.databasetable+" WHERE game = ? ORDER BY {}".format(columnName), (self.game,))
                 self.databaseFilterState=0
-            result = self.cursor.fetchall()
+        elif ifName == 1:
+            if self.databaseFilterState==0:
+                self.cursor.execute("SELECT * from "+self.databasetable+" WHERE game = ? AND user = ? ORDER BY {} DESC".format(columnName), (self.game,self.user,))
+                self.databaseFilterState=1
+            else:
+                self.cursor.execute("SELECT * from "+self.databasetable+" WHERE game = ? AND user = ? ORDER BY {}".format(columnName), (self.game,self.user,))
+                self.databaseFilterState=0
 
-            self.databaseGrid.cols = len(result[0])
-            print(result)
-            for i in result:
-                for j in i:
-                    x = Label()
-                    x.text = str(j)
-                    self.databaseGrid.add_widget(x)
+        result = self.cursor.fetchall()
+
+        self.databaseGrid.cols = len(result[0])
+        print(result)
+        for i in result:
+            for j in i:
+                x = Label()
+                x.text = str(j)
+                self.databaseGrid.add_widget(x)
+        
 
 
 class GameWindow(Screen):

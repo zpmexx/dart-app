@@ -116,10 +116,15 @@ WindowManager:
             # Label:
             #     text: "wspólne: x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt) 180,301,501,701 - Liczba Pozostało oznacza sume punktów które należy wyrzucić by zakończyć gre. W grach chodzi o jak najszybsze uzbieranie danej liczby punktów i zakończenie odpowiednią lotką opartą o liczbe punktów min Pozostało oznacza liczbe rzutów do końca,  pudlo skutkuje karą 70 pkt, w grze chodzi o zdobycie jak najmniejszej ilości punktów max Pozostało oznacza liczbe rzutów do końca, w grze chodzi o zdobycie jak największej ilości punktów bez koniećzności zakańczania konkretą lotką opartą o punkty trening Cel oznacza konkretna wartosc do wyrzucenia, mnożnik x1-x3 oznacza które pole na wartości zostało rzucone, chybiony oznacza nietrafiony rzut, pozostało z celu oznacza liczbe koniecznych trafien danego celu by przejśc do nastepnego trening losowy Wyświetlana lista liczb oznacza cele do trafienia w kolejnosci"
             #     text_size: self.width*0.8, None
-    Button:
-        text: 'Powrót'
-        size_hint: 1, 0.15
-        pos_hint: {'x': 0, 'y':0 }
+    RelativeLayout:
+        size: 1,1
+        MDFillRoundFlatButton:
+            on_release: 
+                app.root.current = "main";root.manager.transition.direction = "right"
+            text:'Powrót'
+            size_hint: 0.8,0.1
+            pos_hint: {'x': 0.1, 'y':0.03}
+            md_bg_color: buttonColour
 
 <ChoosePlayers>:
     playerGrid: playerGrid
@@ -373,26 +378,30 @@ WindowManager:
                     size_hint: buttonSizeHint
                     pos_hint: buttonPosHint
                     md_bg_color: buttonColour
-        RelativeLayout:
-            size: 1,1
-            MDFillRoundFlatButton:
-                on_release: 
-                    app.root.current = "database"     
-                    root.manager.transition.direction = "left"  
-                text: "Baza danych"
-                size_hint: buttonSizeHint
-                pos_hint: buttonPosHint
-                md_bg_color: buttonColour
-        RelativeLayout:
-            size: 1,1   
-            MDFillRoundFlatButton:
-                on_release: 
-                    app.root.current = "main"       
-                    root.manager.transition.direction = "right"   
-                text: "Powrót"
-                size_hint: buttonSizeHint
-                pos_hint: buttonPosHint
-                md_bg_color: buttonColour
+        GridLayout:
+            cols: 1
+            size_hint: .7,.4
+            spacing: '10dp'        
+            RelativeLayout:
+                size: 1,1
+                MDFillRoundFlatButton:
+                    on_release: 
+                        app.root.current = "database"     
+                        root.manager.transition.direction = "left"  
+                    text: "Baza danych"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour
+            RelativeLayout:
+                size: 1,1   
+                MDFillRoundFlatButton:
+                    on_release: 
+                        app.root.current = "main"       
+                        root.manager.transition.direction = "right"   
+                    text: "Powrót"
+                    size_hint: buttonSizeHint
+                    pos_hint: buttonPosHint
+                    md_bg_color: buttonColour
 
      
 
@@ -547,11 +556,16 @@ WindowManager:
         cols: 3
         spacing: '20dp'
     
-    Button:
-        text:'Powrót'
-        # on_release:app.root.current = "main";root.manager.transition.direction = "left"
-        on_release: root.backFunction()
-        size_hint: 1,0.2 
+    RelativeLayout:
+        size: 1,1   
+        MDFillRoundFlatButton:
+            on_release: 
+                on_release: root.backFunction() 
+            text:'Powrót'
+            size_hint: 0.8,0.15
+            pos_hint: {'x':0.1 , 'y':0.03 }
+            md_bg_color: buttonColour
+
 
 <Solo180701>:
     name: "solo180701"
@@ -687,16 +701,26 @@ WindowManager:
     GridLayout:  
         cols: 2
         size_hint: 1,0.2  
-        Button:
-            text: 'Zapisz wynik'
-            on_release: root.saveFunction()
-                
-        Button:
-            text:'Powrót'
-            # on_release:app.root.current = "main";root.manager.transition.direction = "left"
-            on_release: root.backFunction()
+        
+        RelativeLayout:
+            size: 1,1   
+            MDFillRoundFlatButton:
+                on_release: 
+                    on_release: root.saveFunction()  
+                text: 'Zapisz wynik'
+                size_hint: buttonSizeHint
+                pos_hint: buttonPosHint
+                md_bg_color: buttonColour
 
-
+        RelativeLayout:
+            size: 1,1   
+            MDFillRoundFlatButton:
+                on_release: 
+                    on_release: root.backFunction()
+                text:'Powrót'
+                size_hint: buttonSizeHint
+                pos_hint: buttonPosHint
+                md_bg_color: buttonColour
 
 <Records>:
     name: "records"
@@ -722,22 +746,26 @@ WindowManager:
             source: 'background.jpg'
     GridLayout:
         cols:3
-        size_hint: 0.8, 0.2
+        size_hint: 0.8, 0.15
         pos_hint: {'x': 0.1, 'y': 0.8}
         spacing: '20dp'
-        Spinner:
+        SpinnerWidget:
             size_hint: 1, 1
+            background_color: (1,1,1,0.5)
             id: gameSpinner
             text: "Wybierz gre"
             values: ["180","301","501","701","Min","Max",'Trening','Trening losowy']
             # on_text: root.spinner(gameSpinner.text)
     
 
-        TextInput:
-            id: userInput
-            name: "userInput"            
-            hint_text: 'Nazwa użytkownika'
-            multiline: False
+        RelativeLayout:
+            TextInput:
+                size_hint: 1, 0.4
+                pos_hint: {'x':0 , 'y':0.3 }
+                id: userInput
+                name: "userInput"            
+                hint_text: 'Nazwa użytkownika'
+                multiline: False
         
         Button:
             text: "Szukaj"
@@ -761,13 +789,15 @@ WindowManager:
             row_force_default: True
             
    
-
-    Button:
-        size_hint: 0.8, 0.2
-        pos_hint: {'x': 0.1 , 'y':0 }
-        text: "Powrót"
-        color:    
-        on_release: root.backFunction()
+    RelativeLayout:
+        size: 1,1   
+        MDFillRoundFlatButton:
+            on_release: 
+                root.backFunction()  
+            size_hint: 0.8, 0.15
+            pos_hint: {'x': 0.1 , 'y':0.03 }
+            text: "Powrót"
+            md_bg_color: buttonColour
 
 <RandomTraining>
     name: "randomtraining"    
@@ -972,21 +1002,33 @@ WindowManager:
         size_hint: .4,.4
         pos_hint: {'x': 0.3 , 'y': 0.3}
         spacing: '20dp'
-        Button:
-            text: "Statystyki gracza"
-            background_color: (1.0, 0.0, 0.0, 1.0)
-            # size_hint: 0.3, 0.3
-            on_release: 
-                app.root.current = "stats";root.manager.transition.direction = "left"   
-        Button:
-            text: "Baza danych"
-            background_color: (1.0, 0.0, 0.0, 1.0)
-            # size_hint: 0.3, 0.3
-            on_release:app.root.current = "fulldatabase";root.manager.transition.direction = "left"
-        Button:
-            text: "Powrót"
-            background_color: (1.0, 0.0, 0.0, 1.0)
-            on_release:app.root.current = "solo";root.manager.transition.direction = "right"
+        RelativeLayout:
+            size: 1,1   
+            MDFillRoundFlatButton:
+                on_release: 
+                    app.root.current = "stats";root.manager.transition.direction = "left"   
+                text: "Statystyki gracza"
+                size_hint: buttonSizeHint
+                pos_hint: buttonPosHint
+                md_bg_color: buttonColour
+        RelativeLayout:
+            size: 1,1   
+            MDFillRoundFlatButton:
+                on_release:
+                    app.root.current = "fulldatabase";root.manager.transition.direction = "left"
+                text: "Baza danych"
+                size_hint: buttonSizeHint
+                pos_hint: buttonPosHint
+                md_bg_color: buttonColour
+        RelativeLayout:
+            size: 1,1   
+            MDFillRoundFlatButton:
+                on_release:
+                    app.root.current = "solo";root.manager.transition.direction = "right"
+                text: "Powrót"
+                size_hint: buttonSizeHint
+                pos_hint: buttonPosHint
+                md_bg_color: buttonColour
 
 <Stats>:
     userInput: userInput
@@ -1001,22 +1043,27 @@ WindowManager:
             source: 'background.jpg'
     GridLayout:
         cols:3
-        size_hint: 0.8, 0.2
+        size_hint: 0.8, 0.15
         pos_hint: {'x': 0.1, 'y': 0.8}
         spacing: '20dp'
-        Spinner:
+        SpinnerWidget:
             size_hint: 1, 1
+            background_color: (1,1,1,0.5)
             id: gameSpinner
             text: "Wybierz gre"
             values: ["180","301","501","701","Min","Max",'Trening','Trening losowy']
 
-        TextInput:
-            id: userInput
-            name: "userInput"            
-            hint_text: 'Nazwa użytkownika'
-            multiline: False
+        RelativeLayout:
+            TextInput:
+                size_hint: 1, 0.4
+                pos_hint: {'x':0 , 'y':0.3 }
+                id: userInput
+                name: "userInput"            
+                hint_text: 'Nazwa użytkownika'
+                multiline: False
         
         Button:
+            background_color: (1,1,1,0.5)
             text: "Szukaj"
             on_press: root.find()
     GridLayout:
@@ -1024,9 +1071,12 @@ WindowManager:
         size_hint: 0.8, 0.6
         pos_hint: {'x': 0.1 , 'y':0.2 }
 
-    Button:
-        size_hint: 0.8, 0.2
-        pos_hint: {'x': 0.1 , 'y':0 }
-        text: "Powrót"
-        color:    
-        on_release: root.backFunction()
+    RelativeLayout:
+        size: 1,1   
+        MDFillRoundFlatButton:
+            on_release: 
+                root.backFunction()  
+            size_hint: 0.8, 0.15
+            pos_hint: {'x': 0.1 , 'y':0.03 }
+            text: "Powrót"
+            md_bg_color: buttonColour
