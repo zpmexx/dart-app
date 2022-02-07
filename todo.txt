@@ -1,35 +1,6 @@
-co do zrobienia:
+czcionki
 
-cofnij button
-LAYout
-
-
-cofnij button* (po wszystkim ewentualnie + raczej ostatni ruch tylko)
-zakonczenie na double*
-baza danych: podzial na baze, rekordy oraz statystyki dla danego zawodnika
-
-180,301,501,701: liczba rzutow, srednia punktow, pozostało punktow
-min,max: pozostało rzutów, srednia punktów, lista trafionych
-trening losowy: pozostało rzutów, trafiony, nietrafiony, %skutecznosći, następny cel
-trening: liczba rzutów, % trafień, następny cel + ile pozostało z danego celu
-
-
-baza danych: data wszedzie
-minmax - gra, liczba rzutów, średnia rzutów, suma, użytkownik, liczba jedynek,liczba 20
-1800701 - gra, liczba rzutów, średnia rzutów, użytkowni, liczba 60, liczba 57
-trening - gra, liczba rzutów, % trafień, największa passa nietrafionych
-trening losowy - gra, liczba rzutów, liczba trafień, licza chybień, % trafie 
-
-zasady -> mainwindow
-gry druzynowe -> mainwindow
-gry solo -> mainwindow
-gamewindow -> mainwindow
-ScoreBoard -> mainwindow
-SoloScoreBoard -> solowindow
-database ->solowindow
-solo180701 -> solowindow
-training -> solowindow
-minmaxwindow -> solowindow
-randomtraining -> solowindow
-stats -> database
-fulldatabase -> database
+12 9717
+10 9675
+02 9345
+01 9150

@@ -23,7 +23,6 @@
     button20: button20
     button25: button25
     button50: button50
-    buttonBack: buttonBack
     boxx1: boxx1
     boxx2: boxx2
     boxx3: boxx3
@@ -70,9 +69,9 @@
             #:set buttonSizeHint (0.8,0.8)
             #:set buttonPosHint {'x': 0.1, 'y':0 }
             name: "buttonPointsGrid"
-            cols: 4
+            cols: 3
             # size: root.width, root.height * 0.4
-            size_hint: 1,.6
+            size_hint: 1,0.1
             pos_hint: {'x': 0 , 'y': 0.2}
             RelativeLayout:
                 size: 1,1   
@@ -101,17 +100,18 @@
                     size_hint: buttonSizeHint
                     pos_hint: buttonPosHint
                     md_bg_color: buttonColour
-                
-            RelativeLayout:
-                size: 1,1   
-                MDFillRoundFlatButton:
-                    name: 'buttonBack'
-                    id: buttonBack
-                    text: "cofnij"
-                    size_hint: buttonSizeHint
-                    pos_hint: buttonPosHint
-                    md_bg_color: buttonColour 
-
+        MDGridLayout:
+            size_hint: None, None
+            size: self.minimum_size
+            id: buttonPointsGrid
+            #:set buttonColour  (0.6, 0.4, 0.1, 0.4)
+            #:set buttonSizeHint (0.8,0.8)
+            #:set buttonPosHint {'x': 0.1, 'y':0 }
+            name: "buttonPointsGrid"
+            cols: 4
+            # size: root.width, root.height * 0.4
+            size_hint: 1,.50
+            pos_hint: {'x': 0 , 'y': 0.2}     
             RelativeLayout:
                 size: 1,1   
                 MDFillRoundFlatButton:

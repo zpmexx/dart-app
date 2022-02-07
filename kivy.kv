@@ -96,13 +96,11 @@ WindowManager:
         scroll_y: 1
         GridLayout:
             cols:1  
-            rows: 10
             id: scrollViewGrid
-            size: root.width * 0.8, 1800
+            size: root.width * 0.8, root.height * 2
             font_size: root.width
-            size_hint_x: None
+            # size_hint_x: None
             size_hint_y: None
-        
             # height: self.minimum_height
             # row_default_height: 100
             # row_force_default: True
@@ -305,9 +303,6 @@ WindowManager:
         pos_hint: {'x': 0.2 , 'y': 0.1}
         spacing: '10dp'
         GridLayout:
-            #:set buttonColour  (0.6, 0.4, 0.1, 0.4)
-            #:set buttonSizeHint (0.8,0.8)
-            #:set buttonPosHint {'x': 0.1, 'y':0 }
             cols: 2
             rows: 4
             size_hint: 1,1
@@ -562,7 +557,7 @@ WindowManager:
             on_release: 
                 on_release: root.backFunction() 
             text:'Powrót'
-            size_hint: 0.8,0.15
+            size_hint: 0.8,0.1
             pos_hint: {'x':0.1 , 'y':0.03 }
             md_bg_color: buttonColour
 
@@ -708,8 +703,8 @@ WindowManager:
                 on_release: 
                     on_release: root.saveFunction()  
                 text: 'Zapisz wynik'
-                size_hint: buttonSizeHint
-                pos_hint: buttonPosHint
+                size_hint: 0.8, 0.5
+                pos_hint: {'x': 0.1 , 'y':0.03 }
                 md_bg_color: buttonColour
 
         RelativeLayout:
@@ -718,8 +713,8 @@ WindowManager:
                 on_release: 
                     on_release: root.backFunction()
                 text:'Powrót'
-                size_hint: buttonSizeHint
-                pos_hint: buttonPosHint
+                size_hint: 0.8, 0.5
+                pos_hint: {'x': 0.1 , 'y':0.03 }
                 md_bg_color: buttonColour
 
 <Records>:
@@ -757,7 +752,6 @@ WindowManager:
             values: ["180","301","501","701","Min","Max",'Trening','Trening losowy']
             # on_text: root.spinner(gameSpinner.text)
     
-
         RelativeLayout:
             TextInput:
                 size_hint: 1, 0.4
@@ -771,30 +765,39 @@ WindowManager:
             text: "Szukaj"
             on_press: root.find()
 
-    GridLayout:
-        id: filterGrid
-        size_hint: 0.8, 0.1
-        pos_hint: {'x': 0.1 , 'y':0.7 }
+
     ScrollView:
         id: databaseScroll
-        size_hint: 0.8, 0.5
-        pos_hint: {'x': 0.1 , 'y':0.2 }
-        do_scroll_y: False
+        size_hint: 0.7, 0.5
+        pos_hint: {'x': 0.15 , 'y':0.2 }
+        do_scroll_y: False  
+    
         GridLayout:
-            id: databaseGrid
-            size: root.width, root.height 
-            size_hint_x: None
+            size: root.width, root.height * 1.2
+            cols: 1
+            # size_hint_x: None
             size_hint_y: None
-            row_default_height: root.height * 0.1
-            row_force_default: True
-            
+            GridLayout:
+                id: filterGrid
+                size: root.width * 0.7, root.height * 0.05
+                size_hint_x: None
+                size_hint_y: None
+
+            GridLayout:
+                id: databaseGrid
+                size: root.width * 0.7 , root.height * 1.5
+                size_hint_x: None
+                size_hint_y: None
+                row_default_height: root.height * 0.1
+                row_force_default: True
+                
    
     RelativeLayout:
         size: 1,1   
         MDFillRoundFlatButton:
             on_release: 
                 root.backFunction()  
-            size_hint: 0.8, 0.15
+            size_hint: 0.8, 0.1
             pos_hint: {'x': 0.1 , 'y':0.03 }
             text: "Powrót"
             md_bg_color: buttonColour
@@ -856,9 +859,6 @@ WindowManager:
 
     GridLayout:
         id: buttonsGrid
-        #:set buttonColour  (0.6, 0.4, 0.1, 0.4)
-        #:set buttonSizeHint (0.8,0.8)
-        #:set buttonPosHint {'x': 0.1, 'y':0.1 }
         name: "buttonsGrid"
         cols: 3
         size_hint: 1, 0.2
@@ -1076,7 +1076,7 @@ WindowManager:
         MDFillRoundFlatButton:
             on_release: 
                 root.backFunction()  
-            size_hint: 0.8, 0.15
+            size_hint: 0.8, 0.1
             pos_hint: {'x': 0.1 , 'y':0.03 }
             text: "Powrót"
             md_bg_color: buttonColour

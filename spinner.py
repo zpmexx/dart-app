@@ -9,7 +9,7 @@ class SpinnerOptions(SpinnerOption):
         self.background_normal = ""
         self.background_color = [0.3, 0.2, 1, 0.7]
         self.height = self.height * 0.8
-        self.font_size = self.width / 10 + 2
+        self.font_size = 14
 
 
 class SpinnerDropdown(DropDown):

@@ -106,42 +106,66 @@ class Rules(Screen):
         x = WrappedLabel()
         x.text = '''Zasady wspólne: x1-x3 są to mnożniki trafień w dane pole, Cofnij oznacza cofniecie ostatniego ruchu w przypadku pomyłki, po wszystkim mozna zapisywac do bazy, 25 oznacza bull, czyli 25 punktów za rzut, 50 to Bull's Eye (50 pkt).'''     
         x.font_size = fontsize
-        self.scrollViewGrid.add_widget(x)
+        y = RelativeLayout()
+        y.size = 1,1
+        y.add_widget(x)
+        self.scrollViewGrid.add_widget(y)
 
         x = WrappedLabel()
         x.text = '''Gry solo 180-701: Liczba "Pozostało" oznacza sume punktów które należy wyrzucić by zakończyć gre. W grach chodzi o jak najszybsze uzbieranie danej liczby punktów i zakończenie odpowiednią lotką opartą o liczbe punktów.'''
         x.font_size = fontsize
-        self.scrollViewGrid.add_widget(x)
+        y = RelativeLayout()
+        y.size = 1,1
+        y.add_widget(x)
+        self.scrollViewGrid.add_widget(y)
 
         x = WrappedLabel()
         x.text = '''Gra solo min:  W grze chodzi o zdobycie jak najmniejszej ilości punktów, "Pozostało" oznacza liczbe rzutów do końca, pudło skutkuje karą 70 pkt.'''
         x.font_size = fontsize
-        self.scrollViewGrid.add_widget(x)
+        y = RelativeLayout()
+        y.size = 1,1
+        y.add_widget(x)
+        self.scrollViewGrid.add_widget(y)
 
         x = WrappedLabel()
         x.text = '''Gra solo max: W grze chodzi o zdobycie jak największej ilości punktów, "Pozostało" oznacza liczbe rzutów do końca.'''
         x.font_size = fontsize
-        self.scrollViewGrid.add_widget(x)
+        y = RelativeLayout()
+        y.size = 1,1
+        y.add_widget(x)
+        self.scrollViewGrid.add_widget(y)
 
         x = WrappedLabel()
         x.text = '''Gra solo trening: Gra polega na wyrzuceniu wszystkich pól na tarczy trzykrotnie (poza środkiem, który wyrzuca się po razie mały i duży). Cel oznacza konkretna wartosc do wyrzucenia, mnożnik x1-x3 oznacza które pole na wartości zostało rzucone i jak jest ono punktowane, "chybiony" oznacza nietrafiony rzut, pozostało z celu oznacza liczbe koniecznych trafien danego celu by przejśc do nastepnej wartości.'''
         x.font_size = fontsize
-        self.scrollViewGrid.add_widget(x)
+        y = RelativeLayout()
+        y.size = 1,1
+        y.add_widget(x)
+        self.scrollViewGrid.add_widget(y)
 
         x = WrappedLabel()
         x.text = '''Gra solo trening losowy: Wyświetlana lista liczb oznacza cele do trafienia w kolejnosci.'''
         x.font_size = fontsize
-        self.scrollViewGrid.add_widget(x)
+        y = RelativeLayout()
+        y.size = 1,1
+        y.add_widget(x)
+        self.scrollViewGrid.add_widget(y)
 
         x = WrappedLabel()
         x.text = '''Gry drużynowe: Górna lista oznacza grę do wyboru, kafelki z liczbami poniżej oznaczają liczbę graczy, nazwa żadnego z graczy nie może być pusta. Gracz podświetlany na czerwono wykonuje rzut. Gry 180-501 oraz min/max posiadają analogiczne zasady co odpowiadając im gry solo.'''
         x.font_size = fontsize
-        self.scrollViewGrid.add_widget(x)
+        y = RelativeLayout()
+        y.size = 1,1
+        y.add_widget(x)
+        self.scrollViewGrid.add_widget(y)
 
         x = WrappedLabel()
         x.text = '''Gry 180e-501e: Gry typu eliminator. Gry tak jak klasyczne 180-501 polegają na jak najszybszym zdobyciu określonej liczby punktów z tą różnicą, że gdy zawodnik wykonujący rzut w konsekwencji osiągnie sume punktów posiadaną już przez innego zawodnika to wartość jego punktów jest zerowana. Gdy zawodnik osiągnie przy rzucie wartość większą niż docelowa to róznica punktów od wartości docelowej jest odejmowana.'''
         x.font_size = fontsize
-        self.scrollViewGrid.add_widget(x)
+        y = RelativeLayout()
+        y.size = 1,1
+        y.add_widget(x)
+        self.scrollViewGrid.add_widget(y)
 
         
         
@@ -275,8 +299,6 @@ class MinmaxWindow(Screen):
                     temp[21].bind(on_release = lambda x: self.bindButton(x.text))
                     temp.append(getattr(i, 'button50')) 
                     temp[22].bind(on_release = lambda x: self.bindButton(x.text))
-                    temp.append(getattr(i, 'buttonBack')) 
-                    temp[23].bind(on_release = lambda x: self.goBack())
 
 class Solo180701(Screen):
     multiplierList = []
@@ -319,7 +341,12 @@ class Solo180701(Screen):
             self.throwSum += int(j)*multiplier
             self.throwCount += 1
             self.avg = round(float(self.throwSum)/float(self.throwCount),2)
+            if int(j) * multiplier == 57:
+                self.fiftysevens += 1
 
+            if int(j) * multiplier == 60:
+                self.sixties += 1
+                
             self.scores['Gra'] = self.game
             self.scores['Liczba rzutów'] = self.throwCount
             self.scores['Średnia rzutów'] = self.avg
@@ -377,9 +404,6 @@ class Solo180701(Screen):
                     temp[21].bind(on_release = lambda x: self.bindButton(x.text))
                     temp.append(getattr(i, 'button50')) 
                     temp[22].bind(on_release = lambda x: self.bindButton(x.text))
-                    temp.append(getattr(i, 'buttonBack')) 
-                    temp[23].bind(on_release = lambda x: self.previousState())
-
 
         self.game = str(self.leftLabel.text)
 
@@ -397,7 +421,7 @@ class Stats(Screen):
         user = user.rstrip()
         self.databaseGrid.cols = 4 #liczba kolumn w wyswietlanej tabeli
         choose = 0 #dane z której gry wyświetlić
-        connection = sqlite3.connect('dart.db') #otwarcie połaczenia z bazą
+        connection = sqlite3.connect('..\database\dart.db') #otwarcie połaczenia z bazą
         cursor = connection.cursor()
         """wpisanie nagłówków oraz nazwy tabeli dla konkretnych gier"""
         if game in ('180','301','501','701'):
@@ -819,7 +843,7 @@ class FullDatabase(Screen):
     previousColumnNameState = ''
     currentColumnNameState = ''
 
-    connection = sqlite3.connect('dart.db') #otwarcie połaczenia z bazą
+    connection = sqlite3.connect('../database\dart.db') #otwarcie połaczenia z bazą
     cursor = connection.cursor()
     def find(self):
 
@@ -873,6 +897,7 @@ class FullDatabase(Screen):
             for i in headers:
                 temp.append(Button())
                 temp[counter].text = i
+                temp[counter].font_size = self.width / 35
                 counter +=1
 
             counter = 0
@@ -884,6 +909,7 @@ class FullDatabase(Screen):
             for i in result:
                 for j in i:
                     x = Label()
+                    x.font_size = self.width / 35
                     x.text = str(j)
                     self.databaseGrid.add_widget(x)
         except:
@@ -1496,8 +1522,8 @@ class SoloScoreBoard(Screen):
         App.get_running_app().root.transition.direction = "left" 
 
     def saveFunction(self):
-        data = datetime.now()
-        connection = sqlite3.connect('dart.db')
+        data = datetime.now().date()
+        connection = sqlite3.connect('../database\dart.db')
         user = self.manager.get_screen('solo').playerName
         cursor = connection.cursor()
         if self.manager.get_screen('solo').game >= 0 and self.manager.get_screen('solo').game <=3:
@@ -1610,7 +1636,7 @@ class LoginWindow(Screen):
     passwordLabel = ObjectProperty(None)
 
     def create(self):
-        self.connection = sqlite3.connect('dart.db')
+        self.connection = sqlite3.connect('../database\dart.db')
         self.cursor = self.connection.cursor()
         self.cursor.execute(""" CREATE TABLE IF NOT EXISTS lastname (
             username text
